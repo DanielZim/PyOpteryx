@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="ASCII"?>
+<designdecision:DecisionSpace xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:designdecision="http://sdq.ipd.uka.de/DesignDecision/3.0" xmlns:specific="http://sdq.ipd.uka.de/DesignDecision/Specific/3.0" id="_BmumYALCEemyTqmR9cPkkw">
+  <degreesOfFreedom xsi:type="specific:ContinuousProcessingRateDegree" lowerBoundIncluded="false" to="2.0" from="0.5">
+    <primaryChanged href="brs.resourceenvironment#_8-cpgNo_EdyxgfK4Hy_RFA"/>
+    <processingresourcetype href="pathmap://PCM_MODELS/Palladio.resourcetype#_oro4gG3fEdy4YaaT-RYrLQ"/>
+  </degreesOfFreedom>
+  <degreesOfFreedom xsi:type="specific:ContinuousProcessingRateDegree" lowerBoundIncluded="false" to="2.0" from="0.5">
+    <primaryChanged href="brs.resourceenvironment#_EX6xcdpAEdyxgfK4Hy_RFA"/>
+    <processingresourcetype href="pathmap://PCM_MODELS/Palladio.resourcetype#_oro4gG3fEdy4YaaT-RYrLQ"/>
+  </degreesOfFreedom>
+  <degreesOfFreedom xsi:type="specific:ContinuousProcessingRateDegree" lowerBoundIncluded="false" to="2.0" from="0.5">
+    <primaryChanged href="brs.resourceenvironment#_U2Nv4dpAEdyxgfK4Hy_RFA"/>
+    <processingresourcetype href="pathmap://PCM_MODELS/Palladio.resourcetype#_oro4gG3fEdy4YaaT-RYrLQ"/>
+  </degreesOfFreedom>
+  <degreesOfFreedom xsi:type="specific:ContinuousProcessingRateDegree" lowerBoundIncluded="false" to="2.0" from="0.5">
+    <primaryChanged href="brs.resourceenvironment#_L0MH4UUXEd6HAbOR56wSfA"/>
+    <processingresourcetype href="pathmap://PCM_MODELS/Palladio.resourcetype#_oro4gG3fEdy4YaaT-RYrLQ"/>
+  </degreesOfFreedom>
+  <degreesOfFreedom xsi:type="specific:ContinuousProcessingRateDegree" lowerBoundIncluded="false" to="2.0" from="0.5">
+    <primaryChanged href="brs.resourceenvironment#_-S5TAUVLEd6KA7GFQHGCjQ"/>
+    <processingresourcetype href="pathmap://PCM_MODELS/Palladio.resourcetype#_oro4gG3fEdy4YaaT-RYrLQ"/>
+  </degreesOfFreedom>
+  <degreesOfFreedom xsi:type="specific:ContinuousProcessingRateDegree" lowerBoundIncluded="false" to="2.0" from="0.5">
+    <primaryChanged href="brs.resourceenvironment#_Dc89EUVMEd6KA7GFQHGCjQ"/>
+    <processingresourcetype href="pathmap://PCM_MODELS/Palladio.resourcetype#_oro4gG3fEdy4YaaT-RYrLQ"/>
+  </degreesOfFreedom>
+  <degreesOfFreedom xsi:type="specific:ContinuousProcessingRateDegree" lowerBoundIncluded="false" to="2.0" from="0.5">
+    <primaryChanged href="brs.resourceenvironment#_L0Dy4dpAEdyxgfK4Hy_RFA"/>
+    <processingresourcetype href="pathmap://PCM_MODELS/Palladio.resourcetype#_oro4gG3fEdy4YaaT-RYrLQ"/>
+  </degreesOfFreedom>
+  <degreesOfFreedom xsi:type="specific:ContinuousProcessingRateDegree" lowerBoundIncluded="false" to="2.0" from="0.5">
+    <primaryChanged href="brs.resourceenvironment#_K74MwUVMEd6KA7GFQHGCjQ"/>
+    <processingresourcetype href="pathmap://PCM_MODELS/Palladio.resourcetype#_oro4gG3fEdy4YaaT-RYrLQ"/>
+  </degreesOfFreedom>
+  <degreesOfFreedom xsi:type="specific:AssembledComponentDegree">
+    <primaryChanged href="brs.system#_CAsP4EVLEd6KA7GFQHGCjQ"/>
+    <classDesignOptions href="brs.repository#_rpLzcEecEd6KA7GFQHGCjQ"/>
+    <classDesignOptions href="brs.repository#_sQC2sNo4EdyCSNQKlT1LxA"/>
+  </degreesOfFreedom>
+  <degreesOfFreedom xsi:type="specific:AssembledComponentDegree">
+    <primaryChanged href="brs.system#_N8Qq8No_EdyxgfK4Hy_RFA"/>
+    <classDesignOptions href="brs.repository#_6bAEENo5EdyCSNQKlT1LxA"/>
+    <classDesignOptions href="brs.repository#_Mh43oLcKEd2_9rSHIHHezA"/>
+    <classDesignOptions href="brs.repository#_V19EALcKEd2_9rSHIHHezA"/>
+  </degreesOfFreedom>
+  <degreesOfFreedom xsi:type="specific:AssembledComponentDegree">
+    <primaryChanged href="brs.system#_cWmNkNo_EdyxgfK4Hy_RFA"/>
+    <classDesignOptions href="brs.repository#_rpLzcEecEd6KA7GFQHGCjQ"/>
+    <classDesignOptions href="brs.repository#_sQC2sNo4EdyCSNQKlT1LxA"/>
+  </degreesOfFreedom>
+  <degreesOfFreedom xsi:type="specific:AllocationDegree">
+    <primaryChanged href="brs.allocation#_PZQ-QLfXEd2PvvnrNadJLQ"/>
+    <classDesignOptions href="brs.resourceenvironment#_8-cpgNo_EdyxgfK4Hy_RFA"/>
+    <classDesignOptions href="brs.resourceenvironment#_EX6xcdpAEdyxgfK4Hy_RFA"/>
+    <classDesignOptions href="brs.resourceenvironment#_U2Nv4dpAEdyxgfK4Hy_RFA"/>
+    <classDesignOptions href="brs.resourceenvironment#_L0MH4UUXEd6HAbOR56wSfA"/>
+    <classDesignOptions href="brs.resourceenvironment#_-S5TAUVLEd6KA7GFQHGCjQ"/>
+    <classDesignOptions href="brs.resourceenvironment#_Dc89EUVMEd6KA7GFQHGCjQ"/>
+    <classDesignOptions href="brs.resourceenvironment#_L0Dy4dpAEdyxgfK4Hy_RFA"/>
+    <classDesignOptions href="brs.resourceenvironment#_K74MwUVMEd6KA7GFQHGCjQ"/>
+  </degreesOfFreedom>
+  <degreesOfFreedom xsi:type="specific:AllocationDegree">
+    <primaryChanged href="brs.allocation#_QVANwLfXEd2PvvnrNadJLQ"/>
+    <classDesignOptions href="brs.resourceenvironment#_8-cpgNo_EdyxgfK4Hy_RFA"/>
+    <classDesignOptions href="brs.resourceenvironment#_EX6xcdpAEdyxgfK4Hy_RFA"/>
+    <classDesignOptions href="brs.resourceenvironment#_U2Nv4dpAEdyxgfK4Hy_RFA"/>
+    <classDesignOptions href="brs.resourceenvironment#_L0MH4UUXEd6HAbOR56wSfA"/>
+    <classDesignOptions href="brs.resourceenvironment#_-S5TAUVLEd6KA7GFQHGCjQ"/>
+    <classDesignOptions href="brs.resourceenvironment#_Dc89EUVMEd6KA7GFQHGCjQ"/>
+    <classDesignOptions href="brs.resourceenvironment#_L0Dy4dpAEdyxgfK4Hy_RFA"/>
+    <classDesignOptions href="brs.resourceenvironment#_K74MwUVMEd6KA7GFQHGCjQ"/>
+  </degreesOfFreedom>
+  <degreesOfFreedom xsi:type="specific:AllocationDegree">
+    <primaryChanged href="brs.allocation#_Q-kvMLfXEd2PvvnrNadJLQ"/>
+    <classDesignOptions href="brs.resourceenvironment#_8-cpgNo_EdyxgfK4Hy_RFA"/>
+    <classDesignOptions href="brs.resourceenvironment#_EX6xcdpAEdyxgfK4Hy_RFA"/>
+    <classDesignOptions href="brs.resourceenvironment#_U2Nv4dpAEdyxgfK4Hy_RFA"/>
+    <classDesignOptions href="brs.resourceenvironment#_L0MH4UUXEd6HAbOR56wSfA"/>
+    <classDesignOptions href="brs.resourceenvironment#_-S5TAUVLEd6KA7GFQHGCjQ"/>
+    <classDesignOptions href="brs.resourceenvironment#_Dc89EUVMEd6KA7GFQHGCjQ"/>
+    <classDesignOptions href="brs.resourceenvironment#_L0Dy4dpAEdyxgfK4Hy_RFA"/>
+    <classDesignOptions href="brs.resourceenvironment#_K74MwUVMEd6KA7GFQHGCjQ"/>
+  </degreesOfFreedom>
+  <degreesOfFreedom xsi:type="specific:AllocationDegree">
+    <primaryChanged href="brs.allocation#_hgPxkEVMEd6KA7GFQHGCjQ"/>
+    <classDesignOptions href="brs.resourceenvironment#_8-cpgNo_EdyxgfK4Hy_RFA"/>
+    <classDesignOptions href="brs.resourceenvironment#_EX6xcdpAEdyxgfK4Hy_RFA"/>
+    <classDesignOptions href="brs.resourceenvironment#_U2Nv4dpAEdyxgfK4Hy_RFA"/>
+    <classDesignOptions href="brs.resourceenvironment#_L0MH4UUXEd6HAbOR56wSfA"/>
+    <classDesignOptions href="brs.resourceenvironment#_-S5TAUVLEd6KA7GFQHGCjQ"/>
+    <classDesignOptions href="brs.resourceenvironment#_Dc89EUVMEd6KA7GFQHGCjQ"/>
+    <classDesignOptions href="brs.resourceenvironment#_L0Dy4dpAEdyxgfK4Hy_RFA"/>
+    <classDesignOptions href="brs.resourceenvironment#_K74MwUVMEd6KA7GFQHGCjQ"/>
+  </degreesOfFreedom>
+  <degreesOfFreedom xsi:type="specific:AllocationDegree">
+    <primaryChanged href="brs.allocation#_jwneoFaYEd6HqahvVj4WQQ"/>
+    <classDesignOptions href="brs.resourceenvironment#_8-cpgNo_EdyxgfK4Hy_RFA"/>
+    <classDesignOptions href="brs.resourceenvironment#_EX6xcdpAEdyxgfK4Hy_RFA"/>
+    <classDesignOptions href="brs.resourceenvironment#_U2Nv4dpAEdyxgfK4Hy_RFA"/>
+    <classDesignOptions href="brs.resourceenvironment#_L0MH4UUXEd6HAbOR56wSfA"/>
+    <classDesignOptions href="brs.resourceenvironment#_-S5TAUVLEd6KA7GFQHGCjQ"/>
+    <classDesignOptions href="brs.resourceenvironment#_Dc89EUVMEd6KA7GFQHGCjQ"/>
+    <classDesignOptions href="brs.resourceenvironment#_L0Dy4dpAEdyxgfK4Hy_RFA"/>
+    <classDesignOptions href="brs.resourceenvironment#_K74MwUVMEd6KA7GFQHGCjQ"/>
+  </degreesOfFreedom>
+  <degreesOfFreedom xsi:type="specific:AllocationDegree">
+    <primaryChanged href="brs.allocation#_YPvG8Fi9Ed63I7LJSYv-tA"/>
+    <classDesignOptions href="brs.resourceenvironment#_8-cpgNo_EdyxgfK4Hy_RFA"/>
+    <classDesignOptions href="brs.resourceenvironment#_EX6xcdpAEdyxgfK4Hy_RFA"/>
+    <classDesignOptions href="brs.resourceenvironment#_U2Nv4dpAEdyxgfK4Hy_RFA"/>
+    <classDesignOptions href="brs.resourceenvironment#_L0MH4UUXEd6HAbOR56wSfA"/>
+    <classDesignOptions href="brs.resourceenvironment#_-S5TAUVLEd6KA7GFQHGCjQ"/>
+    <classDesignOptions href="brs.resourceenvironment#_Dc89EUVMEd6KA7GFQHGCjQ"/>
+    <classDesignOptions href="brs.resourceenvironment#_L0Dy4dpAEdyxgfK4Hy_RFA"/>
+    <classDesignOptions href="brs.resourceenvironment#_K74MwUVMEd6KA7GFQHGCjQ"/>
+  </degreesOfFreedom>
+  <degreesOfFreedom xsi:type="specific:AllocationDegree">
+    <primaryChanged href="brs.allocation#_P_6pAFjBEd6PI5QcJ-So1g"/>
+    <classDesignOptions href="brs.resourceenvironment#_8-cpgNo_EdyxgfK4Hy_RFA"/>
+    <classDesignOptions href="brs.resourceenvironment#_EX6xcdpAEdyxgfK4Hy_RFA"/>
+    <classDesignOptions href="brs.resourceenvironment#_U2Nv4dpAEdyxgfK4Hy_RFA"/>
+    <classDesignOptions href="brs.resourceenvironment#_L0MH4UUXEd6HAbOR56wSfA"/>
+    <classDesignOptions href="brs.resourceenvironment#_-S5TAUVLEd6KA7GFQHGCjQ"/>
+    <classDesignOptions href="brs.resourceenvironment#_Dc89EUVMEd6KA7GFQHGCjQ"/>
+    <classDesignOptions href="brs.resourceenvironment#_L0Dy4dpAEdyxgfK4Hy_RFA"/>
+    <classDesignOptions href="brs.resourceenvironment#_K74MwUVMEd6KA7GFQHGCjQ"/>
+  </degreesOfFreedom>
+  <degreesOfFreedom xsi:type="specific:AllocationDegree">
+    <primaryChanged href="brs.allocation#_bvhqwFjBEd6PI5QcJ-So1g"/>
+    <classDesignOptions href="brs.resourceenvironment#_8-cpgNo_EdyxgfK4Hy_RFA"/>
+    <classDesignOptions href="brs.resourceenvironment#_EX6xcdpAEdyxgfK4Hy_RFA"/>
+    <classDesignOptions href="brs.resourceenvironment#_U2Nv4dpAEdyxgfK4Hy_RFA"/>
+    <classDesignOptions href="brs.resourceenvironment#_L0MH4UUXEd6HAbOR56wSfA"/>
+    <classDesignOptions href="brs.resourceenvironment#_-S5TAUVLEd6KA7GFQHGCjQ"/>
+    <classDesignOptions href="brs.resourceenvironment#_Dc89EUVMEd6KA7GFQHGCjQ"/>
+    <classDesignOptions href="brs.resourceenvironment#_L0Dy4dpAEdyxgfK4Hy_RFA"/>
+    <classDesignOptions href="brs.resourceenvironment#_K74MwUVMEd6KA7GFQHGCjQ"/>
+  </degreesOfFreedom>
+</designdecision:DecisionSpace>

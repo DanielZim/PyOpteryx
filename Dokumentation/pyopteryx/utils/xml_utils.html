@@ -1,0 +1,1601 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.5.3" />
+<title>pyopteryx.utils.xml_utils API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.name small{font-weight:normal}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title"><code>pyopteryx.utils.xml_utils</code> module</h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">from lxml.etree import ElementTree
+
+
+# Get functions
+def get_allocated_cpu_rate_and_server_name(processor, mapping_cache, cpu_rates):
+    &#34;&#34;&#34;
+    Get allocated cpu_rate and server_name for processor
+    :param cpu_rates: dictionary of cpu processor names and cpu rate for example
+    :param mapping_cache: mapping_cache built in LqnBuilder
+    :param processor: processor element
+    :return:
+    &#34;&#34;&#34;
+    processor_name = processor.get(&#34;name&#34;).replace(&#34;_Processor&#34;, &#34;&#34;)
+    # connector_mapping maps processor_name to allocated_server_id
+    allocated_sever_id = mapping_cache[&#34;connector_mapping&#34;][processor_name]
+    # server_mapping maps server_id to server_name
+    allocated_cpu_server_name = mapping_cache[&#34;server_mapping&#34;][allocated_sever_id]
+    # Get cpu rate for current example from cpu_rates dictionary that maps server id to cpu rate of this server
+    for server_id, server_name in mapping_cache[&#34;server_mapping&#34;].items():
+        if server_name == allocated_cpu_server_name:
+            cpu_rate = cpu_rates[server_id]
+            return cpu_rate, allocated_cpu_server_name
+    return None, None
+
+
+def get_by_tag_name(element, tag):
+    &#34;&#34;&#34;
+    Get elements by tag name.
+    :param element: element
+    :param tag: tag string
+    :return: list of elements that matches tag
+    &#34;&#34;&#34;
+    results = []
+    for child in element.findall(&#39;.//&#39;):
+        if tag in child.tag:
+            results.append(child)
+    return results
+
+
+def get_element_by_identifier(attribute, search_string, element_tree):
+    &#34;&#34;&#34;
+    Get element by attribute and string.
+    :param attribute: string of attribute type
+    :param search_string: identifying string to look for
+    :param element_tree: element tree to look in
+    :return: found element
+    &#34;&#34;&#34;
+    return element_tree.find(
+        &#39;&#39;&#39;.//*[@{attribute}=&#39;{search_string}&#39;]&#39;&#39;&#39;.format(attribute=attribute, search_string=search_string))
+
+
+def get_by_id(element, element_id):
+    &#34;&#34;&#34;
+    Get element by id.
+    :param element: parent element
+    :param element_id: element id
+    :return: element
+    &#34;&#34;&#34;
+    return get_element_by_identifier(attribute=&#34;id&#34;, search_string=element_id, element_tree=element)
+
+
+def get_by_name(element, element_name):
+    &#34;&#34;&#34;
+    Get element by name
+    :param element: parent element
+    :param element_name: name string
+    :return: element
+    &#34;&#34;&#34;
+    return get_element_by_identifier(attribute=&#34;name&#34;, search_string=element_name, element_tree=element)
+
+
+def get_action_type(action):
+    &#34;&#34;&#34;
+    Get action type as string.
+    :param action: action element
+    :return: string action type
+    &#34;&#34;&#34;
+    action_type = action.get(get_xml_schema_type())
+    if action_type:
+        if &#34;InternalAction&#34; in action_type:
+            return &#39;InternalAction&#39;
+        elif &#34;StartAction&#34; in action_type:
+            return &#39;StartAction&#39;
+        elif &#34;StopAction&#34; in action_type:
+            return &#39;StopAction&#39;
+        elif &#34;BranchAction&#34; in action_type:
+            return &#39;BranchAction&#39;
+        elif &#34;EntryLevelSystemCall&#34; in action_type:
+            return &#34;EntryLevelSystemCall&#34;
+        elif &#34;Start&#34; in action_type:
+            return &#34;Start&#34;
+        elif &#34;Stop&#34; in action_type:
+            return &#34;Stop&#34;
+        elif &#34;ExternalCallAction&#34; in action_type:
+            return &#39;ExternalCallAction&#39;
+        elif &#34;Loop&#34; in action_type:
+            return &#39;LoopAction&#39;
+        elif &#34;SetVariableAction&#34; in action_type:
+            return &#39;SetVariableAction&#39;
+    else:
+        return None
+
+
+def get_linkage_id(identifier, element_tree):
+    &#34;&#34;&#34;
+    Get id to linking element from &#34;href&#34; attribute
+    :param identifier: identifier of element to look in
+    :param element_tree: current element tree
+    :return: id
+    &#34;&#34;&#34;
+    linkage_id = element_tree.find(&#39;.//{}&#39;.format(identifier)).get(&#34;href&#34;).split(&#34;#&#34;)[1]
+    return linkage_id
+
+
+def get_entity_name(entity):
+    &#34;&#34;&#34;
+    Get entity name of given entity. If no &#34;entityName&#34; is specified return &#34;aName&#34;.
+    :param entity: entity element
+    :return: entity_name
+    &#34;&#34;&#34;
+    entity_name = entity.get(&#34;entityName&#34;)
+    if not entity_name:
+        entity_name = &#34;aName&#34;
+    return entity_name
+
+
+def get_used_components(repository_tree, input_data):
+    &#34;&#34;&#34;
+    Get repository components from &#34;components__Repository&#34; and only load components that correspond with assembled
+    components of input data
+    :return: all used components from repository as list
+    &#34;&#34;&#34;
+    used_component = []
+    repository_components = repository_tree.findall(&#34;./components__Repository&#34;)
+    for repository_component in repository_components:
+        repository_component_id = repository_component.get(&#34;id&#34;)
+        if repository_component_id not in input_data[&#34;excluded_components&#34;]:
+            used_component.append(repository_component)
+    return used_component
+
+
+def get_element_from_list(attribute, search_string, element_list):
+    &#34;&#34;&#34;
+    Get element by attribute and string.
+    :param attribute: string of attribute type
+    :param search_string: identifying string to look for
+    :param element_list: element tree to look in
+    :return: found element
+    &#34;&#34;&#34;
+    for element in element_list:
+        if search_string == element.get(attribute):
+            return element
+    return None
+
+
+def get_xml_schema_type():
+    &#34;&#34;&#34;
+    Get xml schema type.
+    &#34;&#34;&#34;
+    return &#39;{http://www.w3.org/2001/XMLSchema-instance}type&#39;
+
+
+def get_parent_by_tag(element, tag):
+    &#34;&#34;&#34;
+    Get parent of element by tag name.
+    :param element: child element
+    :param tag: tag of parent element
+    :return: parent element
+    &#34;&#34;&#34;
+    parent = element.getparent()
+    if tag == parent.tag:
+        return parent
+    else:
+        return get_parent_by_tag(parent, tag)
+
+
+def get_branch_type(branch):
+    &#34;&#34;&#34;
+    Get branch type for branch. Type can be detailed, type, simple or probabilistic
+    :param branch: branch element
+    :return: branch type
+    &#34;&#34;&#34;
+    branch_type = branch.get(get_xml_schema_type())
+    if &#34;GuardedBranchTransition&#34; in branch_type:
+        branch_conditions = branch.findall(&#34;.//branchCondition_GuardedBranchTransition&#34;)
+        for condition in branch_conditions:
+            branch_condition = condition.get(&#34;specification&#34;).replace(&#34; &#34;, &#34;&#34;)
+            if &#34;isDetailed.VALUE==&#34; in branch_condition:
+                return &#34;detailed&#34;
+            elif &#34;type.VALUE==&#34; in branch_condition:
+                return &#34;type&#34;
+            else:
+                return &#34;simple&#34;
+    else:
+        return &#34;probabilistic&#34;
+
+
+def get_branch_condition(branch):
+    &#34;&#34;&#34;
+    Extract branchCondition_GuardedBranchTransition from specification, e.g.
+    &#34;type.VALUE == &amp;quot;graphical&amp;quot;&#34; -&gt; &#34;#graphical&#34;
+    :param branch: &#34;branches_Branch&#34;
+    :return: extracted condition string
+    &#34;&#34;&#34;
+    branch_condition = branch.find(&#34;./branchCondition_GuardedBranchTransition&#34;).get(
+        &#34;specification&#34;).split(&#34;==&#34;)[-1].replace(&#39;&#34;&#39;, &#34;&#34;).replace(&#34; &#34;, &#34;&#34;)
+    branch_condition = &#39;#{condition}#&#39;.format(condition=branch_condition)
+    return branch_condition
+
+
+def get_unique_specification_string(specification):
+    &#34;&#34;&#34;
+    Extract branchCondition_GuardedBranchTransition from specification, e.g.
+    &#34;type.VALUE == &amp;quot;graphical&amp;quot;&#34; -&gt; &#34;#graphical&#34;
+    :return: extracted condition string
+    &#34;&#34;&#34;
+    replaceable_characters = [&#39;\r&#39;, &#39;\n&#39;, &#39;\&#34;&#39;, &#39; &#39;]
+    result = specification
+    for replaceable_character in replaceable_characters:
+        result = result.replace(replaceable_character, &#34;&#34;)
+    result = &#39;#{condition}#&#39;.format(condition=result)
+    return result
+
+
+def get_uid_from_action_name(action_name, uid_string=None):
+    &#34;&#34;&#34;
+    Extract id from action name by splitting at &#34;__&#34;, because this marks the start of id in action name.
+    If uid string is in action name, remove it
+    :param action_name: full action name of processor (e.g. &#34;{action_type}_{aName}_{id}[uid_string}]&#34;
+    :param uid_string: uid_string
+    :return: {id}
+    &#34;&#34;&#34;
+    if uid_string:
+        cleaned_name = action_name.replace(&#34;_{uid_string}&#34;.format(uid_string=uid_string), &#34;&#34;)
+        return &#39;_{}&#39;.format(cleaned_name.split(&#34;__&#34;)[-1])
+    else:
+        return &#39;_{}&#39;.format(action_name.split(&#34;__&#34;)[-1])
+
+
+# Check functions
+def is_in_element_tree(attribute, search_string, element_tree):
+    &#34;&#34;&#34;
+    Check if element is in element tree.
+    :param attribute: string attribute type
+    :param search_string: string to search for
+    :param element_tree: tree to search in
+    :return:
+    &#34;&#34;&#34;
+    for element in element_tree:
+        if attribute in element.attrib:
+            if search_string in element.get(attribute):
+                return True
+    return False
+
+
+def check_if_precedence_exist(entry_phase_activities, pre_activity_name, post_activity_name):
+    &#34;&#34;&#34;
+    Checks if precedence already exist in task_activities returns True if precedence exists and false if
+    it does not exist
+    :param entry_phase_activities: task_activities element to add precedence to
+    :param pre_activity_name: activity name for pre tag activity element
+    :param post_activity_name: activity name for post tag activity element
+    :return: Boolean
+    &#34;&#34;&#34;
+    precedences = ElementTree(entry_phase_activities).findall(&#34;./precedence&#34;)
+    if len(precedences) == 0:
+        return False
+    else:
+        for existing_precedence in precedences:
+            # try to get name from pre tag.
+            try:
+                pre_tag = existing_precedence.find(&#34;pre&#34;).find(&#34;activity&#34;).get(&#34;name&#34;)
+            except AttributeError:
+                # pre tag does not exist in precedence -&gt; precedence does not exist yet
+                pre_tag = None  # return False
+            if pre_tag:
+                # try to get name from post tag.
+                try:
+                    post_tag = existing_precedence.find(&#34;post&#34;).find(&#34;activity&#34;).get(&#34;name&#34;)
+                except AttributeError:
+                    post_tag = None  # return False
+                # precedence has normal pre and post tag. Now compare the names to the new names that
+                # should be created
+                if pre_tag and post_tag:
+                    # If names are the same the precedence already exists
+                    if pre_tag == pre_activity_name and post_tag == post_activity_name:
+                        return True
+    return False
+
+
+def is_part_of_composite_component(element, components):
+    &#34;&#34;&#34;
+    Check if element is part of CompositeComponent
+    :param element: element of repository
+    :param components: repository components
+    :return: Boolean
+    &#34;&#34;&#34;
+    if element.tag != &#34;components__Repository&#34;:
+        parent = get_parent_by_tag(element=element, tag=&#34;components__Repository&#34;)
+        parent_id = parent.get(&#34;id&#34;)
+        for component in components:
+            if &#34;CompositeComponent&#34; in component.get(get_xml_schema_type()):
+                for assembly_context in component.findall(&#34;assemblyContexts__ComposedStructure&#34;):
+                    if parent_id == assembly_context.get(&#34;encapsulatedComponent__AssemblyContext&#34;):
+                        return True
+    else:
+        for component in components:
+            if &#34;CompositeComponent&#34; in component.get(get_xml_schema_type()):
+                for assembly_context in component.findall(&#34;assemblyContexts__ComposedStructure&#34;):
+                    if element.get(&#34;id&#34;) == assembly_context.get(&#34;encapsulatedComponent__AssemblyContext&#34;):
+                        return True
+    return False
+
+
+def copy_branch_check(branch_action):
+    &#34;&#34;&#34;
+    Check if branch actions requires a copyied processor by checking the first &#34;branches_Branch&#34; type
+    :param branch_action: branch action
+    :return: Boolean
+    &#34;&#34;&#34;
+    branch = branch_action.find(&#34;./branches_Branch&#34;)
+    branch_type = get_branch_type(branch)
+    if branch_type == &#34;type&#34;:
+        return True
+    else:
+        return False
+
+
+def copy_external_check(external_action):
+    &#34;&#34;&#34;
+    Check if branch actions requires a copied processor by checking the first &#34;branches_Branch&#34; type
+    :param external_action: branch action
+    :return: Boolean
+    &#34;&#34;&#34;
+    try:
+        type_named_reference = get_element_by_identifier(element_tree=external_action, attribute=&#34;referenceName&#34;,
+                                                         search_string=&#34;type&#34;)
+        if type_named_reference is not None:
+            # Get child of sibling with tag = specification_VariableCharacterisation
+            specification_variable = type_named_reference.getparent().find(&#34;.//specification_VariableCharacterisation&#34;)
+            uid_specification = get_unique_specification_string(specification_variable.get(&#34;specification&#34;))
+            return True, uid_specification
+    except AttributeError:
+        pass
+    return False, None
+
+
+def check_and_retrieve_uid(mapping_cache, processor):
+    &#34;&#34;&#34;
+    Check if processor name has uid, if true: return uid.
+    :param mapping_cache: mapping_cache built in LqnBuilder
+    :param processor: processor to check check for uid string
+    :return: uid string
+    &#34;&#34;&#34;
+    processor_list = create_processor_uid_mapping(mapping_cache=mapping_cache)
+    if processor.get(&#34;name&#34;).replace(&#34;_Processor&#34;, &#34;&#34;) in processor_list.keys():
+        uid = processor_list[processor.get(&#34;name&#34;).replace(&#34;_Processor&#34;, &#34;&#34;)]  # returns uid
+        return uid
+    return None
+
+
+def is_part_of_branch(action):
+    &#34;&#34;&#34;
+    Checks if action is part of branch action.
+    :return: Boolean
+    &#34;&#34;&#34;
+    try:
+        branch_action = get_parent_by_tag(element=action, tag=&#34;steps_Behaviour&#34;)
+    except AttributeError:  # parent with tag=&#34;steps_Behaviour&#34; cannot be found --&gt; is not in branch
+        return False
+    if branch_action is None:
+        return False
+    return True
+
+
+# Create functions
+def create_processors_for_composite_components(processor_name, processors_to_add, seff, cache, input_data,
+                                               mapping_cache):
+    &#34;&#34;&#34;
+    Check if current seff belongs to component that is part of CompositeComponent, if true: create corresponding
+    processor names and add to processors_to_add.
+    :param processor_name: Created processor name
+    :param processors_to_add: list of processor names that must be created
+    :param seff: current service effect specification
+    :param cache: cached PCM files
+    :param input_data: input containing cpu rates, allocation of components and assembled components
+    :param mapping_cache: mapping_cache built in LqnBuilder
+    :return: :return: list of processor names that must be created.
+    &#34;&#34;&#34;
+    if not processors_to_add:
+        if is_part_of_composite_component(element=seff, components=cache.get_xml_tree(&#34;repository&#34;).findall(
+                &#34;.//components__Repository&#34;)):
+            component_id = get_parent_by_tag(element=seff, tag=&#34;components__Repository&#34;).get(&#34;id&#34;)
+            allocated_server_ids = []
+            allocated_server_ids = create_server_uids(allocated_server_ids=allocated_server_ids,
+                                                      component_id=component_id, cache=cache,
+                                                      composite_component_allocation=input_data[
+                                                          &#34;composite_component_allocation&#34;])
+            for server_uid in allocated_server_ids:
+                uid = &#39;#{uid}#&#39;.format(uid=server_uid)
+                unique_processor_name = &#39;{processor_name}_{uid}&#39;.format(processor_name=processor_name, uid=uid)
+                mapping_cache[&#34;composite_uid_mapping&#34;][unique_processor_name] = uid
+                processors_to_add.append(unique_processor_name)
+    return processors_to_add
+
+
+def create_processors_for_external_actions(processor_name, processors_to_add, seff):
+    &#34;&#34;&#34;
+    If current seff contains a ExternalCallAction, check if copying processor is required, if true: create corresponding
+    processor names and add to processors_to_add. If ExternalCallAction does not require creation of multiple processors
+    the returned list is empty.
+    :param processor_name: Created processor name
+    :param processors_to_add: list of processor names that must be created
+    :param seff: current service effect specification
+    :return: :return: list of processor names that must be created.
+    &#34;&#34;&#34;
+    if not processors_to_add:
+        for action in seff.findall(&#34;./steps_Behaviour&#34;):
+            action_type = get_action_type(action=action)
+            if action_type == &#34;ExternalCallAction&#34;:
+                mandatory_to_copy, uid_specification = copy_external_check(external_action=action)
+                if mandatory_to_copy:
+                    external_processor_name = &#39;{processor_name}_{uid_specification}&#39;.format(
+                        processor_name=processor_name,
+                        uid_specification=uid_specification)
+                    processors_to_add.append(external_processor_name)
+    return processors_to_add
+
+
+def create_processor_names_for_branch_action(processor_name, processors_to_add, seff, mapping_cache):
+    &#34;&#34;&#34;
+    If current seff contains a BranchAction, check if copying processor is required, if true: create corresponding
+    processor names and add to processors_to_add. If branch action does not require creation of multiple processors
+    the returned list is empty.
+    :param mapping_cache: mapping_cache built in LqnBuilder
+    :param processor_name: Created processor name
+    :param processors_to_add: list of processor names that must be created
+    :param seff: current service effect specification
+    :return: list of processor names that must be created.
+    &#34;&#34;&#34;
+    for action in seff.findall(&#34;./steps_Behaviour&#34;):
+        action_type = get_action_type(action=action)
+        if action_type == &#34;BranchAction&#34;:
+            mandatory_to_copy_branch = copy_branch_check(branch_action=action)
+            if mandatory_to_copy_branch:
+                for branch in action.findall(&#34;./branches_Branch&#34;):
+                    branch_uid = get_branch_condition(branch=branch)
+                    branch_processor_name = &#39;{processor_name}_{condition}&#39;.format(processor_name=processor_name,
+                                                                                  condition=branch_uid)
+                    mapping_cache[&#34;branch_mapping&#34;][branch.get(&#34;id&#34;)] = {branch_processor_name: branch_uid}
+                    mapping_cache[&#34;is_detailed&#34;][processor_name].update({branch_uid: False})
+                    processors_to_add.append(branch_processor_name)
+    return processors_to_add
+
+
+def create_activity_name_from_action(action, uid_string=None):
+    &#34;&#34;&#34;
+    Create activity name from action of format &#34;{type}_{name}_{id}&#34;
+    :param uid_string:
+    :param action: action element
+    :return: activity name
+    &#34;&#34;&#34;
+    action_type = get_action_type(action=action)
+    action_name = get_entity_name(action)
+    action_id = action.get(&#34;id&#34;)
+    if uid_string:
+        activity_name = &#39;{type}_{name}_{id}_{uid_string}&#39;.format(type=action_type, name=action_name, id=action_id,
+                                                                 uid_string=uid_string)
+    else:
+        activity_name = &#39;{type}_{name}_{id}&#39;.format(type=action_type, name=action_name, id=action_id)
+    return activity_name
+
+
+def create_processor_uid_mapping(mapping_cache):
+    &#34;&#34;&#34;
+    Create dictionary that maps processor name to uid
+    :param mapping_cache: mapping_cache built in LqnBuilder
+    :return: mapping for processor to uid
+    &#34;&#34;&#34;
+    processor_uid_mapping = {}
+    # Get uid mappings from mapping_cache
+    branch_mapping = mapping_cache[&#34;branch_mapping&#34;]
+    loop_uid_mapping = mapping_cache[&#34;loop_uid_mapping&#34;]
+    composite_uid_mapping = mapping_cache[&#34;composite_uid_mapping&#34;]
+    # Add mappings to processor_uid_mapping
+    for branch_id, processor_dict in branch_mapping.items():
+        processor_uid_mapping.update(processor_dict)
+    processor_uid_mapping.update(loop_uid_mapping)
+    processor_uid_mapping.update(composite_uid_mapping)
+    return processor_uid_mapping
+
+
+def create_server_uids(allocated_server_ids, component_id, composite_component_allocation, cache):
+    &#34;&#34;&#34;
+
+    :param allocated_server_ids:
+    :param component_id:
+    :param composite_component_allocation:
+    :param cache:
+    :return:
+    &#34;&#34;&#34;
+    if component_id in composite_component_allocation.keys():
+        # Get allocated server for component_id
+        for server_id in composite_component_allocation[component_id]:
+            allocated_server_ids.append(server_id)
+    # Length &#39;composite_component_alocation&#39; mapping == 1 if all CompositeComponents
+    # are located on same server If true: loop over amount of CompositeComponents and
+    # create uids by adding loop counter to allocated server name
+    if len(allocated_server_ids) == 1:
+        # Save tmp allocates_server_name
+        allocated_server_id = allocated_server_ids[0]
+        # Clear list
+        allocated_server_ids = []
+        for i in range(len(composite_component_allocation.keys())):
+            server_name = get_by_id(element_id=allocated_server_id, element=cache.get_xml_tree(
+                &#34;resourceenvironment&#34;)).get(&#34;entityName&#34;)
+            # allocated_server_ids.append(allocated_server + &#34;-&#34; + str(i+1))
+            allocated_server_ids.append(
+                &#39;{server_name}-{counter}&#39;.format(server_name=server_name, counter=i + 1))
+    # Else get server names and add to list
+    else:
+        tmp_server_list = []
+        for allocated_server_id in allocated_server_ids:
+            server_name = get_by_id(element_id=allocated_server_id, element=cache.get_xml_tree(
+                &#34;resourceenvironment&#34;)).get(&#34;entityName&#34;)
+            tmp_server_list.append(server_name)
+        # Overwrite allcated server ids with list that contains names
+        allocated_server_ids = tmp_server_list
+    return allocated_server_ids
+
+
+def create_synch_call_name(called_service_id, xml_cache, input_data, activity, uid_string, action, mapping_cache):
+    # Get Interface operation by &#34;calledService_ExternalService&#34;
+    interface_operation = get_by_id(element_id=called_service_id,
+                                    element=xml_cache.get_xml_tree(&#34;repository&#34;))
+    operation_name = interface_operation.get(&#34;entityName&#34;)
+    # Get the interface_name from interface&#39;s operation parent with tag &#34;interfaces__Repository&#34;
+    # and get &#34;entityName&#34;
+    interface = get_parent_by_tag(element=interface_operation, tag=&#34;interfaces__Repository&#34;)
+    interface_name = interface.get(&#34;entityName&#34;)
+
+    # Get component_name from parent element with tag &#34;components__Repository&#34; from
+    # element that&#39;s &#34;describedService__SEFF&#34; == component_repository_id
+    described_seff = None
+    for component in get_used_components(xml_cache.get_xml_tree(name=&#34;repository&#34;), input_data=input_data):
+        described_seff = get_element_by_identifier(attribute=&#34;describedService__SEFF&#34;,
+                                                   search_string=called_service_id,
+                                                   element_tree=component)
+        if described_seff is not None:
+            break
+    component = get_parent_by_tag(element=described_seff, tag=&#34;components__Repository&#34;)
+    component_name = component.get(&#34;entityName&#34;)
+
+    # Create synch_call_name and add synch-call to activity
+    # check if action contains attribute referenceName=type in all children and
+    # retrieve child of type namedReference__VariableUsage (see *.repository file)
+    type_named_reference = get_element_by_identifier(element_tree=action, attribute=&#34;referenceName&#34;,
+                                                     search_string=&#34;type&#34;)
+    if type_named_reference is not None:
+        # Get child of sibling with tag = specification_VariableCharacterisation
+        specification_variable = type_named_reference.getparent().find(&#34;.//specification_VariableCharacterisation&#34;)
+        uid_specification = get_unique_specification_string(specification_variable.get(&#34;specification&#34;))
+        synch_call_name = &#39;{component}_{interface}_{operation}_{uid_specification}_Entry&#39;.format(
+            component=component_name,
+            interface=interface_name,
+            operation=operation_name,
+            uid_specification=uid_specification)
+        return synch_call_name
+    else:
+        # Check is actions belongs to composite component, if true build processor name with self.uid_string to
+        # link to corresponding processor
+        composite_component = is_part_of_composite_component(element=component,
+                                                             components=xml_cache.get_xml_tree(&#34;repository&#34;).findall(
+                                                                 &#34;./components__Repository&#34;))
+        if composite_component and uid_string:
+            synch_call_name = &#39;{component}_{interface}_{operation}_{uid}_Entry&#39;.format(
+                component=component_name,
+                interface=interface_name,
+                operation=operation_name,
+                uid=uid_string)
+            return synch_call_name
+        else:
+            parent_component_name = get_parent_by_tag(element=activity, tag=&#34;processor&#34;).get(&#34;name&#34;)
+            try:
+                if input_data[&#34;graphical_mapping&#34;][0] in parent_component_name:
+                    synch_call_name = &#39;{component}_{interface}_{operation}_{uid}_Entry&#39;.format(
+                        component=component_name,
+                        interface=interface_name,
+                        operation=operation_name,
+                        uid=input_data[&#34;graphical_mapping&#34;][1])
+                    return synch_call_name
+            except KeyError:
+                # except for other examples than BRS
+                pass
+            # Create synch-calls for remaining processors
+            processor_name_beginning = &#39;{component}_{interface}_{operation}&#39;.format(
+                component=component_name,
+                interface=interface_name,
+                operation=operation_name)
+            # Our heuristic: Choose first processor that matches processor_name_beginning as synch-call&#39;s destination
+            for processor_name in mapping_cache[&#34;connector_mapping&#34;].keys():
+                if processor_name_beginning in processor_name:
+                    synch_call_name = &#39;{processor_name}_Entry&#39;.format(processor_name=processor_name)
+                    return synch_call_name</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="pyopteryx.utils.xml_utils.check_and_retrieve_uid"><code class="name flex">
+<span>def <span class="ident">check_and_retrieve_uid</span></span>(<span>mapping_cache, processor)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Check if processor name has uid, if true: return uid.
+:param mapping_cache: mapping_cache built in LqnBuilder
+:param processor: processor to check check for uid string
+:return: uid string</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def check_and_retrieve_uid(mapping_cache, processor):
+    &#34;&#34;&#34;
+    Check if processor name has uid, if true: return uid.
+    :param mapping_cache: mapping_cache built in LqnBuilder
+    :param processor: processor to check check for uid string
+    :return: uid string
+    &#34;&#34;&#34;
+    processor_list = create_processor_uid_mapping(mapping_cache=mapping_cache)
+    if processor.get(&#34;name&#34;).replace(&#34;_Processor&#34;, &#34;&#34;) in processor_list.keys():
+        uid = processor_list[processor.get(&#34;name&#34;).replace(&#34;_Processor&#34;, &#34;&#34;)]  # returns uid
+        return uid
+    return None</code></pre>
+</details>
+</dd>
+<dt id="pyopteryx.utils.xml_utils.check_if_precedence_exist"><code class="name flex">
+<span>def <span class="ident">check_if_precedence_exist</span></span>(<span>entry_phase_activities, pre_activity_name, post_activity_name)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Checks if precedence already exist in task_activities returns True if precedence exists and false if
+it does not exist
+:param entry_phase_activities: task_activities element to add precedence to
+:param pre_activity_name: activity name for pre tag activity element
+:param post_activity_name: activity name for post tag activity element
+:return: Boolean</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def check_if_precedence_exist(entry_phase_activities, pre_activity_name, post_activity_name):
+    &#34;&#34;&#34;
+    Checks if precedence already exist in task_activities returns True if precedence exists and false if
+    it does not exist
+    :param entry_phase_activities: task_activities element to add precedence to
+    :param pre_activity_name: activity name for pre tag activity element
+    :param post_activity_name: activity name for post tag activity element
+    :return: Boolean
+    &#34;&#34;&#34;
+    precedences = ElementTree(entry_phase_activities).findall(&#34;./precedence&#34;)
+    if len(precedences) == 0:
+        return False
+    else:
+        for existing_precedence in precedences:
+            # try to get name from pre tag.
+            try:
+                pre_tag = existing_precedence.find(&#34;pre&#34;).find(&#34;activity&#34;).get(&#34;name&#34;)
+            except AttributeError:
+                # pre tag does not exist in precedence -&gt; precedence does not exist yet
+                pre_tag = None  # return False
+            if pre_tag:
+                # try to get name from post tag.
+                try:
+                    post_tag = existing_precedence.find(&#34;post&#34;).find(&#34;activity&#34;).get(&#34;name&#34;)
+                except AttributeError:
+                    post_tag = None  # return False
+                # precedence has normal pre and post tag. Now compare the names to the new names that
+                # should be created
+                if pre_tag and post_tag:
+                    # If names are the same the precedence already exists
+                    if pre_tag == pre_activity_name and post_tag == post_activity_name:
+                        return True
+    return False</code></pre>
+</details>
+</dd>
+<dt id="pyopteryx.utils.xml_utils.copy_branch_check"><code class="name flex">
+<span>def <span class="ident">copy_branch_check</span></span>(<span>branch_action)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Check if branch actions requires a copyied processor by checking the first "branches_Branch" type
+:param branch_action: branch action
+:return: Boolean</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def copy_branch_check(branch_action):
+    &#34;&#34;&#34;
+    Check if branch actions requires a copyied processor by checking the first &#34;branches_Branch&#34; type
+    :param branch_action: branch action
+    :return: Boolean
+    &#34;&#34;&#34;
+    branch = branch_action.find(&#34;./branches_Branch&#34;)
+    branch_type = get_branch_type(branch)
+    if branch_type == &#34;type&#34;:
+        return True
+    else:
+        return False</code></pre>
+</details>
+</dd>
+<dt id="pyopteryx.utils.xml_utils.copy_external_check"><code class="name flex">
+<span>def <span class="ident">copy_external_check</span></span>(<span>external_action)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Check if branch actions requires a copied processor by checking the first "branches_Branch" type
+:param external_action: branch action
+:return: Boolean</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def copy_external_check(external_action):
+    &#34;&#34;&#34;
+    Check if branch actions requires a copied processor by checking the first &#34;branches_Branch&#34; type
+    :param external_action: branch action
+    :return: Boolean
+    &#34;&#34;&#34;
+    try:
+        type_named_reference = get_element_by_identifier(element_tree=external_action, attribute=&#34;referenceName&#34;,
+                                                         search_string=&#34;type&#34;)
+        if type_named_reference is not None:
+            # Get child of sibling with tag = specification_VariableCharacterisation
+            specification_variable = type_named_reference.getparent().find(&#34;.//specification_VariableCharacterisation&#34;)
+            uid_specification = get_unique_specification_string(specification_variable.get(&#34;specification&#34;))
+            return True, uid_specification
+    except AttributeError:
+        pass
+    return False, None</code></pre>
+</details>
+</dd>
+<dt id="pyopteryx.utils.xml_utils.create_activity_name_from_action"><code class="name flex">
+<span>def <span class="ident">create_activity_name_from_action</span></span>(<span>action, uid_string=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Create activity name from action of format "{type}<em id>{name}</em>"
+:param uid_string:
+:param action: action element
+:return: activity name</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def create_activity_name_from_action(action, uid_string=None):
+    &#34;&#34;&#34;
+    Create activity name from action of format &#34;{type}_{name}_{id}&#34;
+    :param uid_string:
+    :param action: action element
+    :return: activity name
+    &#34;&#34;&#34;
+    action_type = get_action_type(action=action)
+    action_name = get_entity_name(action)
+    action_id = action.get(&#34;id&#34;)
+    if uid_string:
+        activity_name = &#39;{type}_{name}_{id}_{uid_string}&#39;.format(type=action_type, name=action_name, id=action_id,
+                                                                 uid_string=uid_string)
+    else:
+        activity_name = &#39;{type}_{name}_{id}&#39;.format(type=action_type, name=action_name, id=action_id)
+    return activity_name</code></pre>
+</details>
+</dd>
+<dt id="pyopteryx.utils.xml_utils.create_processor_names_for_branch_action"><code class="name flex">
+<span>def <span class="ident">create_processor_names_for_branch_action</span></span>(<span>processor_name, processors_to_add, seff, mapping_cache)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>If current seff contains a BranchAction, check if copying processor is required, if true: create corresponding
+processor names and add to processors_to_add. If branch action does not require creation of multiple processors
+the returned list is empty.
+:param mapping_cache: mapping_cache built in LqnBuilder
+:param processor_name: Created processor name
+:param processors_to_add: list of processor names that must be created
+:param seff: current service effect specification
+:return: list of processor names that must be created.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def create_processor_names_for_branch_action(processor_name, processors_to_add, seff, mapping_cache):
+    &#34;&#34;&#34;
+    If current seff contains a BranchAction, check if copying processor is required, if true: create corresponding
+    processor names and add to processors_to_add. If branch action does not require creation of multiple processors
+    the returned list is empty.
+    :param mapping_cache: mapping_cache built in LqnBuilder
+    :param processor_name: Created processor name
+    :param processors_to_add: list of processor names that must be created
+    :param seff: current service effect specification
+    :return: list of processor names that must be created.
+    &#34;&#34;&#34;
+    for action in seff.findall(&#34;./steps_Behaviour&#34;):
+        action_type = get_action_type(action=action)
+        if action_type == &#34;BranchAction&#34;:
+            mandatory_to_copy_branch = copy_branch_check(branch_action=action)
+            if mandatory_to_copy_branch:
+                for branch in action.findall(&#34;./branches_Branch&#34;):
+                    branch_uid = get_branch_condition(branch=branch)
+                    branch_processor_name = &#39;{processor_name}_{condition}&#39;.format(processor_name=processor_name,
+                                                                                  condition=branch_uid)
+                    mapping_cache[&#34;branch_mapping&#34;][branch.get(&#34;id&#34;)] = {branch_processor_name: branch_uid}
+                    mapping_cache[&#34;is_detailed&#34;][processor_name].update({branch_uid: False})
+                    processors_to_add.append(branch_processor_name)
+    return processors_to_add</code></pre>
+</details>
+</dd>
+<dt id="pyopteryx.utils.xml_utils.create_processor_uid_mapping"><code class="name flex">
+<span>def <span class="ident">create_processor_uid_mapping</span></span>(<span>mapping_cache)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Create dictionary that maps processor name to uid
+:param mapping_cache: mapping_cache built in LqnBuilder
+:return: mapping for processor to uid</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def create_processor_uid_mapping(mapping_cache):
+    &#34;&#34;&#34;
+    Create dictionary that maps processor name to uid
+    :param mapping_cache: mapping_cache built in LqnBuilder
+    :return: mapping for processor to uid
+    &#34;&#34;&#34;
+    processor_uid_mapping = {}
+    # Get uid mappings from mapping_cache
+    branch_mapping = mapping_cache[&#34;branch_mapping&#34;]
+    loop_uid_mapping = mapping_cache[&#34;loop_uid_mapping&#34;]
+    composite_uid_mapping = mapping_cache[&#34;composite_uid_mapping&#34;]
+    # Add mappings to processor_uid_mapping
+    for branch_id, processor_dict in branch_mapping.items():
+        processor_uid_mapping.update(processor_dict)
+    processor_uid_mapping.update(loop_uid_mapping)
+    processor_uid_mapping.update(composite_uid_mapping)
+    return processor_uid_mapping</code></pre>
+</details>
+</dd>
+<dt id="pyopteryx.utils.xml_utils.create_processors_for_composite_components"><code class="name flex">
+<span>def <span class="ident">create_processors_for_composite_components</span></span>(<span>processor_name, processors_to_add, seff, cache, input_data, mapping_cache)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Check if current seff belongs to component that is part of CompositeComponent, if true: create corresponding
+processor names and add to processors_to_add.
+:param processor_name: Created processor name
+:param processors_to_add: list of processor names that must be created
+:param seff: current service effect specification
+:param cache: cached PCM files
+:param input_data: input containing cpu rates, allocation of components and assembled components
+:param mapping_cache: mapping_cache built in LqnBuilder
+:return: :return: list of processor names that must be created.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def create_processors_for_composite_components(processor_name, processors_to_add, seff, cache, input_data,
+                                               mapping_cache):
+    &#34;&#34;&#34;
+    Check if current seff belongs to component that is part of CompositeComponent, if true: create corresponding
+    processor names and add to processors_to_add.
+    :param processor_name: Created processor name
+    :param processors_to_add: list of processor names that must be created
+    :param seff: current service effect specification
+    :param cache: cached PCM files
+    :param input_data: input containing cpu rates, allocation of components and assembled components
+    :param mapping_cache: mapping_cache built in LqnBuilder
+    :return: :return: list of processor names that must be created.
+    &#34;&#34;&#34;
+    if not processors_to_add:
+        if is_part_of_composite_component(element=seff, components=cache.get_xml_tree(&#34;repository&#34;).findall(
+                &#34;.//components__Repository&#34;)):
+            component_id = get_parent_by_tag(element=seff, tag=&#34;components__Repository&#34;).get(&#34;id&#34;)
+            allocated_server_ids = []
+            allocated_server_ids = create_server_uids(allocated_server_ids=allocated_server_ids,
+                                                      component_id=component_id, cache=cache,
+                                                      composite_component_allocation=input_data[
+                                                          &#34;composite_component_allocation&#34;])
+            for server_uid in allocated_server_ids:
+                uid = &#39;#{uid}#&#39;.format(uid=server_uid)
+                unique_processor_name = &#39;{processor_name}_{uid}&#39;.format(processor_name=processor_name, uid=uid)
+                mapping_cache[&#34;composite_uid_mapping&#34;][unique_processor_name] = uid
+                processors_to_add.append(unique_processor_name)
+    return processors_to_add</code></pre>
+</details>
+</dd>
+<dt id="pyopteryx.utils.xml_utils.create_processors_for_external_actions"><code class="name flex">
+<span>def <span class="ident">create_processors_for_external_actions</span></span>(<span>processor_name, processors_to_add, seff)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>If current seff contains a ExternalCallAction, check if copying processor is required, if true: create corresponding
+processor names and add to processors_to_add. If ExternalCallAction does not require creation of multiple processors
+the returned list is empty.
+:param processor_name: Created processor name
+:param processors_to_add: list of processor names that must be created
+:param seff: current service effect specification
+:return: :return: list of processor names that must be created.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def create_processors_for_external_actions(processor_name, processors_to_add, seff):
+    &#34;&#34;&#34;
+    If current seff contains a ExternalCallAction, check if copying processor is required, if true: create corresponding
+    processor names and add to processors_to_add. If ExternalCallAction does not require creation of multiple processors
+    the returned list is empty.
+    :param processor_name: Created processor name
+    :param processors_to_add: list of processor names that must be created
+    :param seff: current service effect specification
+    :return: :return: list of processor names that must be created.
+    &#34;&#34;&#34;
+    if not processors_to_add:
+        for action in seff.findall(&#34;./steps_Behaviour&#34;):
+            action_type = get_action_type(action=action)
+            if action_type == &#34;ExternalCallAction&#34;:
+                mandatory_to_copy, uid_specification = copy_external_check(external_action=action)
+                if mandatory_to_copy:
+                    external_processor_name = &#39;{processor_name}_{uid_specification}&#39;.format(
+                        processor_name=processor_name,
+                        uid_specification=uid_specification)
+                    processors_to_add.append(external_processor_name)
+    return processors_to_add</code></pre>
+</details>
+</dd>
+<dt id="pyopteryx.utils.xml_utils.create_server_uids"><code class="name flex">
+<span>def <span class="ident">create_server_uids</span></span>(<span>allocated_server_ids, component_id, composite_component_allocation, cache)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>:param allocated_server_ids:
+:param component_id:
+:param composite_component_allocation:
+:param cache:
+:return:</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def create_server_uids(allocated_server_ids, component_id, composite_component_allocation, cache):
+    &#34;&#34;&#34;
+
+    :param allocated_server_ids:
+    :param component_id:
+    :param composite_component_allocation:
+    :param cache:
+    :return:
+    &#34;&#34;&#34;
+    if component_id in composite_component_allocation.keys():
+        # Get allocated server for component_id
+        for server_id in composite_component_allocation[component_id]:
+            allocated_server_ids.append(server_id)
+    # Length &#39;composite_component_alocation&#39; mapping == 1 if all CompositeComponents
+    # are located on same server If true: loop over amount of CompositeComponents and
+    # create uids by adding loop counter to allocated server name
+    if len(allocated_server_ids) == 1:
+        # Save tmp allocates_server_name
+        allocated_server_id = allocated_server_ids[0]
+        # Clear list
+        allocated_server_ids = []
+        for i in range(len(composite_component_allocation.keys())):
+            server_name = get_by_id(element_id=allocated_server_id, element=cache.get_xml_tree(
+                &#34;resourceenvironment&#34;)).get(&#34;entityName&#34;)
+            # allocated_server_ids.append(allocated_server + &#34;-&#34; + str(i+1))
+            allocated_server_ids.append(
+                &#39;{server_name}-{counter}&#39;.format(server_name=server_name, counter=i + 1))
+    # Else get server names and add to list
+    else:
+        tmp_server_list = []
+        for allocated_server_id in allocated_server_ids:
+            server_name = get_by_id(element_id=allocated_server_id, element=cache.get_xml_tree(
+                &#34;resourceenvironment&#34;)).get(&#34;entityName&#34;)
+            tmp_server_list.append(server_name)
+        # Overwrite allcated server ids with list that contains names
+        allocated_server_ids = tmp_server_list
+    return allocated_server_ids</code></pre>
+</details>
+</dd>
+<dt id="pyopteryx.utils.xml_utils.create_synch_call_name"><code class="name flex">
+<span>def <span class="ident">create_synch_call_name</span></span>(<span>called_service_id, xml_cache, input_data, activity, uid_string, action, mapping_cache)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def create_synch_call_name(called_service_id, xml_cache, input_data, activity, uid_string, action, mapping_cache):
+    # Get Interface operation by &#34;calledService_ExternalService&#34;
+    interface_operation = get_by_id(element_id=called_service_id,
+                                    element=xml_cache.get_xml_tree(&#34;repository&#34;))
+    operation_name = interface_operation.get(&#34;entityName&#34;)
+    # Get the interface_name from interface&#39;s operation parent with tag &#34;interfaces__Repository&#34;
+    # and get &#34;entityName&#34;
+    interface = get_parent_by_tag(element=interface_operation, tag=&#34;interfaces__Repository&#34;)
+    interface_name = interface.get(&#34;entityName&#34;)
+
+    # Get component_name from parent element with tag &#34;components__Repository&#34; from
+    # element that&#39;s &#34;describedService__SEFF&#34; == component_repository_id
+    described_seff = None
+    for component in get_used_components(xml_cache.get_xml_tree(name=&#34;repository&#34;), input_data=input_data):
+        described_seff = get_element_by_identifier(attribute=&#34;describedService__SEFF&#34;,
+                                                   search_string=called_service_id,
+                                                   element_tree=component)
+        if described_seff is not None:
+            break
+    component = get_parent_by_tag(element=described_seff, tag=&#34;components__Repository&#34;)
+    component_name = component.get(&#34;entityName&#34;)
+
+    # Create synch_call_name and add synch-call to activity
+    # check if action contains attribute referenceName=type in all children and
+    # retrieve child of type namedReference__VariableUsage (see *.repository file)
+    type_named_reference = get_element_by_identifier(element_tree=action, attribute=&#34;referenceName&#34;,
+                                                     search_string=&#34;type&#34;)
+    if type_named_reference is not None:
+        # Get child of sibling with tag = specification_VariableCharacterisation
+        specification_variable = type_named_reference.getparent().find(&#34;.//specification_VariableCharacterisation&#34;)
+        uid_specification = get_unique_specification_string(specification_variable.get(&#34;specification&#34;))
+        synch_call_name = &#39;{component}_{interface}_{operation}_{uid_specification}_Entry&#39;.format(
+            component=component_name,
+            interface=interface_name,
+            operation=operation_name,
+            uid_specification=uid_specification)
+        return synch_call_name
+    else:
+        # Check is actions belongs to composite component, if true build processor name with self.uid_string to
+        # link to corresponding processor
+        composite_component = is_part_of_composite_component(element=component,
+                                                             components=xml_cache.get_xml_tree(&#34;repository&#34;).findall(
+                                                                 &#34;./components__Repository&#34;))
+        if composite_component and uid_string:
+            synch_call_name = &#39;{component}_{interface}_{operation}_{uid}_Entry&#39;.format(
+                component=component_name,
+                interface=interface_name,
+                operation=operation_name,
+                uid=uid_string)
+            return synch_call_name
+        else:
+            parent_component_name = get_parent_by_tag(element=activity, tag=&#34;processor&#34;).get(&#34;name&#34;)
+            try:
+                if input_data[&#34;graphical_mapping&#34;][0] in parent_component_name:
+                    synch_call_name = &#39;{component}_{interface}_{operation}_{uid}_Entry&#39;.format(
+                        component=component_name,
+                        interface=interface_name,
+                        operation=operation_name,
+                        uid=input_data[&#34;graphical_mapping&#34;][1])
+                    return synch_call_name
+            except KeyError:
+                # except for other examples than BRS
+                pass
+            # Create synch-calls for remaining processors
+            processor_name_beginning = &#39;{component}_{interface}_{operation}&#39;.format(
+                component=component_name,
+                interface=interface_name,
+                operation=operation_name)
+            # Our heuristic: Choose first processor that matches processor_name_beginning as synch-call&#39;s destination
+            for processor_name in mapping_cache[&#34;connector_mapping&#34;].keys():
+                if processor_name_beginning in processor_name:
+                    synch_call_name = &#39;{processor_name}_Entry&#39;.format(processor_name=processor_name)
+                    return synch_call_name</code></pre>
+</details>
+</dd>
+<dt id="pyopteryx.utils.xml_utils.get_action_type"><code class="name flex">
+<span>def <span class="ident">get_action_type</span></span>(<span>action)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get action type as string.
+:param action: action element
+:return: string action type</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_action_type(action):
+    &#34;&#34;&#34;
+    Get action type as string.
+    :param action: action element
+    :return: string action type
+    &#34;&#34;&#34;
+    action_type = action.get(get_xml_schema_type())
+    if action_type:
+        if &#34;InternalAction&#34; in action_type:
+            return &#39;InternalAction&#39;
+        elif &#34;StartAction&#34; in action_type:
+            return &#39;StartAction&#39;
+        elif &#34;StopAction&#34; in action_type:
+            return &#39;StopAction&#39;
+        elif &#34;BranchAction&#34; in action_type:
+            return &#39;BranchAction&#39;
+        elif &#34;EntryLevelSystemCall&#34; in action_type:
+            return &#34;EntryLevelSystemCall&#34;
+        elif &#34;Start&#34; in action_type:
+            return &#34;Start&#34;
+        elif &#34;Stop&#34; in action_type:
+            return &#34;Stop&#34;
+        elif &#34;ExternalCallAction&#34; in action_type:
+            return &#39;ExternalCallAction&#39;
+        elif &#34;Loop&#34; in action_type:
+            return &#39;LoopAction&#39;
+        elif &#34;SetVariableAction&#34; in action_type:
+            return &#39;SetVariableAction&#39;
+    else:
+        return None</code></pre>
+</details>
+</dd>
+<dt id="pyopteryx.utils.xml_utils.get_allocated_cpu_rate_and_server_name"><code class="name flex">
+<span>def <span class="ident">get_allocated_cpu_rate_and_server_name</span></span>(<span>processor, mapping_cache, cpu_rates)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get allocated cpu_rate and server_name for processor
+:param cpu_rates: dictionary of cpu processor names and cpu rate for example
+:param mapping_cache: mapping_cache built in LqnBuilder
+:param processor: processor element
+:return:</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_allocated_cpu_rate_and_server_name(processor, mapping_cache, cpu_rates):
+    &#34;&#34;&#34;
+    Get allocated cpu_rate and server_name for processor
+    :param cpu_rates: dictionary of cpu processor names and cpu rate for example
+    :param mapping_cache: mapping_cache built in LqnBuilder
+    :param processor: processor element
+    :return:
+    &#34;&#34;&#34;
+    processor_name = processor.get(&#34;name&#34;).replace(&#34;_Processor&#34;, &#34;&#34;)
+    # connector_mapping maps processor_name to allocated_server_id
+    allocated_sever_id = mapping_cache[&#34;connector_mapping&#34;][processor_name]
+    # server_mapping maps server_id to server_name
+    allocated_cpu_server_name = mapping_cache[&#34;server_mapping&#34;][allocated_sever_id]
+    # Get cpu rate for current example from cpu_rates dictionary that maps server id to cpu rate of this server
+    for server_id, server_name in mapping_cache[&#34;server_mapping&#34;].items():
+        if server_name == allocated_cpu_server_name:
+            cpu_rate = cpu_rates[server_id]
+            return cpu_rate, allocated_cpu_server_name
+    return None, None</code></pre>
+</details>
+</dd>
+<dt id="pyopteryx.utils.xml_utils.get_branch_condition"><code class="name flex">
+<span>def <span class="ident">get_branch_condition</span></span>(<span>branch)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Extract branchCondition_GuardedBranchTransition from specification, e.g.
+"type.VALUE == &quot;graphical&quot;" -&gt; "#graphical"
+:param branch: "branches_Branch"
+:return: extracted condition string</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_branch_condition(branch):
+    &#34;&#34;&#34;
+    Extract branchCondition_GuardedBranchTransition from specification, e.g.
+    &#34;type.VALUE == &amp;quot;graphical&amp;quot;&#34; -&gt; &#34;#graphical&#34;
+    :param branch: &#34;branches_Branch&#34;
+    :return: extracted condition string
+    &#34;&#34;&#34;
+    branch_condition = branch.find(&#34;./branchCondition_GuardedBranchTransition&#34;).get(
+        &#34;specification&#34;).split(&#34;==&#34;)[-1].replace(&#39;&#34;&#39;, &#34;&#34;).replace(&#34; &#34;, &#34;&#34;)
+    branch_condition = &#39;#{condition}#&#39;.format(condition=branch_condition)
+    return branch_condition</code></pre>
+</details>
+</dd>
+<dt id="pyopteryx.utils.xml_utils.get_branch_type"><code class="name flex">
+<span>def <span class="ident">get_branch_type</span></span>(<span>branch)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get branch type for branch. Type can be detailed, type, simple or probabilistic
+:param branch: branch element
+:return: branch type</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_branch_type(branch):
+    &#34;&#34;&#34;
+    Get branch type for branch. Type can be detailed, type, simple or probabilistic
+    :param branch: branch element
+    :return: branch type
+    &#34;&#34;&#34;
+    branch_type = branch.get(get_xml_schema_type())
+    if &#34;GuardedBranchTransition&#34; in branch_type:
+        branch_conditions = branch.findall(&#34;.//branchCondition_GuardedBranchTransition&#34;)
+        for condition in branch_conditions:
+            branch_condition = condition.get(&#34;specification&#34;).replace(&#34; &#34;, &#34;&#34;)
+            if &#34;isDetailed.VALUE==&#34; in branch_condition:
+                return &#34;detailed&#34;
+            elif &#34;type.VALUE==&#34; in branch_condition:
+                return &#34;type&#34;
+            else:
+                return &#34;simple&#34;
+    else:
+        return &#34;probabilistic&#34;</code></pre>
+</details>
+</dd>
+<dt id="pyopteryx.utils.xml_utils.get_by_id"><code class="name flex">
+<span>def <span class="ident">get_by_id</span></span>(<span>element, element_id)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get element by id.
+:param element: parent element
+:param element_id: element id
+:return: element</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_by_id(element, element_id):
+    &#34;&#34;&#34;
+    Get element by id.
+    :param element: parent element
+    :param element_id: element id
+    :return: element
+    &#34;&#34;&#34;
+    return get_element_by_identifier(attribute=&#34;id&#34;, search_string=element_id, element_tree=element)</code></pre>
+</details>
+</dd>
+<dt id="pyopteryx.utils.xml_utils.get_by_name"><code class="name flex">
+<span>def <span class="ident">get_by_name</span></span>(<span>element, element_name)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get element by name
+:param element: parent element
+:param element_name: name string
+:return: element</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_by_name(element, element_name):
+    &#34;&#34;&#34;
+    Get element by name
+    :param element: parent element
+    :param element_name: name string
+    :return: element
+    &#34;&#34;&#34;
+    return get_element_by_identifier(attribute=&#34;name&#34;, search_string=element_name, element_tree=element)</code></pre>
+</details>
+</dd>
+<dt id="pyopteryx.utils.xml_utils.get_by_tag_name"><code class="name flex">
+<span>def <span class="ident">get_by_tag_name</span></span>(<span>element, tag)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get elements by tag name.
+:param element: element
+:param tag: tag string
+:return: list of elements that matches tag</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_by_tag_name(element, tag):
+    &#34;&#34;&#34;
+    Get elements by tag name.
+    :param element: element
+    :param tag: tag string
+    :return: list of elements that matches tag
+    &#34;&#34;&#34;
+    results = []
+    for child in element.findall(&#39;.//&#39;):
+        if tag in child.tag:
+            results.append(child)
+    return results</code></pre>
+</details>
+</dd>
+<dt id="pyopteryx.utils.xml_utils.get_element_by_identifier"><code class="name flex">
+<span>def <span class="ident">get_element_by_identifier</span></span>(<span>attribute, search_string, element_tree)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get element by attribute and string.
+:param attribute: string of attribute type
+:param search_string: identifying string to look for
+:param element_tree: element tree to look in
+:return: found element</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_element_by_identifier(attribute, search_string, element_tree):
+    &#34;&#34;&#34;
+    Get element by attribute and string.
+    :param attribute: string of attribute type
+    :param search_string: identifying string to look for
+    :param element_tree: element tree to look in
+    :return: found element
+    &#34;&#34;&#34;
+    return element_tree.find(
+        &#39;&#39;&#39;.//*[@{attribute}=&#39;{search_string}&#39;]&#39;&#39;&#39;.format(attribute=attribute, search_string=search_string))</code></pre>
+</details>
+</dd>
+<dt id="pyopteryx.utils.xml_utils.get_element_from_list"><code class="name flex">
+<span>def <span class="ident">get_element_from_list</span></span>(<span>attribute, search_string, element_list)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get element by attribute and string.
+:param attribute: string of attribute type
+:param search_string: identifying string to look for
+:param element_list: element tree to look in
+:return: found element</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_element_from_list(attribute, search_string, element_list):
+    &#34;&#34;&#34;
+    Get element by attribute and string.
+    :param attribute: string of attribute type
+    :param search_string: identifying string to look for
+    :param element_list: element tree to look in
+    :return: found element
+    &#34;&#34;&#34;
+    for element in element_list:
+        if search_string == element.get(attribute):
+            return element
+    return None</code></pre>
+</details>
+</dd>
+<dt id="pyopteryx.utils.xml_utils.get_entity_name"><code class="name flex">
+<span>def <span class="ident">get_entity_name</span></span>(<span>entity)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get entity name of given entity. If no "entityName" is specified return "aName".
+:param entity: entity element
+:return: entity_name</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_entity_name(entity):
+    &#34;&#34;&#34;
+    Get entity name of given entity. If no &#34;entityName&#34; is specified return &#34;aName&#34;.
+    :param entity: entity element
+    :return: entity_name
+    &#34;&#34;&#34;
+    entity_name = entity.get(&#34;entityName&#34;)
+    if not entity_name:
+        entity_name = &#34;aName&#34;
+    return entity_name</code></pre>
+</details>
+</dd>
+<dt id="pyopteryx.utils.xml_utils.get_linkage_id"><code class="name flex">
+<span>def <span class="ident">get_linkage_id</span></span>(<span>identifier, element_tree)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get id to linking element from "href" attribute
+:param identifier: identifier of element to look in
+:param element_tree: current element tree
+:return: id</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_linkage_id(identifier, element_tree):
+    &#34;&#34;&#34;
+    Get id to linking element from &#34;href&#34; attribute
+    :param identifier: identifier of element to look in
+    :param element_tree: current element tree
+    :return: id
+    &#34;&#34;&#34;
+    linkage_id = element_tree.find(&#39;.//{}&#39;.format(identifier)).get(&#34;href&#34;).split(&#34;#&#34;)[1]
+    return linkage_id</code></pre>
+</details>
+</dd>
+<dt id="pyopteryx.utils.xml_utils.get_parent_by_tag"><code class="name flex">
+<span>def <span class="ident">get_parent_by_tag</span></span>(<span>element, tag)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get parent of element by tag name.
+:param element: child element
+:param tag: tag of parent element
+:return: parent element</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_parent_by_tag(element, tag):
+    &#34;&#34;&#34;
+    Get parent of element by tag name.
+    :param element: child element
+    :param tag: tag of parent element
+    :return: parent element
+    &#34;&#34;&#34;
+    parent = element.getparent()
+    if tag == parent.tag:
+        return parent
+    else:
+        return get_parent_by_tag(parent, tag)</code></pre>
+</details>
+</dd>
+<dt id="pyopteryx.utils.xml_utils.get_uid_from_action_name"><code class="name flex">
+<span>def <span class="ident">get_uid_from_action_name</span></span>(<span>action_name, uid_string=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Extract id from action name by splitting at "__", because this marks the start of id in action name.
+If uid string is in action name, remove it
+:param action_name: full action name of processor (e.g. "{action_type}<em id>{aName}</em>[uid_string}]"
+:param uid_string: uid_string
+:return: {id}</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_uid_from_action_name(action_name, uid_string=None):
+    &#34;&#34;&#34;
+    Extract id from action name by splitting at &#34;__&#34;, because this marks the start of id in action name.
+    If uid string is in action name, remove it
+    :param action_name: full action name of processor (e.g. &#34;{action_type}_{aName}_{id}[uid_string}]&#34;
+    :param uid_string: uid_string
+    :return: {id}
+    &#34;&#34;&#34;
+    if uid_string:
+        cleaned_name = action_name.replace(&#34;_{uid_string}&#34;.format(uid_string=uid_string), &#34;&#34;)
+        return &#39;_{}&#39;.format(cleaned_name.split(&#34;__&#34;)[-1])
+    else:
+        return &#39;_{}&#39;.format(action_name.split(&#34;__&#34;)[-1])</code></pre>
+</details>
+</dd>
+<dt id="pyopteryx.utils.xml_utils.get_unique_specification_string"><code class="name flex">
+<span>def <span class="ident">get_unique_specification_string</span></span>(<span>specification)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Extract branchCondition_GuardedBranchTransition from specification, e.g.
+"type.VALUE == &quot;graphical&quot;" -&gt; "#graphical"
+:return: extracted condition string</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_unique_specification_string(specification):
+    &#34;&#34;&#34;
+    Extract branchCondition_GuardedBranchTransition from specification, e.g.
+    &#34;type.VALUE == &amp;quot;graphical&amp;quot;&#34; -&gt; &#34;#graphical&#34;
+    :return: extracted condition string
+    &#34;&#34;&#34;
+    replaceable_characters = [&#39;\r&#39;, &#39;\n&#39;, &#39;\&#34;&#39;, &#39; &#39;]
+    result = specification
+    for replaceable_character in replaceable_characters:
+        result = result.replace(replaceable_character, &#34;&#34;)
+    result = &#39;#{condition}#&#39;.format(condition=result)
+    return result</code></pre>
+</details>
+</dd>
+<dt id="pyopteryx.utils.xml_utils.get_used_components"><code class="name flex">
+<span>def <span class="ident">get_used_components</span></span>(<span>repository_tree, input_data)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get repository components from "components__Repository" and only load components that correspond with assembled
+components of input data
+:return: all used components from repository as list</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_used_components(repository_tree, input_data):
+    &#34;&#34;&#34;
+    Get repository components from &#34;components__Repository&#34; and only load components that correspond with assembled
+    components of input data
+    :return: all used components from repository as list
+    &#34;&#34;&#34;
+    used_component = []
+    repository_components = repository_tree.findall(&#34;./components__Repository&#34;)
+    for repository_component in repository_components:
+        repository_component_id = repository_component.get(&#34;id&#34;)
+        if repository_component_id not in input_data[&#34;excluded_components&#34;]:
+            used_component.append(repository_component)
+    return used_component</code></pre>
+</details>
+</dd>
+<dt id="pyopteryx.utils.xml_utils.get_xml_schema_type"><code class="name flex">
+<span>def <span class="ident">get_xml_schema_type</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get xml schema type.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_xml_schema_type():
+    &#34;&#34;&#34;
+    Get xml schema type.
+    &#34;&#34;&#34;
+    return &#39;{http://www.w3.org/2001/XMLSchema-instance}type&#39;</code></pre>
+</details>
+</dd>
+<dt id="pyopteryx.utils.xml_utils.is_in_element_tree"><code class="name flex">
+<span>def <span class="ident">is_in_element_tree</span></span>(<span>attribute, search_string, element_tree)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Check if element is in element tree.
+:param attribute: string attribute type
+:param search_string: string to search for
+:param element_tree: tree to search in
+:return:</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def is_in_element_tree(attribute, search_string, element_tree):
+    &#34;&#34;&#34;
+    Check if element is in element tree.
+    :param attribute: string attribute type
+    :param search_string: string to search for
+    :param element_tree: tree to search in
+    :return:
+    &#34;&#34;&#34;
+    for element in element_tree:
+        if attribute in element.attrib:
+            if search_string in element.get(attribute):
+                return True
+    return False</code></pre>
+</details>
+</dd>
+<dt id="pyopteryx.utils.xml_utils.is_part_of_branch"><code class="name flex">
+<span>def <span class="ident">is_part_of_branch</span></span>(<span>action)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Checks if action is part of branch action.
+:return: Boolean</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def is_part_of_branch(action):
+    &#34;&#34;&#34;
+    Checks if action is part of branch action.
+    :return: Boolean
+    &#34;&#34;&#34;
+    try:
+        branch_action = get_parent_by_tag(element=action, tag=&#34;steps_Behaviour&#34;)
+    except AttributeError:  # parent with tag=&#34;steps_Behaviour&#34; cannot be found --&gt; is not in branch
+        return False
+    if branch_action is None:
+        return False
+    return True</code></pre>
+</details>
+</dd>
+<dt id="pyopteryx.utils.xml_utils.is_part_of_composite_component"><code class="name flex">
+<span>def <span class="ident">is_part_of_composite_component</span></span>(<span>element, components)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Check if element is part of CompositeComponent
+:param element: element of repository
+:param components: repository components
+:return: Boolean</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def is_part_of_composite_component(element, components):
+    &#34;&#34;&#34;
+    Check if element is part of CompositeComponent
+    :param element: element of repository
+    :param components: repository components
+    :return: Boolean
+    &#34;&#34;&#34;
+    if element.tag != &#34;components__Repository&#34;:
+        parent = get_parent_by_tag(element=element, tag=&#34;components__Repository&#34;)
+        parent_id = parent.get(&#34;id&#34;)
+        for component in components:
+            if &#34;CompositeComponent&#34; in component.get(get_xml_schema_type()):
+                for assembly_context in component.findall(&#34;assemblyContexts__ComposedStructure&#34;):
+                    if parent_id == assembly_context.get(&#34;encapsulatedComponent__AssemblyContext&#34;):
+                        return True
+    else:
+        for component in components:
+            if &#34;CompositeComponent&#34; in component.get(get_xml_schema_type()):
+                for assembly_context in component.findall(&#34;assemblyContexts__ComposedStructure&#34;):
+                    if element.get(&#34;id&#34;) == assembly_context.get(&#34;encapsulatedComponent__AssemblyContext&#34;):
+                        return True
+    return False</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="pyopteryx.utils" href="index.html">pyopteryx.utils</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="pyopteryx.utils.xml_utils.check_and_retrieve_uid" href="#pyopteryx.utils.xml_utils.check_and_retrieve_uid">check_and_retrieve_uid</a></code></li>
+<li><code><a title="pyopteryx.utils.xml_utils.check_if_precedence_exist" href="#pyopteryx.utils.xml_utils.check_if_precedence_exist">check_if_precedence_exist</a></code></li>
+<li><code><a title="pyopteryx.utils.xml_utils.copy_branch_check" href="#pyopteryx.utils.xml_utils.copy_branch_check">copy_branch_check</a></code></li>
+<li><code><a title="pyopteryx.utils.xml_utils.copy_external_check" href="#pyopteryx.utils.xml_utils.copy_external_check">copy_external_check</a></code></li>
+<li><code><a title="pyopteryx.utils.xml_utils.create_activity_name_from_action" href="#pyopteryx.utils.xml_utils.create_activity_name_from_action">create_activity_name_from_action</a></code></li>
+<li><code><a title="pyopteryx.utils.xml_utils.create_processor_names_for_branch_action" href="#pyopteryx.utils.xml_utils.create_processor_names_for_branch_action">create_processor_names_for_branch_action</a></code></li>
+<li><code><a title="pyopteryx.utils.xml_utils.create_processor_uid_mapping" href="#pyopteryx.utils.xml_utils.create_processor_uid_mapping">create_processor_uid_mapping</a></code></li>
+<li><code><a title="pyopteryx.utils.xml_utils.create_processors_for_composite_components" href="#pyopteryx.utils.xml_utils.create_processors_for_composite_components">create_processors_for_composite_components</a></code></li>
+<li><code><a title="pyopteryx.utils.xml_utils.create_processors_for_external_actions" href="#pyopteryx.utils.xml_utils.create_processors_for_external_actions">create_processors_for_external_actions</a></code></li>
+<li><code><a title="pyopteryx.utils.xml_utils.create_server_uids" href="#pyopteryx.utils.xml_utils.create_server_uids">create_server_uids</a></code></li>
+<li><code><a title="pyopteryx.utils.xml_utils.create_synch_call_name" href="#pyopteryx.utils.xml_utils.create_synch_call_name">create_synch_call_name</a></code></li>
+<li><code><a title="pyopteryx.utils.xml_utils.get_action_type" href="#pyopteryx.utils.xml_utils.get_action_type">get_action_type</a></code></li>
+<li><code><a title="pyopteryx.utils.xml_utils.get_allocated_cpu_rate_and_server_name" href="#pyopteryx.utils.xml_utils.get_allocated_cpu_rate_and_server_name">get_allocated_cpu_rate_and_server_name</a></code></li>
+<li><code><a title="pyopteryx.utils.xml_utils.get_branch_condition" href="#pyopteryx.utils.xml_utils.get_branch_condition">get_branch_condition</a></code></li>
+<li><code><a title="pyopteryx.utils.xml_utils.get_branch_type" href="#pyopteryx.utils.xml_utils.get_branch_type">get_branch_type</a></code></li>
+<li><code><a title="pyopteryx.utils.xml_utils.get_by_id" href="#pyopteryx.utils.xml_utils.get_by_id">get_by_id</a></code></li>
+<li><code><a title="pyopteryx.utils.xml_utils.get_by_name" href="#pyopteryx.utils.xml_utils.get_by_name">get_by_name</a></code></li>
+<li><code><a title="pyopteryx.utils.xml_utils.get_by_tag_name" href="#pyopteryx.utils.xml_utils.get_by_tag_name">get_by_tag_name</a></code></li>
+<li><code><a title="pyopteryx.utils.xml_utils.get_element_by_identifier" href="#pyopteryx.utils.xml_utils.get_element_by_identifier">get_element_by_identifier</a></code></li>
+<li><code><a title="pyopteryx.utils.xml_utils.get_element_from_list" href="#pyopteryx.utils.xml_utils.get_element_from_list">get_element_from_list</a></code></li>
+<li><code><a title="pyopteryx.utils.xml_utils.get_entity_name" href="#pyopteryx.utils.xml_utils.get_entity_name">get_entity_name</a></code></li>
+<li><code><a title="pyopteryx.utils.xml_utils.get_linkage_id" href="#pyopteryx.utils.xml_utils.get_linkage_id">get_linkage_id</a></code></li>
+<li><code><a title="pyopteryx.utils.xml_utils.get_parent_by_tag" href="#pyopteryx.utils.xml_utils.get_parent_by_tag">get_parent_by_tag</a></code></li>
+<li><code><a title="pyopteryx.utils.xml_utils.get_uid_from_action_name" href="#pyopteryx.utils.xml_utils.get_uid_from_action_name">get_uid_from_action_name</a></code></li>
+<li><code><a title="pyopteryx.utils.xml_utils.get_unique_specification_string" href="#pyopteryx.utils.xml_utils.get_unique_specification_string">get_unique_specification_string</a></code></li>
+<li><code><a title="pyopteryx.utils.xml_utils.get_used_components" href="#pyopteryx.utils.xml_utils.get_used_components">get_used_components</a></code></li>
+<li><code><a title="pyopteryx.utils.xml_utils.get_xml_schema_type" href="#pyopteryx.utils.xml_utils.get_xml_schema_type">get_xml_schema_type</a></code></li>
+<li><code><a title="pyopteryx.utils.xml_utils.is_in_element_tree" href="#pyopteryx.utils.xml_utils.is_in_element_tree">is_in_element_tree</a></code></li>
+<li><code><a title="pyopteryx.utils.xml_utils.is_part_of_branch" href="#pyopteryx.utils.xml_utils.is_part_of_branch">is_part_of_branch</a></code></li>
+<li><code><a title="pyopteryx.utils.xml_utils.is_part_of_composite_component" href="#pyopteryx.utils.xml_utils.is_part_of_composite_component">is_part_of_composite_component</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.5.3</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

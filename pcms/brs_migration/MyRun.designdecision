@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="ASCII"?>
+<designdecision:DecisionSpace xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:designdecision="http://sdq.ipd.uka.de/DesignDecision/3.0" xmlns:specific="http://sdq.ipd.uka.de/DesignDecision/Specific/3.0" id="_uShu4AIeEemxa-w3DkA3AQ" name="">
+  <degreesOfFreedom xsi:type="specific:ContinuousProcessingRateDegree" lowerBoundIncluded="false" to="5.0" from="2.0"/>
+  <degreesOfFreedom xsi:type="specific:ContinuousProcessingRateDegree" lowerBoundIncluded="false" to="5.0" from="2.0"/>
+  <degreesOfFreedom xsi:type="specific:ContinuousProcessingRateDegree" lowerBoundIncluded="false" to="5.0" from="2.0"/>
+  <degreesOfFreedom xsi:type="specific:ContinuousProcessingRateDegree" lowerBoundIncluded="false" to="5.0" from="2.0"/>
+  <degreesOfFreedom xsi:type="specific:ContinuousProcessingRateDegree" lowerBoundIncluded="false" to="5.0" from="2.0"/>
+  <degreesOfFreedom xsi:type="specific:ContinuousProcessingRateDegree" lowerBoundIncluded="false" to="5.0" from="2.0"/>
+  <degreesOfFreedom xsi:type="specific:ContinuousProcessingRateDegree" lowerBoundIncluded="false" to="5.0" from="2.0"/>
+  <degreesOfFreedom xsi:type="specific:ContinuousProcessingRateDegree" lowerBoundIncluded="false" to="5.0" from="2.0"/>
+  <degreesOfFreedom xsi:type="specific:AssembledComponentDegree"/>
+  <degreesOfFreedom xsi:type="specific:AssembledComponentDegree"/>
+  <degreesOfFreedom xsi:type="specific:AssembledComponentDegree"/>
+  <degreesOfFreedom xsi:type="specific:AllocationDegree"/>
+  <degreesOfFreedom xsi:type="specific:AllocationDegree"/>
+  <degreesOfFreedom xsi:type="specific:AllocationDegree"/>
+  <degreesOfFreedom xsi:type="specific:AllocationDegree"/>
+  <degreesOfFreedom xsi:type="specific:AllocationDegree"/>
+  <degreesOfFreedom xsi:type="specific:AllocationDegree"/>
+  <degreesOfFreedom xsi:type="specific:AllocationDegree"/>
+  <degreesOfFreedom xsi:type="specific:AllocationDegree"/>
+</designdecision:DecisionSpace>

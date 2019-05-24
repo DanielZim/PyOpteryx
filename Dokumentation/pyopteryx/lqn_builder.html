@@ -1,0 +1,1179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.5.3" />
+<title>pyopteryx.lqn_builder API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.name small{font-weight:normal}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title"><code>pyopteryx.lqn_builder</code> module</h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">from collections import defaultdict
+from datetime import date
+
+from lxml.etree import Element, SubElement
+
+from pyopteryx.factories.action_factories.action_factory import ActionFactory
+from pyopteryx.factories.loop_action_factories.loop_action_factory import LoopActionFactory
+from pyopteryx.factories.usage_action_factories.usage_action_factory import UsageActionFactory
+from pyopteryx.utils.finalize_utils import delete_unused_processors, precedence_error_check, sort_processor_elements
+from pyopteryx.utils.utils import calculate_open_arrival_rate
+from pyopteryx.utils.builder_utils import add_processor_element, add_task_to_processor, add_entry_to_task, \
+    add_activity_to_entry, add_default_processor, add_internal_actions_to_cpu
+from pyopteryx.utils.xml_utils import get_by_id, get_by_name, get_action_type, get_linkage_id, get_entity_name, \
+    get_used_components, get_element_from_list, get_xml_schema_type, get_parent_by_tag, is_part_of_composite_component, \
+    create_processors_for_composite_components, create_processors_for_external_actions, \
+    create_processor_names_for_branch_action, create_server_uids
+
+
+class LqnBuilder:
+    &#34;&#34;&#34;
+    Class that perform PyCM2LQN Transformation.
+    &#34;&#34;&#34;
+    def __init__(self, input_data, cache):
+        &#34;&#34;&#34;
+        Set __input_data and __cache.
+        Create __mapping_cache, __latency, __xml_tree, __repository_components_cleaned.
+        Add solver parameter to __xml_tree.
+        :param input_data: input containing cpu rates, allocation of components and assembled components
+        :param cache: cached PCM files
+        &#34;&#34;&#34;
+        self.__input_data = input_data
+        self.__cache = cache
+        self.__mapping_cache = {  # TODO refactor, delete mapping string
+            &#34;action_mapping&#34;: defaultdict(lambda: []),  # maps processor name to ExternalCallAction
+            &#34;allocation_mapping&#34;: defaultdict(lambda: []),  # maps component id to processor id
+            &#34;branch_mapping&#34;: defaultdict(lambda: {}),  # maps &#34;branches_Branch&#34; id to interface_processor name
+            &#34;component_mapping&#34;: defaultdict(lambda: {}),  # maps component_id to processor name
+            &#34;composite_uid_mapping&#34;: defaultdict(lambda: {}),  # map processor_name to uid
+            &#34;connector_mapping&#34;: defaultdict(lambda: &#34;&#34;),  # maps processor name to server id
+            &#34;is_detailed&#34;: defaultdict(lambda: {}),  # maps processor_name without uid to all available
+            &#34;server_mapping&#34;: defaultdict(lambda: {}),  # maps server_id to processor name
+            &#34;loop_mapping&#34;: defaultdict(lambda: []),  # maps processor_name to loop_action
+            &#34;loop_uid_mapping&#34;: defaultdict(lambda: {})  # map processor_name to uid
+        }
+        self.__latency = {}  # lookup for latency entry of linking resource processor
+        self.__xml_tree = Element(&#39;lqn-model&#39;)
+        self.__xml_tree.set(&#39;name&#39;, &#39;PyCM2LQN_Model&#39;)
+        self.__add_solver_params_to_root(root=self.__xml_tree)
+        self.__repository_components_cleaned = get_used_components(repository_tree=cache.get_xml_tree(&#34;repository&#34;),
+                                                                   input_data=self.__input_data)
+
+    def __add_solver_params_to_root(self, root):
+        &#34;&#34;&#34;
+        Add solver params to xml tree.
+        :param root:
+        :return:
+        &#34;&#34;&#34;
+        solver_params = SubElement(root, &#39;solver-params&#39;)
+        solver_params.set(&#34;comment&#34;, &#34;Generated by PyCM2LQN on {}&#34;.format(date.today()))
+        solver_params.set(&#34;conv_val&#34;, self.__input_data[&#34;solver_params&#34;][&#34;conv_val&#34;])
+        solver_params.set(&#34;it_limit&#34;, &#34;50&#34;)
+        solver_params.set(&#34;print_int&#34;, &#34;10&#34;)
+        solver_params.set(&#34;underrelax_coeff&#34;, &#34;0.5&#34;)
+
+    def __create_cpu_processors(self):
+        &#34;&#34;&#34;
+        Create cpu processors for every cpu_rate entry of input data and add them to xml tree.
+        Processors are of format &#34;{server}_CPU_Processor&#34;
+        :return: added all cpu processors to lqn-model xml tree
+        &#34;&#34;&#34;
+        for server_id in self.__input_data[&#34;cpu_rates&#34;]:
+            # get current server_cpu_resource from &#34;{setting_type}.resourceenvironment&#34; file
+            # and build correct server_cpu_processor_name
+            cpu_server = get_by_id(element_id=server_id, element=self.__cache.get_xml_tree(&#34;resourceenvironment&#34;))
+            cpu_server_name = cpu_server.get(&#34;entityName&#34;)
+            processor_name = &#39;{}_CPU&#39;.format(cpu_server_name)
+            # create elements and add them to xml tree
+            processor = add_processor_element(xml_tree=self.__xml_tree, processor_name=processor_name,
+                                              speed_factor=&#34;1.0&#34;)
+            task = add_task_to_processor(processor=processor)
+            entry = add_entry_to_task(task=task, entry_name=processor_name, entry_type=&#39;NONE&#39;)
+            add_activity_to_entry(entry=entry, activity_name=processor_name, host_demand_mean=&#34;0.0&#34;)
+            # map server_id to name of new created processor
+            self.__mapping_cache[&#34;server_mapping&#34;][server_id] = &#39;{}_Processor&#39;.format(processor_name)
+
+    def __create_linking_resource_processors(self):
+        &#34;&#34;&#34;
+        Create linking resource processor for every linking resource declared in &#34;{setting_type}.resourceenvironment&#34; as
+        &#34;linkingResources__ResourceEnvironment&#34; and add them to xml tree
+        :return: processor of format &#34;LinkingResource_{}_LAN_Processor processors&#34; with:
+                    - task:  &#34;LinkingResource_{aName}_LAN_Task&#34;
+                    - entry: &#34;throughput_LinkingResource_{aName}_LAN_Entry&#34;
+                    - entry: &#34;latency_LinkingResource_{aName}_LAN_SYNCH_Entry&#34;
+                    - entry: &#34;latency_LinkingResource_{aName}_LAN_ASYNCH_Entry&#34;
+        &#34;&#34;&#34;
+        for resource_linking_environment in self.__cache.get_xml_tree(&#34;resourceenvironment&#34;).findall(
+                &#34;./linkingResources__ResourceEnvironment&#34;):
+            # add entityName to processor id if it is declared
+            entity_name = get_entity_name(resource_linking_environment)
+            linking_processor_name = &#39;LinkingResource_{entity_name}_LAN&#39;.format(entity_name=entity_name)
+            # create elements and add them to xml tree
+            processor = add_processor_element(self.__xml_tree, processor_name=linking_processor_name,
+                                              speed_factor=&#34;1.0&#34;)
+            task = add_task_to_processor(processor=processor)
+            # latency and throughput specifications are stored in:
+            # {setting_type}.resourceenvironment &gt; linkingResources__ResourceEnvironment &gt;
+            # communicationLinkResourceSpecifications_LinkingResource:
+            # - latency_CommunicationLinkResourceSpecification
+            latency = resource_linking_environment.find(&#34;.//latency_CommunicationLinkResourceSpecification&#34;).get(
+                &#34;specification&#34;)
+            # - throughput_CommunicationLinkResourceSpecification
+            throughput = resource_linking_environment.find(&#34;.//throughput_CommunicationLinkResourceSpecification&#34;).get(
+                &#34;specification&#34;)
+            throughput_host_demand_mean = &#39;{throughput}&#39;.format(throughput=1 / int(throughput))
+            # add throughput entry
+            throughput_entry_id = &#39;throughput_{processor_id}&#39;.format(processor_id=linking_processor_name)
+            throughput_entry = add_entry_to_task(task=task,
+                                                 entry_name=throughput_entry_id,
+                                                 entry_type=&#34;PH1PH2&#34;)
+            add_activity_to_entry(entry=throughput_entry,
+                                  activity_name=throughput_entry_id,
+                                  host_demand_mean=throughput_host_demand_mean)
+            # add synch latency entry
+            latency_synch_id = &#39;latency_{linking_processor_name}_SYNCH&#39;.format(
+                linking_processor_name=linking_processor_name)
+            self.__latency[&#34;SYNCH&#34;] = &#39;{latency_synch_id}_Entry&#39;.format(latency_synch_id=latency_synch_id)
+            latency_synch_entry = add_entry_to_task(task=task, entry_name=latency_synch_id, entry_type=&#34;PH1PH2&#34;)
+            add_activity_to_entry(entry=latency_synch_entry,
+                                  activity_name=latency_synch_id,
+                                  host_demand_mean=latency,
+                                  host_demand_cvsq=&#34;0.0&#34;)
+            # add asynch latency entry
+            latency_specification_asynch_id = &#39;latency_{linking_processor_name}_ASYNCH&#39;.format(
+                linking_processor_name=linking_processor_name)
+
+            latency_asynch_entry = add_entry_to_task(task=task,
+                                                     entry_name=latency_specification_asynch_id,
+                                                     entry_type=&#34;PH1PH2&#34;)
+            add_activity_to_entry(entry=latency_asynch_entry,
+                                  activity_name=latency_specification_asynch_id,
+                                  host_demand_mean=latency,
+                                  host_demand_cvsq=&#34;0.0&#34;)
+
+    def __create_usage_delay_processor(self):
+        &#34;&#34;&#34;
+        Add usage delay processor to lqn-model xml tree.
+        :return:
+        &#34;&#34;&#34;
+        processor = add_processor_element(self.__xml_tree, processor_name=&#34;USAGE_DELAY&#34;, scheduling=&#34;inf&#34;)
+        task = add_task_to_processor(processor)
+        entry = add_entry_to_task(task=task, entry_name=&#34;USAGE_DELAY0&#34;, entry_type=&#34;PH1PH2&#34;)
+        add_activity_to_entry(entry=entry, activity_name=&#34;USAGE_DELAY0&#34;, host_demand_mean=&#34;0.0&#34;)
+
+    def __create_usage_scenario_processors(self):
+        &#34;&#34;&#34;
+        Create usage scenario processor for every usage scenario declared in &#34;{setting_type}.usagemodel&#34; as
+        &#34;usageScenario_UsageModel&#34; and add them to xml tree. Create processor of format
+        &#34;UsageScenario_{scenario_name}_{amount_scenarios}_Processor&#34; with:
+            - task: &#34;UsageScenario_{scenario_name}_{amount_scenarios}_Task&#34;
+            - entry: &#34;UsageScenario_{scenario_name}_{amount_scenarios}_Entry&#34;
+        &#34;&#34;&#34;
+        usage_scenario_counter = 1
+        for usage_scenario in self.__cache.get_xml_tree(&#34;usagemodel&#34;).findall(&#34;./usageScenario_UsageModel&#34;):
+            usage_scenario_entity_name = usage_scenario.get(&#34;entityName&#34;)
+            # get specification from &#34;{setting_type}.usagemodel&#34; file &gt; workload_UsageScenario &gt;
+            # interArrivalTime_OpenWorkload &gt; specification
+            specification = usage_scenario.find(&#34;.//interArrivalTime_OpenWorkload&#34;).get(&#34;specification&#34;)
+            open_arrival_rate = calculate_open_arrival_rate(specification)
+            usage_scenario_processor_name = &#39;UsageScenario_{}_{}&#39;.format(usage_scenario_entity_name,
+                                                                         usage_scenario_counter)
+            # add usage scenario processor, task and entry
+            processor = add_processor_element(self.__xml_tree, processor_name=usage_scenario_processor_name)
+            task = add_task_to_processor(processor=processor)
+            add_entry_to_task(task=task,
+                              entry_name=usage_scenario_processor_name,
+                              open_arrival_rate=open_arrival_rate)
+            SubElement(task, &#39;task-activities&#39;)
+            usage_scenario_counter += 1
+
+    def __create_component_interface_processors(self):
+        &#34;&#34;&#34;
+        Create all component interface processors for every used components of repository.
+        :return:
+        &#34;&#34;&#34;
+        # To avoid duplicates
+        used_components = []
+        for component_id in self.__input_data[&#34;component_allocations&#34;]:
+            # allocation
+            allocation_context = get_by_id(element_id=component_id,
+                                           element=self.__cache.get_xml_tree(&#34;allocation&#34;))
+            # allocation &gt; system
+            allocation_to_system_linkage_id = get_linkage_id(identifier=&#39;assemblyContext_AllocationContext&#39;,
+                                                             element_tree=allocation_context)
+            # system
+            assembly_context = get_by_id(element_id=allocation_to_system_linkage_id,
+                                         element=self.__cache.get_xml_tree(&#39;system&#39;))
+            # system &gt; repository
+            system_to_repository_linkage_id = get_linkage_id(identifier=&#39;encapsulatedComponent__AssemblyContext&#39;,
+                                                             element_tree=assembly_context)
+            # check if system_to_repository_linkage_id is an unused alternative design option,
+            # if yes, get currently used corresponding alternative
+            for used_option in self.__input_data[&#34;alternative_design_options&#34;]:
+                if system_to_repository_linkage_id in self.__input_data[&#34;alternative_design_options&#34;][used_option]:
+                    system_to_repository_linkage_id = used_option
+
+            # repository
+            repository_component = get_by_id(element_id=system_to_repository_linkage_id,
+                                             element=self.__cache.get_xml_tree(&#34;repository&#34;))
+            self.__create_interface_processors(component_id=component_id,
+                                               used_components=used_components,
+                                               repository_component=repository_component)
+
+            # map component_id to name of new created processor
+            self.__mapping_cache[&#39;component_mapping&#39;][component_id] = repository_component.get(&#34;id&#34;)
+
+    def __create_interface_processors(self, component_id, used_components, repository_component):
+        &#34;&#34;&#34;
+        Add processors for every operation that can be called from an used component of the repository that
+        are of format {component}_{interface}_{operation}
+        :param component_id: component of allocation
+        :param used_components:
+        :return:
+        &#34;&#34;&#34;
+        component_type = repository_component.get(get_xml_schema_type())
+        if &#34;CompositeComponent&#34; in component_type:
+            repository_components = []
+            assembly_contexts = repository_component.findall(&#34;.//assemblyContexts__ComposedStructure&#34;)
+            for repository_component in assembly_contexts:
+                context_id = repository_component.get(&#34;encapsulatedComponent__AssemblyContext&#34;)
+                repository_component = get_element_from_list(search_string=context_id,
+                                                             attribute=&#34;id&#34;,
+                                                             element_list=self.__repository_components_cleaned)
+                repository_components.append(repository_component)
+            for repository_component in repository_components:
+                self.__add_interface_processors(component_id, repository_component, used_components)
+        else:
+            self.__add_interface_processors(component_id, repository_component, used_components)
+        return used_components
+
+    def __create_loop_processors(self):
+        &#34;&#34;&#34;
+        Create processor for every LoopAction, that contains all actions of current LoopAction
+        :return:
+        &#34;&#34;&#34;
+        for component in self.__cache.get_xml_tree(&#34;repository&#34;):
+            for action in component.findall(&#34;.//steps_Behaviour&#34;):
+                action_type = get_action_type(action=action)
+                if &#34;LoopAction&#34; in action_type:
+                    processors_to_add = []
+                    # build processor name and add processor
+                    action_name = get_entity_name(entity=action)
+                    action_id = action.get(&#34;id&#34;)
+                    processor_name = &#39;{type}_{name}_{id}&#39;.format(type=action_type, name=action_name, id=action_id)
+                    if is_part_of_composite_component(element=action,
+                                                      components=self.__cache.get_xml_tree(&#34;repository&#34;).findall(
+                                                          &#34;.//components__Repository&#34;)):
+                        allocated_server_ids = []
+                        allocated_server_ids = create_server_uids(allocated_server_ids=allocated_server_ids,
+                                                                  component_id=component.get(&#34;id&#34;), cache=self.__cache,
+                                                                  composite_component_allocation=self.__input_data[
+                                                                      &#34;composite_component_allocation&#34;])
+
+                        for server_uid in allocated_server_ids:
+                            uid = &#39;#{uid}#&#39;.format(uid=server_uid)
+                            unique_processor_name = &#39;{processor_name}_{uid}&#39;.format(processor_name=processor_name,
+                                                                                    uid=uid)
+                            self.__mapping_cache[&#34;loop_uid_mapping&#34;][unique_processor_name] = uid
+                            self.__mapping_cache[&#34;loop_mapping&#34;][action].append(unique_processor_name)
+                            # self.__mapping_cache[&#34;composite_uid_mapping&#34;][unique_processor_name] = uid
+                            processors_to_add.append(unique_processor_name)
+
+                    # for alternative in branch_uids
+                    # add processor_name to
+                    if not processors_to_add:
+                        processors_to_add.append(processor_name)
+                        self.__mapping_cache[&#34;loop_mapping&#34;][action].append(processor_name)
+
+                    for processor_name in processors_to_add:
+                        add_default_processor(xml_tree=self.__xml_tree, processor_name=processor_name)
+
+    def __add_interface_processors(self, component_id, repository_component, used_components):
+        &#34;&#34;&#34;
+        Add component interface processors to xml_tree. Processors must be created for every &#39;described_SEFF&#39; of a
+        repository component, that stands for an &#39;operation&#39;. An interface processor name is of format:
+        &#34;{component_name}_{interface_name}_{operation_name}[_uid]_Processor&#34; (note: that &#39;uid&#39; is optional)
+        :param component_id: id of component from allocation
+        :param repository_component: component element from repository
+        :param used_components: list of component interface processors already created
+        :return:
+        &#34;&#34;&#34;
+        # first part of processor_name is component_name
+        component_name = repository_component.get(&#34;entityName&#34;)
+        # get provided interfaces for component
+        service_effect_specifications = repository_component.findall(&#34;./serviceEffectSpecifications__BasicComponent&#34;)
+        repository_id = repository_component.get(&#34;id&#34;)
+        for seff in service_effect_specifications:
+            # list of processor names that must be created according to this seff
+            processors_to_add = []
+            # get &#34;Signatures__OperationInterface&#34; element from &#34;describedService__SEFF&#34; of current seff
+            described_seff_id = seff.get(&#34;describedService__SEFF&#34;)
+            interface_operation = get_by_id(element_id=described_seff_id,
+                                            element=self.__cache.get_xml_tree(&#34;repository&#34;))
+            # second part of processor_name is interface name
+            interface_name = get_parent_by_tag(element=interface_operation,
+                                               tag=&#34;interfaces__Repository&#34;).get(&#34;entityName&#34;)
+            # third part of processor_name is operation_name
+            operation_name = interface_operation.get(&#34;entityName&#34;)
+            # Create component interface processor name
+            processor_name = &#39;{component}_{interface}_{operation}&#39;.format(component=component_name,
+                                                                          interface=interface_name,
+                                                                          operation=operation_name)
+            # Check if processors must be duplicated due to included branch action,
+            # if yes return list that contains the corresponding processor names with branch specific uid
+            processors_to_add = create_processor_names_for_branch_action(processor_name=processor_name,
+                                                                         processors_to_add=processors_to_add, seff=seff,
+                                                                         mapping_cache=self.__mapping_cache)
+
+            # Check if ExternalCallAction links to processor that includes BranchAction, which is mandatory to copy
+            # if yes: copy processor for ExternalCallAction also
+            processors_to_add = create_processors_for_external_actions(processor_name=processor_name,
+                                                                       processors_to_add=processors_to_add,
+                                                                       seff=seff)
+
+            # Check if component is of type CompositeComponent, if yes: add duplicated processor names to list
+            # for every described_SEFF that contains an InternalAction. Make processor names unique by
+            # adding allocated server name as uid
+            processors_to_add = create_processors_for_composite_components(processor_name=processor_name,
+                                                                           processors_to_add=processors_to_add,
+                                                                           seff=seff, cache=self.__cache,
+                                                                           input_data=self.__input_data,
+                                                                           mapping_cache=self.__mapping_cache)
+            # If none of the above create-functions return a processor_name, no extra processor_names must be created,
+            # so add normal processor_name to &#39;processors_to_add&#39;
+            if not processors_to_add:
+                processors_to_add.append(processor_name)
+            # Add processors to xml tree and avoid duplicated processors
+            for processor_name in processors_to_add:
+                if processor_name not in used_components:
+                    used_components.append(processor_name)
+                    # map component id to processor id
+                    self.__mapping_cache[&#39;allocation_mapping&#39;][component_id].append(processor_name)
+                    # map component and interface processors to corresponding
+                    # &#34;describedService__SEFF&#34; of basic component
+                    self.__mapping_cache[&#39;action_mapping&#39;][processor_name] = described_seff_id
+                    if repository_id in self.__input_data[&#34;composite_component_allocation&#34;].keys():
+                        # located on same server
+                        if len(self.__input_data[&#34;composite_component_allocation&#34;][repository_id]) != 1:
+                            for server_id, used in self.__input_data[&#34;composite_component_allocation&#34;][
+                                    repository_id].items():
+                                if not used:
+                                    self.__mapping_cache[&#39;connector_mapping&#39;][processor_name] = server_id
+                                    self.__input_data[&#34;composite_component_allocation&#34;][repository_id][server_id] = True
+                                    break
+                        else:
+                            server_id = list(self.__input_data[&#34;composite_component_allocation&#34;][repository_id].keys())[
+                                0]
+                            self.__mapping_cache[&#39;connector_mapping&#39;][processor_name] = server_id
+                            self.__input_data[&#34;composite_component_allocation&#34;][repository_id][server_id] = True
+                    else:
+                        self.__mapping_cache[&#39;connector_mapping&#39;][processor_name] = self.__input_data[
+                            &#34;component_allocations&#34;][component_id]
+
+                    add_default_processor(xml_tree=self.__xml_tree, processor_name=processor_name)
+
+            if repository_id in self.__input_data[&#34;composite_component_allocation&#34;].keys():
+                for server_id, allocation in self.__input_data[&#34;composite_component_allocation&#34;][repository_id].items():
+                    self.__input_data[&#34;composite_component_allocation&#34;][repository_id][server_id] = False
+
+    def __add_actions_to_loop_processors(self):
+        &#34;&#34;&#34;
+        adds actions to rel
+        :return:
+        &#34;&#34;&#34;
+        for action in self.__mapping_cache[&#34;loop_mapping&#34;]:
+            for processor_name in self.__mapping_cache[&#34;loop_mapping&#34;][action]:
+                processor = get_by_name(element=self.__xml_tree,
+                                        element_name=&#39;{processor_name}_Processor&#39;.format(processor_name=processor_name))
+                # Get all actions within LoopAction and create activities and precedences via LoopActionFactory
+                loop_actions = action.find(&#34;bodyBehaviour_Loop&#34;).findall(&#34;./steps_Behaviour&#34;)
+                for loop_action in loop_actions:
+                    action_factory = LoopActionFactory(xml_cache=self.__cache,
+                                                       input_data=self.__input_data,
+                                                       processor=processor,
+                                                       action=loop_action,
+                                                       mapping_cache=self.__mapping_cache).create_action_factory()
+                    action_factory.add_action()
+
+        # ----- PROCESSOR CREATION END -----
+
+    def __add_actions(self, action, processor):
+        &#34;&#34;&#34;
+        Create ActionFactory and add action as &lt;activity&gt; to processors&#39; &lt;task-activities&gt;
+        and all corresponding &lt;precedences&gt; for action
+        :param processor: processor to add actions to
+        :param action: first action of a component is always StartAction
+        :return:
+        &#34;&#34;&#34;
+        # Create ActionFactory for action
+        task_activities = processor.find(&#34;.//task-activities&#34;)
+        action_factory = ActionFactory(xml_cache=self.__cache,
+                                       mapping_cache=self.__mapping_cache,
+                                       action=action,
+                                       input_data=self.__input_data,
+                                       latency=self.__latency,
+                                       processor=processor).create_action_factory(task_activities=task_activities)
+        # If action type is &#39;SetVariableAction&#39; no factory will be created, since &#39;SetVariableAction&#39; is not supported
+        if action_factory:
+            action_factory.add_action()
+        # Add actions recursively if current action has successor action
+        successor_id = action.get(&#34;successor_AbstractAction&#34;)
+        if successor_id is not None:
+            successor = get_by_id(element=action.getparent(), element_id=successor_id)
+            self.__add_actions(action=successor, processor=processor)
+
+    def __add_actions_to_usage_scenario_processor(self):
+        &#34;&#34;&#34;
+        Create actions to usage scenario processor AND create &#34;UsageScenario_Loop_&#34; processors with actions
+        :return:
+        &#34;&#34;&#34;
+        usage_counter = 1
+        for usage_model in self.__cache.get_xml_tree(&#34;usagemodel&#34;).findall(&#34;./usageScenario_UsageModel&#34;):
+            usage_scenario = usage_model.find(&#34;scenarioBehaviour_UsageScenario&#34;)
+            usage_processor_name = &#39;UsageScenario_{}_{}_Processor&#39;.format(usage_model.get(&#34;entityName&#34;),
+                                                                          usage_counter)
+            processor = get_by_name(element=self.__xml_tree, element_name=usage_processor_name)
+            # add usage actions to usage processor
+            for action in usage_scenario.findall(&#34;./actions_ScenarioBehaviour&#34;):
+                action_factory = UsageActionFactory(xml_cache=self.__cache, input_data=self.__input_data,
+                                                    processor=processor, action=action,
+                                                    mapping_cache=self.__mapping_cache).create_action_factory()
+                action_factory.add_action()
+            # Create UsageScenario_Loop processor for every &#34;bodyBehaviour_Loop&#34; and
+            # add actions that are within it to created processor
+            for body_behaviour in usage_model.findall(&#34;.//bodyBehaviour_Loop&#34;):
+                processor_id = get_parent_by_tag(element=body_behaviour, tag=&#34;actions_ScenarioBehaviour&#34;).get(&#34;id&#34;)
+                processor_name = &#39;UsageScenario_Loop_{id}&#39;.format(id=processor_id)
+                # Add processor, task, entry, task_activities and reply entry
+                processor = add_processor_element(self.__xml_tree, processor_name)
+                task = add_task_to_processor(processor=processor)
+                entry = add_entry_to_task(task=task, entry_name=processor_name)
+                task_activities = SubElement(task, &#39;task-activities&#39;)
+                reply_entry = SubElement(task_activities, &#39;reply-entry&#39;)
+                reply_entry.set(&#34;name&#34;, entry.get(&#39;name&#39;))
+                # Add loop actions to &#34;UsageScenario_Loop&#34; processor
+                for action in body_behaviour.findall(&#34;./&#34;):
+                    action_factory = UsageActionFactory(xml_cache=self.__cache, input_data=self.__input_data,
+                                                        processor=processor, action=action,
+                                                        mapping_cache=self.__mapping_cache).create_action_factory()
+                    action_factory.add_loop_config()
+        usage_counter += 1
+
+    def __add_actions_to_component_interface_processors(self):
+        &#34;&#34;&#34;
+        create actions as activities and corresponding precedence tags
+        :return:
+        &#34;&#34;&#34;
+        # for every component interface processor that was created
+        for component_interface_processor in self.__mapping_cache[&#34;action_mapping&#34;]:
+            processor_name = &#39;{name}_Processor&#39;.format(name=component_interface_processor)
+            processor = get_by_name(element_name=processor_name, element=self.__xml_tree)
+            for component in self.__repository_components_cleaned:
+                service_effect_specifications = component.findall(&#34;.//serviceEffectSpecifications__BasicComponent&#34;)
+                for seff in service_effect_specifications:
+                    if seff.get(&#34;describedService__SEFF&#34;) == self.__mapping_cache[&#34;action_mapping&#34;][
+                            component_interface_processor]:
+                        # StartAction is always first element with tag &#34;steps_Behaviour&#34;
+                        start_action = seff.find(&#34;./steps_Behaviour&#34;)
+                        # Create start_action and all it&#39;s successor actions linear
+                        self.__add_actions(action=start_action, processor=processor)
+
+    def __finalize_xml_tree(self):
+        &#34;&#34;&#34;
+        Execute clean up steps:
+        1. Delete unused processors,
+        2. Check synch calls
+        3. Add internal actions of remaining processors to allocated cpu processors
+        4. Sort processor elements
+        :return: finalized lqn-model
+        &#34;&#34;&#34;
+        # Delete those processors that&#39;s entry is not used as &#34;dest&#34; in any other processor
+        delete_unused_processors(mapping_cache=self.__mapping_cache, xml_tree=self.__xml_tree)
+        # Check xml tree for precedence duplications
+        precedence_error_check(tree=self.__xml_tree)
+        # Add internal actions to allocated cpu processors and sort processor elements
+        processors = self.__xml_tree.findall(&#34;processor&#34;)
+        for processor in processors:
+            add_internal_actions_to_cpu(processor=processor, mapping_cache=self.__mapping_cache,
+                                        xml_tree=self.__xml_tree, cpu_rates=self.__input_data[&#34;cpu_rates&#34;],
+                                        repository=self.__cache.get_xml_tree(&#34;repository&#34;))
+            sort_processor_elements(processor=processor)
+        return self.__xml_tree
+
+    def transform_pycm2lqn(self):
+        &#34;&#34;&#34;
+        Perform transformation from PCM to LQXO file.
+        &#34;&#34;&#34;
+        # 1) Create cpu processors, e.g. &#34;Server1_CPU_Processor&#34;
+        self.__create_cpu_processors()
+
+        # 2) Create linking resource processors, e.g. &#34;LinkingResource_{}_LAN_Processor processors&#34;
+        self.__create_linking_resource_processors()
+
+        # 3) Create USAGE_DELAY processors, e.g. &#34;USAGE_DELAY_Processor&#34;
+        self.__create_usage_delay_processor()
+
+        # 4) Create component/interface processors,
+        # e.g. &#34;{component_name}_{interface_name}_{operation_name}[_uid]_Processor&#34; (note: [uid] is optional)
+        self.__create_component_interface_processors()
+        self.__add_actions_to_component_interface_processors()
+
+        # 6) Create usage UsageScenario, e.g. &#34;UsageScenario_{usage_scenario}_1_Processor&#34;
+        self.__create_usage_scenario_processors()
+        self.__add_actions_to_usage_scenario_processor()
+
+        # 7) Create Loop Processors
+        self.__create_loop_processors()
+        self.__add_actions_to_loop_processors()
+
+        return self.__finalize_xml_tree()</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="pyopteryx.lqn_builder.LqnBuilder"><code class="flex name class">
+<span>class <span class="ident">LqnBuilder</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Class that perform PyCM2LQN Transformation.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class LqnBuilder:
+    &#34;&#34;&#34;
+    Class that perform PyCM2LQN Transformation.
+    &#34;&#34;&#34;
+    def __init__(self, input_data, cache):
+        &#34;&#34;&#34;
+        Set __input_data and __cache.
+        Create __mapping_cache, __latency, __xml_tree, __repository_components_cleaned.
+        Add solver parameter to __xml_tree.
+        :param input_data: input containing cpu rates, allocation of components and assembled components
+        :param cache: cached PCM files
+        &#34;&#34;&#34;
+        self.__input_data = input_data
+        self.__cache = cache
+        self.__mapping_cache = {  # TODO refactor, delete mapping string
+            &#34;action_mapping&#34;: defaultdict(lambda: []),  # maps processor name to ExternalCallAction
+            &#34;allocation_mapping&#34;: defaultdict(lambda: []),  # maps component id to processor id
+            &#34;branch_mapping&#34;: defaultdict(lambda: {}),  # maps &#34;branches_Branch&#34; id to interface_processor name
+            &#34;component_mapping&#34;: defaultdict(lambda: {}),  # maps component_id to processor name
+            &#34;composite_uid_mapping&#34;: defaultdict(lambda: {}),  # map processor_name to uid
+            &#34;connector_mapping&#34;: defaultdict(lambda: &#34;&#34;),  # maps processor name to server id
+            &#34;is_detailed&#34;: defaultdict(lambda: {}),  # maps processor_name without uid to all available
+            &#34;server_mapping&#34;: defaultdict(lambda: {}),  # maps server_id to processor name
+            &#34;loop_mapping&#34;: defaultdict(lambda: []),  # maps processor_name to loop_action
+            &#34;loop_uid_mapping&#34;: defaultdict(lambda: {})  # map processor_name to uid
+        }
+        self.__latency = {}  # lookup for latency entry of linking resource processor
+        self.__xml_tree = Element(&#39;lqn-model&#39;)
+        self.__xml_tree.set(&#39;name&#39;, &#39;PyCM2LQN_Model&#39;)
+        self.__add_solver_params_to_root(root=self.__xml_tree)
+        self.__repository_components_cleaned = get_used_components(repository_tree=cache.get_xml_tree(&#34;repository&#34;),
+                                                                   input_data=self.__input_data)
+
+    def __add_solver_params_to_root(self, root):
+        &#34;&#34;&#34;
+        Add solver params to xml tree.
+        :param root:
+        :return:
+        &#34;&#34;&#34;
+        solver_params = SubElement(root, &#39;solver-params&#39;)
+        solver_params.set(&#34;comment&#34;, &#34;Generated by PyCM2LQN on {}&#34;.format(date.today()))
+        solver_params.set(&#34;conv_val&#34;, self.__input_data[&#34;solver_params&#34;][&#34;conv_val&#34;])
+        solver_params.set(&#34;it_limit&#34;, &#34;50&#34;)
+        solver_params.set(&#34;print_int&#34;, &#34;10&#34;)
+        solver_params.set(&#34;underrelax_coeff&#34;, &#34;0.5&#34;)
+
+    def __create_cpu_processors(self):
+        &#34;&#34;&#34;
+        Create cpu processors for every cpu_rate entry of input data and add them to xml tree.
+        Processors are of format &#34;{server}_CPU_Processor&#34;
+        :return: added all cpu processors to lqn-model xml tree
+        &#34;&#34;&#34;
+        for server_id in self.__input_data[&#34;cpu_rates&#34;]:
+            # get current server_cpu_resource from &#34;{setting_type}.resourceenvironment&#34; file
+            # and build correct server_cpu_processor_name
+            cpu_server = get_by_id(element_id=server_id, element=self.__cache.get_xml_tree(&#34;resourceenvironment&#34;))
+            cpu_server_name = cpu_server.get(&#34;entityName&#34;)
+            processor_name = &#39;{}_CPU&#39;.format(cpu_server_name)
+            # create elements and add them to xml tree
+            processor = add_processor_element(xml_tree=self.__xml_tree, processor_name=processor_name,
+                                              speed_factor=&#34;1.0&#34;)
+            task = add_task_to_processor(processor=processor)
+            entry = add_entry_to_task(task=task, entry_name=processor_name, entry_type=&#39;NONE&#39;)
+            add_activity_to_entry(entry=entry, activity_name=processor_name, host_demand_mean=&#34;0.0&#34;)
+            # map server_id to name of new created processor
+            self.__mapping_cache[&#34;server_mapping&#34;][server_id] = &#39;{}_Processor&#39;.format(processor_name)
+
+    def __create_linking_resource_processors(self):
+        &#34;&#34;&#34;
+        Create linking resource processor for every linking resource declared in &#34;{setting_type}.resourceenvironment&#34; as
+        &#34;linkingResources__ResourceEnvironment&#34; and add them to xml tree
+        :return: processor of format &#34;LinkingResource_{}_LAN_Processor processors&#34; with:
+                    - task:  &#34;LinkingResource_{aName}_LAN_Task&#34;
+                    - entry: &#34;throughput_LinkingResource_{aName}_LAN_Entry&#34;
+                    - entry: &#34;latency_LinkingResource_{aName}_LAN_SYNCH_Entry&#34;
+                    - entry: &#34;latency_LinkingResource_{aName}_LAN_ASYNCH_Entry&#34;
+        &#34;&#34;&#34;
+        for resource_linking_environment in self.__cache.get_xml_tree(&#34;resourceenvironment&#34;).findall(
+                &#34;./linkingResources__ResourceEnvironment&#34;):
+            # add entityName to processor id if it is declared
+            entity_name = get_entity_name(resource_linking_environment)
+            linking_processor_name = &#39;LinkingResource_{entity_name}_LAN&#39;.format(entity_name=entity_name)
+            # create elements and add them to xml tree
+            processor = add_processor_element(self.__xml_tree, processor_name=linking_processor_name,
+                                              speed_factor=&#34;1.0&#34;)
+            task = add_task_to_processor(processor=processor)
+            # latency and throughput specifications are stored in:
+            # {setting_type}.resourceenvironment &gt; linkingResources__ResourceEnvironment &gt;
+            # communicationLinkResourceSpecifications_LinkingResource:
+            # - latency_CommunicationLinkResourceSpecification
+            latency = resource_linking_environment.find(&#34;.//latency_CommunicationLinkResourceSpecification&#34;).get(
+                &#34;specification&#34;)
+            # - throughput_CommunicationLinkResourceSpecification
+            throughput = resource_linking_environment.find(&#34;.//throughput_CommunicationLinkResourceSpecification&#34;).get(
+                &#34;specification&#34;)
+            throughput_host_demand_mean = &#39;{throughput}&#39;.format(throughput=1 / int(throughput))
+            # add throughput entry
+            throughput_entry_id = &#39;throughput_{processor_id}&#39;.format(processor_id=linking_processor_name)
+            throughput_entry = add_entry_to_task(task=task,
+                                                 entry_name=throughput_entry_id,
+                                                 entry_type=&#34;PH1PH2&#34;)
+            add_activity_to_entry(entry=throughput_entry,
+                                  activity_name=throughput_entry_id,
+                                  host_demand_mean=throughput_host_demand_mean)
+            # add synch latency entry
+            latency_synch_id = &#39;latency_{linking_processor_name}_SYNCH&#39;.format(
+                linking_processor_name=linking_processor_name)
+            self.__latency[&#34;SYNCH&#34;] = &#39;{latency_synch_id}_Entry&#39;.format(latency_synch_id=latency_synch_id)
+            latency_synch_entry = add_entry_to_task(task=task, entry_name=latency_synch_id, entry_type=&#34;PH1PH2&#34;)
+            add_activity_to_entry(entry=latency_synch_entry,
+                                  activity_name=latency_synch_id,
+                                  host_demand_mean=latency,
+                                  host_demand_cvsq=&#34;0.0&#34;)
+            # add asynch latency entry
+            latency_specification_asynch_id = &#39;latency_{linking_processor_name}_ASYNCH&#39;.format(
+                linking_processor_name=linking_processor_name)
+
+            latency_asynch_entry = add_entry_to_task(task=task,
+                                                     entry_name=latency_specification_asynch_id,
+                                                     entry_type=&#34;PH1PH2&#34;)
+            add_activity_to_entry(entry=latency_asynch_entry,
+                                  activity_name=latency_specification_asynch_id,
+                                  host_demand_mean=latency,
+                                  host_demand_cvsq=&#34;0.0&#34;)
+
+    def __create_usage_delay_processor(self):
+        &#34;&#34;&#34;
+        Add usage delay processor to lqn-model xml tree.
+        :return:
+        &#34;&#34;&#34;
+        processor = add_processor_element(self.__xml_tree, processor_name=&#34;USAGE_DELAY&#34;, scheduling=&#34;inf&#34;)
+        task = add_task_to_processor(processor)
+        entry = add_entry_to_task(task=task, entry_name=&#34;USAGE_DELAY0&#34;, entry_type=&#34;PH1PH2&#34;)
+        add_activity_to_entry(entry=entry, activity_name=&#34;USAGE_DELAY0&#34;, host_demand_mean=&#34;0.0&#34;)
+
+    def __create_usage_scenario_processors(self):
+        &#34;&#34;&#34;
+        Create usage scenario processor for every usage scenario declared in &#34;{setting_type}.usagemodel&#34; as
+        &#34;usageScenario_UsageModel&#34; and add them to xml tree. Create processor of format
+        &#34;UsageScenario_{scenario_name}_{amount_scenarios}_Processor&#34; with:
+            - task: &#34;UsageScenario_{scenario_name}_{amount_scenarios}_Task&#34;
+            - entry: &#34;UsageScenario_{scenario_name}_{amount_scenarios}_Entry&#34;
+        &#34;&#34;&#34;
+        usage_scenario_counter = 1
+        for usage_scenario in self.__cache.get_xml_tree(&#34;usagemodel&#34;).findall(&#34;./usageScenario_UsageModel&#34;):
+            usage_scenario_entity_name = usage_scenario.get(&#34;entityName&#34;)
+            # get specification from &#34;{setting_type}.usagemodel&#34; file &gt; workload_UsageScenario &gt;
+            # interArrivalTime_OpenWorkload &gt; specification
+            specification = usage_scenario.find(&#34;.//interArrivalTime_OpenWorkload&#34;).get(&#34;specification&#34;)
+            open_arrival_rate = calculate_open_arrival_rate(specification)
+            usage_scenario_processor_name = &#39;UsageScenario_{}_{}&#39;.format(usage_scenario_entity_name,
+                                                                         usage_scenario_counter)
+            # add usage scenario processor, task and entry
+            processor = add_processor_element(self.__xml_tree, processor_name=usage_scenario_processor_name)
+            task = add_task_to_processor(processor=processor)
+            add_entry_to_task(task=task,
+                              entry_name=usage_scenario_processor_name,
+                              open_arrival_rate=open_arrival_rate)
+            SubElement(task, &#39;task-activities&#39;)
+            usage_scenario_counter += 1
+
+    def __create_component_interface_processors(self):
+        &#34;&#34;&#34;
+        Create all component interface processors for every used components of repository.
+        :return:
+        &#34;&#34;&#34;
+        # To avoid duplicates
+        used_components = []
+        for component_id in self.__input_data[&#34;component_allocations&#34;]:
+            # allocation
+            allocation_context = get_by_id(element_id=component_id,
+                                           element=self.__cache.get_xml_tree(&#34;allocation&#34;))
+            # allocation &gt; system
+            allocation_to_system_linkage_id = get_linkage_id(identifier=&#39;assemblyContext_AllocationContext&#39;,
+                                                             element_tree=allocation_context)
+            # system
+            assembly_context = get_by_id(element_id=allocation_to_system_linkage_id,
+                                         element=self.__cache.get_xml_tree(&#39;system&#39;))
+            # system &gt; repository
+            system_to_repository_linkage_id = get_linkage_id(identifier=&#39;encapsulatedComponent__AssemblyContext&#39;,
+                                                             element_tree=assembly_context)
+            # check if system_to_repository_linkage_id is an unused alternative design option,
+            # if yes, get currently used corresponding alternative
+            for used_option in self.__input_data[&#34;alternative_design_options&#34;]:
+                if system_to_repository_linkage_id in self.__input_data[&#34;alternative_design_options&#34;][used_option]:
+                    system_to_repository_linkage_id = used_option
+
+            # repository
+            repository_component = get_by_id(element_id=system_to_repository_linkage_id,
+                                             element=self.__cache.get_xml_tree(&#34;repository&#34;))
+            self.__create_interface_processors(component_id=component_id,
+                                               used_components=used_components,
+                                               repository_component=repository_component)
+
+            # map component_id to name of new created processor
+            self.__mapping_cache[&#39;component_mapping&#39;][component_id] = repository_component.get(&#34;id&#34;)
+
+    def __create_interface_processors(self, component_id, used_components, repository_component):
+        &#34;&#34;&#34;
+        Add processors for every operation that can be called from an used component of the repository that
+        are of format {component}_{interface}_{operation}
+        :param component_id: component of allocation
+        :param used_components:
+        :return:
+        &#34;&#34;&#34;
+        component_type = repository_component.get(get_xml_schema_type())
+        if &#34;CompositeComponent&#34; in component_type:
+            repository_components = []
+            assembly_contexts = repository_component.findall(&#34;.//assemblyContexts__ComposedStructure&#34;)
+            for repository_component in assembly_contexts:
+                context_id = repository_component.get(&#34;encapsulatedComponent__AssemblyContext&#34;)
+                repository_component = get_element_from_list(search_string=context_id,
+                                                             attribute=&#34;id&#34;,
+                                                             element_list=self.__repository_components_cleaned)
+                repository_components.append(repository_component)
+            for repository_component in repository_components:
+                self.__add_interface_processors(component_id, repository_component, used_components)
+        else:
+            self.__add_interface_processors(component_id, repository_component, used_components)
+        return used_components
+
+    def __create_loop_processors(self):
+        &#34;&#34;&#34;
+        Create processor for every LoopAction, that contains all actions of current LoopAction
+        :return:
+        &#34;&#34;&#34;
+        for component in self.__cache.get_xml_tree(&#34;repository&#34;):
+            for action in component.findall(&#34;.//steps_Behaviour&#34;):
+                action_type = get_action_type(action=action)
+                if &#34;LoopAction&#34; in action_type:
+                    processors_to_add = []
+                    # build processor name and add processor
+                    action_name = get_entity_name(entity=action)
+                    action_id = action.get(&#34;id&#34;)
+                    processor_name = &#39;{type}_{name}_{id}&#39;.format(type=action_type, name=action_name, id=action_id)
+                    if is_part_of_composite_component(element=action,
+                                                      components=self.__cache.get_xml_tree(&#34;repository&#34;).findall(
+                                                          &#34;.//components__Repository&#34;)):
+                        allocated_server_ids = []
+                        allocated_server_ids = create_server_uids(allocated_server_ids=allocated_server_ids,
+                                                                  component_id=component.get(&#34;id&#34;), cache=self.__cache,
+                                                                  composite_component_allocation=self.__input_data[
+                                                                      &#34;composite_component_allocation&#34;])
+
+                        for server_uid in allocated_server_ids:
+                            uid = &#39;#{uid}#&#39;.format(uid=server_uid)
+                            unique_processor_name = &#39;{processor_name}_{uid}&#39;.format(processor_name=processor_name,
+                                                                                    uid=uid)
+                            self.__mapping_cache[&#34;loop_uid_mapping&#34;][unique_processor_name] = uid
+                            self.__mapping_cache[&#34;loop_mapping&#34;][action].append(unique_processor_name)
+                            # self.__mapping_cache[&#34;composite_uid_mapping&#34;][unique_processor_name] = uid
+                            processors_to_add.append(unique_processor_name)
+
+                    # for alternative in branch_uids
+                    # add processor_name to
+                    if not processors_to_add:
+                        processors_to_add.append(processor_name)
+                        self.__mapping_cache[&#34;loop_mapping&#34;][action].append(processor_name)
+
+                    for processor_name in processors_to_add:
+                        add_default_processor(xml_tree=self.__xml_tree, processor_name=processor_name)
+
+    def __add_interface_processors(self, component_id, repository_component, used_components):
+        &#34;&#34;&#34;
+        Add component interface processors to xml_tree. Processors must be created for every &#39;described_SEFF&#39; of a
+        repository component, that stands for an &#39;operation&#39;. An interface processor name is of format:
+        &#34;{component_name}_{interface_name}_{operation_name}[_uid]_Processor&#34; (note: that &#39;uid&#39; is optional)
+        :param component_id: id of component from allocation
+        :param repository_component: component element from repository
+        :param used_components: list of component interface processors already created
+        :return:
+        &#34;&#34;&#34;
+        # first part of processor_name is component_name
+        component_name = repository_component.get(&#34;entityName&#34;)
+        # get provided interfaces for component
+        service_effect_specifications = repository_component.findall(&#34;./serviceEffectSpecifications__BasicComponent&#34;)
+        repository_id = repository_component.get(&#34;id&#34;)
+        for seff in service_effect_specifications:
+            # list of processor names that must be created according to this seff
+            processors_to_add = []
+            # get &#34;Signatures__OperationInterface&#34; element from &#34;describedService__SEFF&#34; of current seff
+            described_seff_id = seff.get(&#34;describedService__SEFF&#34;)
+            interface_operation = get_by_id(element_id=described_seff_id,
+                                            element=self.__cache.get_xml_tree(&#34;repository&#34;))
+            # second part of processor_name is interface name
+            interface_name = get_parent_by_tag(element=interface_operation,
+                                               tag=&#34;interfaces__Repository&#34;).get(&#34;entityName&#34;)
+            # third part of processor_name is operation_name
+            operation_name = interface_operation.get(&#34;entityName&#34;)
+            # Create component interface processor name
+            processor_name = &#39;{component}_{interface}_{operation}&#39;.format(component=component_name,
+                                                                          interface=interface_name,
+                                                                          operation=operation_name)
+            # Check if processors must be duplicated due to included branch action,
+            # if yes return list that contains the corresponding processor names with branch specific uid
+            processors_to_add = create_processor_names_for_branch_action(processor_name=processor_name,
+                                                                         processors_to_add=processors_to_add, seff=seff,
+                                                                         mapping_cache=self.__mapping_cache)
+
+            # Check if ExternalCallAction links to processor that includes BranchAction, which is mandatory to copy
+            # if yes: copy processor for ExternalCallAction also
+            processors_to_add = create_processors_for_external_actions(processor_name=processor_name,
+                                                                       processors_to_add=processors_to_add,
+                                                                       seff=seff)
+
+            # Check if component is of type CompositeComponent, if yes: add duplicated processor names to list
+            # for every described_SEFF that contains an InternalAction. Make processor names unique by
+            # adding allocated server name as uid
+            processors_to_add = create_processors_for_composite_components(processor_name=processor_name,
+                                                                           processors_to_add=processors_to_add,
+                                                                           seff=seff, cache=self.__cache,
+                                                                           input_data=self.__input_data,
+                                                                           mapping_cache=self.__mapping_cache)
+            # If none of the above create-functions return a processor_name, no extra processor_names must be created,
+            # so add normal processor_name to &#39;processors_to_add&#39;
+            if not processors_to_add:
+                processors_to_add.append(processor_name)
+            # Add processors to xml tree and avoid duplicated processors
+            for processor_name in processors_to_add:
+                if processor_name not in used_components:
+                    used_components.append(processor_name)
+                    # map component id to processor id
+                    self.__mapping_cache[&#39;allocation_mapping&#39;][component_id].append(processor_name)
+                    # map component and interface processors to corresponding
+                    # &#34;describedService__SEFF&#34; of basic component
+                    self.__mapping_cache[&#39;action_mapping&#39;][processor_name] = described_seff_id
+                    if repository_id in self.__input_data[&#34;composite_component_allocation&#34;].keys():
+                        # located on same server
+                        if len(self.__input_data[&#34;composite_component_allocation&#34;][repository_id]) != 1:
+                            for server_id, used in self.__input_data[&#34;composite_component_allocation&#34;][
+                                    repository_id].items():
+                                if not used:
+                                    self.__mapping_cache[&#39;connector_mapping&#39;][processor_name] = server_id
+                                    self.__input_data[&#34;composite_component_allocation&#34;][repository_id][server_id] = True
+                                    break
+                        else:
+                            server_id = list(self.__input_data[&#34;composite_component_allocation&#34;][repository_id].keys())[
+                                0]
+                            self.__mapping_cache[&#39;connector_mapping&#39;][processor_name] = server_id
+                            self.__input_data[&#34;composite_component_allocation&#34;][repository_id][server_id] = True
+                    else:
+                        self.__mapping_cache[&#39;connector_mapping&#39;][processor_name] = self.__input_data[
+                            &#34;component_allocations&#34;][component_id]
+
+                    add_default_processor(xml_tree=self.__xml_tree, processor_name=processor_name)
+
+            if repository_id in self.__input_data[&#34;composite_component_allocation&#34;].keys():
+                for server_id, allocation in self.__input_data[&#34;composite_component_allocation&#34;][repository_id].items():
+                    self.__input_data[&#34;composite_component_allocation&#34;][repository_id][server_id] = False
+
+    def __add_actions_to_loop_processors(self):
+        &#34;&#34;&#34;
+        adds actions to rel
+        :return:
+        &#34;&#34;&#34;
+        for action in self.__mapping_cache[&#34;loop_mapping&#34;]:
+            for processor_name in self.__mapping_cache[&#34;loop_mapping&#34;][action]:
+                processor = get_by_name(element=self.__xml_tree,
+                                        element_name=&#39;{processor_name}_Processor&#39;.format(processor_name=processor_name))
+                # Get all actions within LoopAction and create activities and precedences via LoopActionFactory
+                loop_actions = action.find(&#34;bodyBehaviour_Loop&#34;).findall(&#34;./steps_Behaviour&#34;)
+                for loop_action in loop_actions:
+                    action_factory = LoopActionFactory(xml_cache=self.__cache,
+                                                       input_data=self.__input_data,
+                                                       processor=processor,
+                                                       action=loop_action,
+                                                       mapping_cache=self.__mapping_cache).create_action_factory()
+                    action_factory.add_action()
+
+        # ----- PROCESSOR CREATION END -----
+
+    def __add_actions(self, action, processor):
+        &#34;&#34;&#34;
+        Create ActionFactory and add action as &lt;activity&gt; to processors&#39; &lt;task-activities&gt;
+        and all corresponding &lt;precedences&gt; for action
+        :param processor: processor to add actions to
+        :param action: first action of a component is always StartAction
+        :return:
+        &#34;&#34;&#34;
+        # Create ActionFactory for action
+        task_activities = processor.find(&#34;.//task-activities&#34;)
+        action_factory = ActionFactory(xml_cache=self.__cache,
+                                       mapping_cache=self.__mapping_cache,
+                                       action=action,
+                                       input_data=self.__input_data,
+                                       latency=self.__latency,
+                                       processor=processor).create_action_factory(task_activities=task_activities)
+        # If action type is &#39;SetVariableAction&#39; no factory will be created, since &#39;SetVariableAction&#39; is not supported
+        if action_factory:
+            action_factory.add_action()
+        # Add actions recursively if current action has successor action
+        successor_id = action.get(&#34;successor_AbstractAction&#34;)
+        if successor_id is not None:
+            successor = get_by_id(element=action.getparent(), element_id=successor_id)
+            self.__add_actions(action=successor, processor=processor)
+
+    def __add_actions_to_usage_scenario_processor(self):
+        &#34;&#34;&#34;
+        Create actions to usage scenario processor AND create &#34;UsageScenario_Loop_&#34; processors with actions
+        :return:
+        &#34;&#34;&#34;
+        usage_counter = 1
+        for usage_model in self.__cache.get_xml_tree(&#34;usagemodel&#34;).findall(&#34;./usageScenario_UsageModel&#34;):
+            usage_scenario = usage_model.find(&#34;scenarioBehaviour_UsageScenario&#34;)
+            usage_processor_name = &#39;UsageScenario_{}_{}_Processor&#39;.format(usage_model.get(&#34;entityName&#34;),
+                                                                          usage_counter)
+            processor = get_by_name(element=self.__xml_tree, element_name=usage_processor_name)
+            # add usage actions to usage processor
+            for action in usage_scenario.findall(&#34;./actions_ScenarioBehaviour&#34;):
+                action_factory = UsageActionFactory(xml_cache=self.__cache, input_data=self.__input_data,
+                                                    processor=processor, action=action,
+                                                    mapping_cache=self.__mapping_cache).create_action_factory()
+                action_factory.add_action()
+            # Create UsageScenario_Loop processor for every &#34;bodyBehaviour_Loop&#34; and
+            # add actions that are within it to created processor
+            for body_behaviour in usage_model.findall(&#34;.//bodyBehaviour_Loop&#34;):
+                processor_id = get_parent_by_tag(element=body_behaviour, tag=&#34;actions_ScenarioBehaviour&#34;).get(&#34;id&#34;)
+                processor_name = &#39;UsageScenario_Loop_{id}&#39;.format(id=processor_id)
+                # Add processor, task, entry, task_activities and reply entry
+                processor = add_processor_element(self.__xml_tree, processor_name)
+                task = add_task_to_processor(processor=processor)
+                entry = add_entry_to_task(task=task, entry_name=processor_name)
+                task_activities = SubElement(task, &#39;task-activities&#39;)
+                reply_entry = SubElement(task_activities, &#39;reply-entry&#39;)
+                reply_entry.set(&#34;name&#34;, entry.get(&#39;name&#39;))
+                # Add loop actions to &#34;UsageScenario_Loop&#34; processor
+                for action in body_behaviour.findall(&#34;./&#34;):
+                    action_factory = UsageActionFactory(xml_cache=self.__cache, input_data=self.__input_data,
+                                                        processor=processor, action=action,
+                                                        mapping_cache=self.__mapping_cache).create_action_factory()
+                    action_factory.add_loop_config()
+        usage_counter += 1
+
+    def __add_actions_to_component_interface_processors(self):
+        &#34;&#34;&#34;
+        create actions as activities and corresponding precedence tags
+        :return:
+        &#34;&#34;&#34;
+        # for every component interface processor that was created
+        for component_interface_processor in self.__mapping_cache[&#34;action_mapping&#34;]:
+            processor_name = &#39;{name}_Processor&#39;.format(name=component_interface_processor)
+            processor = get_by_name(element_name=processor_name, element=self.__xml_tree)
+            for component in self.__repository_components_cleaned:
+                service_effect_specifications = component.findall(&#34;.//serviceEffectSpecifications__BasicComponent&#34;)
+                for seff in service_effect_specifications:
+                    if seff.get(&#34;describedService__SEFF&#34;) == self.__mapping_cache[&#34;action_mapping&#34;][
+                            component_interface_processor]:
+                        # StartAction is always first element with tag &#34;steps_Behaviour&#34;
+                        start_action = seff.find(&#34;./steps_Behaviour&#34;)
+                        # Create start_action and all it&#39;s successor actions linear
+                        self.__add_actions(action=start_action, processor=processor)
+
+    def __finalize_xml_tree(self):
+        &#34;&#34;&#34;
+        Execute clean up steps:
+        1. Delete unused processors,
+        2. Check synch calls
+        3. Add internal actions of remaining processors to allocated cpu processors
+        4. Sort processor elements
+        :return: finalized lqn-model
+        &#34;&#34;&#34;
+        # Delete those processors that&#39;s entry is not used as &#34;dest&#34; in any other processor
+        delete_unused_processors(mapping_cache=self.__mapping_cache, xml_tree=self.__xml_tree)
+        # Check xml tree for precedence duplications
+        precedence_error_check(tree=self.__xml_tree)
+        # Add internal actions to allocated cpu processors and sort processor elements
+        processors = self.__xml_tree.findall(&#34;processor&#34;)
+        for processor in processors:
+            add_internal_actions_to_cpu(processor=processor, mapping_cache=self.__mapping_cache,
+                                        xml_tree=self.__xml_tree, cpu_rates=self.__input_data[&#34;cpu_rates&#34;],
+                                        repository=self.__cache.get_xml_tree(&#34;repository&#34;))
+            sort_processor_elements(processor=processor)
+        return self.__xml_tree
+
+    def transform_pycm2lqn(self):
+        &#34;&#34;&#34;
+        Perform transformation from PCM to LQXO file.
+        &#34;&#34;&#34;
+        # 1) Create cpu processors, e.g. &#34;Server1_CPU_Processor&#34;
+        self.__create_cpu_processors()
+
+        # 2) Create linking resource processors, e.g. &#34;LinkingResource_{}_LAN_Processor processors&#34;
+        self.__create_linking_resource_processors()
+
+        # 3) Create USAGE_DELAY processors, e.g. &#34;USAGE_DELAY_Processor&#34;
+        self.__create_usage_delay_processor()
+
+        # 4) Create component/interface processors,
+        # e.g. &#34;{component_name}_{interface_name}_{operation_name}[_uid]_Processor&#34; (note: [uid] is optional)
+        self.__create_component_interface_processors()
+        self.__add_actions_to_component_interface_processors()
+
+        # 6) Create usage UsageScenario, e.g. &#34;UsageScenario_{usage_scenario}_1_Processor&#34;
+        self.__create_usage_scenario_processors()
+        self.__add_actions_to_usage_scenario_processor()
+
+        # 7) Create Loop Processors
+        self.__create_loop_processors()
+        self.__add_actions_to_loop_processors()
+
+        return self.__finalize_xml_tree()</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="pyopteryx.lqn_builder.LqnBuilder.__init__"><code class="name flex">
+<span>def <span class="ident">__init__</span></span>(<span>self, input_data, cache)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Set __input_data and __cache.
+Create __mapping_cache, __latency, __xml_tree, __repository_components_cleaned.
+Add solver parameter to __xml_tree.
+:param input_data: input containing cpu rates, allocation of components and assembled components
+:param cache: cached PCM files</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def __init__(self, input_data, cache):
+    &#34;&#34;&#34;
+    Set __input_data and __cache.
+    Create __mapping_cache, __latency, __xml_tree, __repository_components_cleaned.
+    Add solver parameter to __xml_tree.
+    :param input_data: input containing cpu rates, allocation of components and assembled components
+    :param cache: cached PCM files
+    &#34;&#34;&#34;
+    self.__input_data = input_data
+    self.__cache = cache
+    self.__mapping_cache = {  # TODO refactor, delete mapping string
+        &#34;action_mapping&#34;: defaultdict(lambda: []),  # maps processor name to ExternalCallAction
+        &#34;allocation_mapping&#34;: defaultdict(lambda: []),  # maps component id to processor id
+        &#34;branch_mapping&#34;: defaultdict(lambda: {}),  # maps &#34;branches_Branch&#34; id to interface_processor name
+        &#34;component_mapping&#34;: defaultdict(lambda: {}),  # maps component_id to processor name
+        &#34;composite_uid_mapping&#34;: defaultdict(lambda: {}),  # map processor_name to uid
+        &#34;connector_mapping&#34;: defaultdict(lambda: &#34;&#34;),  # maps processor name to server id
+        &#34;is_detailed&#34;: defaultdict(lambda: {}),  # maps processor_name without uid to all available
+        &#34;server_mapping&#34;: defaultdict(lambda: {}),  # maps server_id to processor name
+        &#34;loop_mapping&#34;: defaultdict(lambda: []),  # maps processor_name to loop_action
+        &#34;loop_uid_mapping&#34;: defaultdict(lambda: {})  # map processor_name to uid
+    }
+    self.__latency = {}  # lookup for latency entry of linking resource processor
+    self.__xml_tree = Element(&#39;lqn-model&#39;)
+    self.__xml_tree.set(&#39;name&#39;, &#39;PyCM2LQN_Model&#39;)
+    self.__add_solver_params_to_root(root=self.__xml_tree)
+    self.__repository_components_cleaned = get_used_components(repository_tree=cache.get_xml_tree(&#34;repository&#34;),
+                                                               input_data=self.__input_data)</code></pre>
+</details>
+</dd>
+<dt id="pyopteryx.lqn_builder.LqnBuilder.transform_pycm2lqn"><code class="name flex">
+<span>def <span class="ident">transform_pycm2lqn</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Perform transformation from PCM to LQXO file.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def transform_pycm2lqn(self):
+    &#34;&#34;&#34;
+    Perform transformation from PCM to LQXO file.
+    &#34;&#34;&#34;
+    # 1) Create cpu processors, e.g. &#34;Server1_CPU_Processor&#34;
+    self.__create_cpu_processors()
+
+    # 2) Create linking resource processors, e.g. &#34;LinkingResource_{}_LAN_Processor processors&#34;
+    self.__create_linking_resource_processors()
+
+    # 3) Create USAGE_DELAY processors, e.g. &#34;USAGE_DELAY_Processor&#34;
+    self.__create_usage_delay_processor()
+
+    # 4) Create component/interface processors,
+    # e.g. &#34;{component_name}_{interface_name}_{operation_name}[_uid]_Processor&#34; (note: [uid] is optional)
+    self.__create_component_interface_processors()
+    self.__add_actions_to_component_interface_processors()
+
+    # 6) Create usage UsageScenario, e.g. &#34;UsageScenario_{usage_scenario}_1_Processor&#34;
+    self.__create_usage_scenario_processors()
+    self.__add_actions_to_usage_scenario_processor()
+
+    # 7) Create Loop Processors
+    self.__create_loop_processors()
+    self.__add_actions_to_loop_processors()
+
+    return self.__finalize_xml_tree()</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="pyopteryx" href="index.html">pyopteryx</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="pyopteryx.lqn_builder.LqnBuilder" href="#pyopteryx.lqn_builder.LqnBuilder">LqnBuilder</a></code></h4>
+<ul class="">
+<li><code><a title="pyopteryx.lqn_builder.LqnBuilder.__init__" href="#pyopteryx.lqn_builder.LqnBuilder.__init__">__init__</a></code></li>
+<li><code><a title="pyopteryx.lqn_builder.LqnBuilder.transform_pycm2lqn" href="#pyopteryx.lqn_builder.LqnBuilder.transform_pycm2lqn">transform_pycm2lqn</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.5.3</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

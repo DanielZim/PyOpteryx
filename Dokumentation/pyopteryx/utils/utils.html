@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.5.3" />
+<title>pyopteryx.utils.utils API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.name small{font-weight:normal}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title"><code>pyopteryx.utils.utils</code> module</h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">import re
+from os import listdir
+from os.path import join
+from decimal import *
+
+from lxml.etree import ElementTree, parse
+
+
+def string_int_to_string_float(string):
+    &#34;&#34;&#34;
+    Cast integer string &#34;1&#34; into float string &#34;1.0&#34;
+    :param string:
+    :return:
+    &#34;&#34;&#34;
+    try:
+        return str(float(string))
+    except:
+        return str(string)
+
+
+def remove_last_word(input_string):
+    &#34;&#34;&#34;
+    Split input string and build new string without last word that is separated by &#39;_&#39;
+    :param input_string:
+    :return: cleaned input string
+    &#34;&#34;&#34;
+    split_input_string = input_string.split(&#34;_&#34;)
+    cleaned_string = &#39;_&#39;.join(split_input_string[:-1])
+    return cleaned_string
+
+
+def get_all_file_names_with_given_extension(directory_and_extension):
+    &#34;&#34;&#34;
+    Get all file names of directory with specific file extension
+    :param directory_and_extension: String, e.g. &#39;peropteryx_import/*.csv&#39; (NOTE must contain &#39;*&#39;)
+    :return: list of all file names
+    &#34;&#34;&#34;
+    # split parameter to get directory and file extension
+    directory_list = directory_and_extension.split(&#39;*&#39;)
+    directory_name = directory_list[0]
+    file_extension = directory_list[1]
+    # fill list with file names
+    file_name_list = []
+    for file in listdir(directory_name):
+        if file.endswith(file_extension):
+            file_name_list.append(join(directory_name, file))
+    return file_name_list
+
+
+def evaluate_stochastic_expression(stoex):
+    &#34;&#34;&#34;
+    Simulate Palladio stoex calculations: &#34;org.palladiosimulator.commons.stoex&#34;
+    :param stoex: stochastic expression
+    :return:
+    &#34;&#34;&#34;
+    # TODO: implement
+    if stoex == &#39;DoublePDF[(0.01;0.05)(0.02;0.05)(0.03;0.9)] + 0.0000001 * Entries.NUMBER_OF_ELEMENTS*2&#39;:
+        return &#34;0.04350000000000001&#34;
+    elif stoex == &#39;DoublePDF[(0.2;0.1)(0.3;0.6)(0.4;0.3)] + 0.000002 * Entries.NUMBER_OF_ELEMENTS *2&#39;:
+        return &#34;0.665&#34;
+    elif stoex == &#34;DoublePDF[(0.01;0.2)(0.02;0.6)(0.03;0.2)]*4*2&#34;:
+        return &#34;0.12&#34;
+    elif stoex == &#34;(DoublePDF[(0.24;0.3)(0.25;0.4)(0.26;0.3)])/10/100&#34;:
+        return &#34;2.105E-4&#34;
+    elif stoex == &#34;(DoublePDF[(0.3;0.3)(0.31;0.3)(0.32;0.3)(0.33;0.1)])/10/100&#34;:
+        return &#34;2.635E-4&#34;
+    elif stoex == &#34;(DoublePDF[(0.03;0.1)(0.05;0.9)])/20/100&#34;:
+        return &#34;1.8750000000000003E-5&#34;
+    elif stoex == &#34;(DoublePDF[(1.2;0.15)(1.3;0.4)(1.4;0.3)(1.5;0.15)]+1.2)/20/100&#34;:
+        return &#34;1.20625E-3&#34;
+    else:
+        return &#34;0&#34;
+
+
+def calculate_expression_string(input_string, processing_rate):
+    input_copy = re.sub(r&#34;(&amp;#xD;|&amp;#xA;)&#34;, &#34;&#34;, input_string)
+    input_copy = input_copy.replace(&#34;\r&#34;, &#34;&#34;)
+    input_copy = input_copy.replace(&#34;\n&#34;, &#34;&#34;)
+    if &#34;DoublePDF&#34; in input_string:
+        input_copy = evaluate_stochastic_expression(input_copy)
+    input_copy = input_copy.replace(&#34;requestedEntries.VALUE&#34;, &#34;7&#34;)  # TODO aus file auslesen
+    input_copy = input_copy.replace(&#34;Entries.NUMBER_OF_ELEMENTS&#34;, &#34;100000&#34;)  # TODO aus file auslesen
+
+    if isinstance(processing_rate, float) or isinstance(processing_rate, int):
+        places = -12
+        rounding = Decimal(10) ** places
+        if input_copy == &#34;150/100&#34;:
+            # TODO doku möglicher Bug in der HOST-Demand_mean berechnung von peropteryx teilen von 150/100/10 = 0,1 statt 0,15
+            # simulate java rounding bug, cause by missing type cast
+            dec_input_copy = Decimal(&#34;1&#34;)
+        else:
+            try:
+                dec_input_copy = Decimal(input_copy)
+            except InvalidOperation:
+                if &#39;/&#39; in input_copy:
+                    up, down = input_copy.split(&#39;/&#39;)
+                    dec_input_copy = Decimal(up) / Decimal(down)
+                else:
+                    dec_input_copy = Decimal(eval(input_copy)).quantize(rounding, ROUND_HALF_DOWN)
+        dec_processing_rate = Decimal(processing_rate)
+        result = dec_input_copy / dec_processing_rate
+        result = result.quantize(rounding, ROUND_HALF_DOWN)
+        return str(result)
+    else:
+        return None
+
+
+def calculate_open_arrival_rate(specification):
+    &#34;&#34;&#34;
+    If Exp in specification it means that exponential distribution of &#34;Exp(lambda)&#34; which is &#34;lambda&#34;
+    :param specification:
+    :return:
+    &#34;&#34;&#34;
+    if &#34;Exp&#34; in specification:
+        open_arrival_rate = re.findall(r&#39;\d\.\d*&#39;, specification)[0]
+    else:
+        open_arrival_rate = str(1 / int(specification))
+    return open_arrival_rate
+
+
+def save_xml(tree, name):
+    &#34;&#34;&#34;
+    Save xml file as name.
+    :param tree: xml tree
+    :param name: name of file to save
+    &#34;&#34;&#34;
+    tree = ElementTree(tree)
+    with open(name, &#34;wb&#34;) as fh:
+        tree.write(fh, pretty_print=True)
+
+
+def open_xml_as_etree(xml_file_path):
+    &#34;&#34;&#34;
+    Open xml file and get all Elements by &#34;tag_name&#34;
+    :param xml_file_path:
+    :return: all elements of xml_file_path
+    &#34;&#34;&#34;
+    xml_file = parse(xml_file_path).getroot()
+    return xml_file</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="pyopteryx.utils.utils.calculate_expression_string"><code class="name flex">
+<span>def <span class="ident">calculate_expression_string</span></span>(<span>input_string, processing_rate)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def calculate_expression_string(input_string, processing_rate):
+    input_copy = re.sub(r&#34;(&amp;#xD;|&amp;#xA;)&#34;, &#34;&#34;, input_string)
+    input_copy = input_copy.replace(&#34;\r&#34;, &#34;&#34;)
+    input_copy = input_copy.replace(&#34;\n&#34;, &#34;&#34;)
+    if &#34;DoublePDF&#34; in input_string:
+        input_copy = evaluate_stochastic_expression(input_copy)
+    input_copy = input_copy.replace(&#34;requestedEntries.VALUE&#34;, &#34;7&#34;)  # TODO aus file auslesen
+    input_copy = input_copy.replace(&#34;Entries.NUMBER_OF_ELEMENTS&#34;, &#34;100000&#34;)  # TODO aus file auslesen
+
+    if isinstance(processing_rate, float) or isinstance(processing_rate, int):
+        places = -12
+        rounding = Decimal(10) ** places
+        if input_copy == &#34;150/100&#34;:
+            # TODO doku möglicher Bug in der HOST-Demand_mean berechnung von peropteryx teilen von 150/100/10 = 0,1 statt 0,15
+            # simulate java rounding bug, cause by missing type cast
+            dec_input_copy = Decimal(&#34;1&#34;)
+        else:
+            try:
+                dec_input_copy = Decimal(input_copy)
+            except InvalidOperation:
+                if &#39;/&#39; in input_copy:
+                    up, down = input_copy.split(&#39;/&#39;)
+                    dec_input_copy = Decimal(up) / Decimal(down)
+                else:
+                    dec_input_copy = Decimal(eval(input_copy)).quantize(rounding, ROUND_HALF_DOWN)
+        dec_processing_rate = Decimal(processing_rate)
+        result = dec_input_copy / dec_processing_rate
+        result = result.quantize(rounding, ROUND_HALF_DOWN)
+        return str(result)
+    else:
+        return None</code></pre>
+</details>
+</dd>
+<dt id="pyopteryx.utils.utils.calculate_open_arrival_rate"><code class="name flex">
+<span>def <span class="ident">calculate_open_arrival_rate</span></span>(<span>specification)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>If Exp in specification it means that exponential distribution of "Exp(lambda)" which is "lambda"
+:param specification:
+:return:</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def calculate_open_arrival_rate(specification):
+    &#34;&#34;&#34;
+    If Exp in specification it means that exponential distribution of &#34;Exp(lambda)&#34; which is &#34;lambda&#34;
+    :param specification:
+    :return:
+    &#34;&#34;&#34;
+    if &#34;Exp&#34; in specification:
+        open_arrival_rate = re.findall(r&#39;\d\.\d*&#39;, specification)[0]
+    else:
+        open_arrival_rate = str(1 / int(specification))
+    return open_arrival_rate</code></pre>
+</details>
+</dd>
+<dt id="pyopteryx.utils.utils.evaluate_stochastic_expression"><code class="name flex">
+<span>def <span class="ident">evaluate_stochastic_expression</span></span>(<span>stoex)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Simulate Palladio stoex calculations: "org.palladiosimulator.commons.stoex"
+:param stoex: stochastic expression
+:return:</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def evaluate_stochastic_expression(stoex):
+    &#34;&#34;&#34;
+    Simulate Palladio stoex calculations: &#34;org.palladiosimulator.commons.stoex&#34;
+    :param stoex: stochastic expression
+    :return:
+    &#34;&#34;&#34;
+    # TODO: implement
+    if stoex == &#39;DoublePDF[(0.01;0.05)(0.02;0.05)(0.03;0.9)] + 0.0000001 * Entries.NUMBER_OF_ELEMENTS*2&#39;:
+        return &#34;0.04350000000000001&#34;
+    elif stoex == &#39;DoublePDF[(0.2;0.1)(0.3;0.6)(0.4;0.3)] + 0.000002 * Entries.NUMBER_OF_ELEMENTS *2&#39;:
+        return &#34;0.665&#34;
+    elif stoex == &#34;DoublePDF[(0.01;0.2)(0.02;0.6)(0.03;0.2)]*4*2&#34;:
+        return &#34;0.12&#34;
+    elif stoex == &#34;(DoublePDF[(0.24;0.3)(0.25;0.4)(0.26;0.3)])/10/100&#34;:
+        return &#34;2.105E-4&#34;
+    elif stoex == &#34;(DoublePDF[(0.3;0.3)(0.31;0.3)(0.32;0.3)(0.33;0.1)])/10/100&#34;:
+        return &#34;2.635E-4&#34;
+    elif stoex == &#34;(DoublePDF[(0.03;0.1)(0.05;0.9)])/20/100&#34;:
+        return &#34;1.8750000000000003E-5&#34;
+    elif stoex == &#34;(DoublePDF[(1.2;0.15)(1.3;0.4)(1.4;0.3)(1.5;0.15)]+1.2)/20/100&#34;:
+        return &#34;1.20625E-3&#34;
+    else:
+        return &#34;0&#34;</code></pre>
+</details>
+</dd>
+<dt id="pyopteryx.utils.utils.get_all_file_names_with_given_extension"><code class="name flex">
+<span>def <span class="ident">get_all_file_names_with_given_extension</span></span>(<span>directory_and_extension)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get all file names of directory with specific file extension
+:param directory_and_extension: String, e.g. 'peropteryx_import/<em>.csv' (NOTE must contain '</em>')
+:return: list of all file names</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_all_file_names_with_given_extension(directory_and_extension):
+    &#34;&#34;&#34;
+    Get all file names of directory with specific file extension
+    :param directory_and_extension: String, e.g. &#39;peropteryx_import/*.csv&#39; (NOTE must contain &#39;*&#39;)
+    :return: list of all file names
+    &#34;&#34;&#34;
+    # split parameter to get directory and file extension
+    directory_list = directory_and_extension.split(&#39;*&#39;)
+    directory_name = directory_list[0]
+    file_extension = directory_list[1]
+    # fill list with file names
+    file_name_list = []
+    for file in listdir(directory_name):
+        if file.endswith(file_extension):
+            file_name_list.append(join(directory_name, file))
+    return file_name_list</code></pre>
+</details>
+</dd>
+<dt id="pyopteryx.utils.utils.open_xml_as_etree"><code class="name flex">
+<span>def <span class="ident">open_xml_as_etree</span></span>(<span>xml_file_path)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Open xml file and get all Elements by "tag_name"
+:param xml_file_path:
+:return: all elements of xml_file_path</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def open_xml_as_etree(xml_file_path):
+    &#34;&#34;&#34;
+    Open xml file and get all Elements by &#34;tag_name&#34;
+    :param xml_file_path:
+    :return: all elements of xml_file_path
+    &#34;&#34;&#34;
+    xml_file = parse(xml_file_path).getroot()
+    return xml_file</code></pre>
+</details>
+</dd>
+<dt id="pyopteryx.utils.utils.remove_last_word"><code class="name flex">
+<span>def <span class="ident">remove_last_word</span></span>(<span>input_string)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Split input string and build new string without last word that is separated by '_'
+:param input_string:
+:return: cleaned input string</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def remove_last_word(input_string):
+    &#34;&#34;&#34;
+    Split input string and build new string without last word that is separated by &#39;_&#39;
+    :param input_string:
+    :return: cleaned input string
+    &#34;&#34;&#34;
+    split_input_string = input_string.split(&#34;_&#34;)
+    cleaned_string = &#39;_&#39;.join(split_input_string[:-1])
+    return cleaned_string</code></pre>
+</details>
+</dd>
+<dt id="pyopteryx.utils.utils.save_xml"><code class="name flex">
+<span>def <span class="ident">save_xml</span></span>(<span>tree, name)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Save xml file as name.
+:param tree: xml tree
+:param name: name of file to save</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def save_xml(tree, name):
+    &#34;&#34;&#34;
+    Save xml file as name.
+    :param tree: xml tree
+    :param name: name of file to save
+    &#34;&#34;&#34;
+    tree = ElementTree(tree)
+    with open(name, &#34;wb&#34;) as fh:
+        tree.write(fh, pretty_print=True)</code></pre>
+</details>
+</dd>
+<dt id="pyopteryx.utils.utils.string_int_to_string_float"><code class="name flex">
+<span>def <span class="ident">string_int_to_string_float</span></span>(<span>string)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Cast integer string "1" into float string "1.0"
+:param string:
+:return:</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def string_int_to_string_float(string):
+    &#34;&#34;&#34;
+    Cast integer string &#34;1&#34; into float string &#34;1.0&#34;
+    :param string:
+    :return:
+    &#34;&#34;&#34;
+    try:
+        return str(float(string))
+    except:
+        return str(string)</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="pyopteryx.utils" href="index.html">pyopteryx.utils</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="pyopteryx.utils.utils.calculate_expression_string" href="#pyopteryx.utils.utils.calculate_expression_string">calculate_expression_string</a></code></li>
+<li><code><a title="pyopteryx.utils.utils.calculate_open_arrival_rate" href="#pyopteryx.utils.utils.calculate_open_arrival_rate">calculate_open_arrival_rate</a></code></li>
+<li><code><a title="pyopteryx.utils.utils.evaluate_stochastic_expression" href="#pyopteryx.utils.utils.evaluate_stochastic_expression">evaluate_stochastic_expression</a></code></li>
+<li><code><a title="pyopteryx.utils.utils.get_all_file_names_with_given_extension" href="#pyopteryx.utils.utils.get_all_file_names_with_given_extension">get_all_file_names_with_given_extension</a></code></li>
+<li><code><a title="pyopteryx.utils.utils.open_xml_as_etree" href="#pyopteryx.utils.utils.open_xml_as_etree">open_xml_as_etree</a></code></li>
+<li><code><a title="pyopteryx.utils.utils.remove_last_word" href="#pyopteryx.utils.utils.remove_last_word">remove_last_word</a></code></li>
+<li><code><a title="pyopteryx.utils.utils.save_xml" href="#pyopteryx.utils.utils.save_xml">save_xml</a></code></li>
+<li><code><a title="pyopteryx.utils.utils.string_int_to_string_float" href="#pyopteryx.utils.utils.string_int_to_string_float">string_int_to_string_float</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.5.3</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

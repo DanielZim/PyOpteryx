@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.5.3" />
+<title>pyopteryx.factories.usage_action_factories.entrylevelsystemcall_usage_action_facotry API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.name small{font-weight:normal}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title"><code>pyopteryx.factories.usage_action_factories.entrylevelsystemcall_usage_action_facotry</code> module</h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">from pyopteryx.factories.usage_action_factories.abstract_usage_action_factory import AbstractUsageActionFactory
+from pyopteryx.utils.builder_utils import add_activity_to_task, add_synch_call_to_activity
+from pyopteryx.utils.xml_utils import get_element_by_identifier, get_by_id, get_linkage_id, get_used_components, \
+    get_parent_by_tag, get_unique_specification_string, is_part_of_composite_component
+
+
+class EntryLevelSystemCallUsageActionFactory(AbstractUsageActionFactory):
+    def __init__(self, action, xml_cache, input_data, processor, mapping_cache):
+        super().__init__(action=action, xml_cache=xml_cache, input_data=input_data, processor=processor,
+                         mapping_cache=mapping_cache)
+
+    def add_action(self):
+        activity = add_activity_to_task(task_activities=self.task_activities,
+                                        activity_name=self.activity_name,
+                                        hide_activity=True)
+        self._add_synch_call(activity=activity, usage_action=self.action)
+        self._add_precedences(action=self.action,
+                              action_activity_name=self.activity_name)
+
+    def add_loop_config(self):
+        activity = add_activity_to_task(task_activities=self.task_activities,
+                                        activity_name=self.activity_name,
+                                        hide_activity=True)
+        self._add_synch_call(activity=activity, usage_action=self.action)
+        self._add_precedences(action=self.action,
+                              action_activity_name=self.activity_name)
+
+    def _add_synch_call(self, activity, usage_action):
+        &#34;&#34;&#34;
+        Adds a synch-call to the given usage_action
+        :param activity:
+        :param usage_action:
+        :return:
+        &#34;&#34;&#34;
+        repository = self.xml_cache.get_xml_tree(&#34;repository&#34;)
+        # Get id that links from current usage action to id of element with &#34;signatures__OperationInterface&#34;-tag
+        component_repository_id = get_linkage_id(identifier=&#34;operationSignature__EntryLevelSystemCall&#34;,
+                                                 element_tree=usage_action)
+        # Get interface operation from element with &#34;signatures__OperationInterface&#34;-tag
+        # that&#39;s id == component_repository_id
+        interface_operation = get_by_id(element_id=component_repository_id, element=repository)
+        operation_name = interface_operation.get(&#34;entityName&#34;)
+        # Get the interface_name from interface&#39;s operation parent with tag &#34;interfaces__Repository&#34;
+        # and get &#34;entityName&#34;
+        interface = get_parent_by_tag(element=interface_operation, tag=&#34;interfaces__Repository&#34;)
+        interface_name = interface.get(&#34;entityName&#34;)
+
+        # Get component_name from parent element with tag &#34;components__Repository&#34; from
+        # element that&#39;s &#34;describedService__SEFF&#34; == component_repository_id
+        described_seff = None
+        for component in get_used_components(self.xml_cache.get_xml_tree(name=&#34;repository&#34;),
+                                             input_data=self.input_data):
+            described_seff = get_element_by_identifier(attribute=&#34;describedService__SEFF&#34;,
+                                                       search_string=component_repository_id,
+                                                       element_tree=component)
+            if described_seff is not None:
+                break
+
+        component = get_parent_by_tag(element=described_seff, tag=&#34;components__Repository&#34;)
+        synch_call_name = self.__create_synch_call_name(component=component, interface_name=interface_name,
+                                                        operation_name=operation_name)
+        add_synch_call_to_activity(activity=activity, synch_call_dest=synch_call_name)
+
+    def __create_synch_call_name(self, component, interface_name, operation_name):
+        &#34;&#34;&#34;
+        Creates a unique synch_call_name
+        :param component:
+        :param interface_name:
+        :param operation_name:
+        :return:
+        &#34;&#34;&#34;
+        component_name = component.get(&#34;entityName&#34;)
+        # If synch-call destination is type branch processor, find uid for that processor and add to synch call name
+        type_named_reference = get_element_by_identifier(element_tree=self.action, attribute=&#34;referenceName&#34;,
+                                                         search_string=&#34;type&#34;)
+        if type_named_reference is not None:
+            # Get child of sibling with tag = specification_VariableCharacterisation
+            element = get_element_by_identifier(element_tree=type_named_reference.getparent(),
+                                                attribute=&#34;type&#34;, search_string=&#34;TYPE&#34;)
+            if element is None:
+                element = get_element_by_identifier(element_tree=type_named_reference.getparent(),
+                                                    attribute=&#34;type&#34;, search_string=&#34;VALUE&#34;)
+            specification_variable = element.find(&#34;.//specification_VariableCharacterisation&#34;)
+            uid = get_unique_specification_string(specification_variable.get(&#34;specification&#34;))
+            synch_call_name = &#39;{component}_{interface}_{operation}_{uid}_Entry&#39;.format(component=component_name,
+                                                                                       interface=interface_name,
+                                                                                       operation=operation_name,
+                                                                                       uid=uid)
+            return synch_call_name
+        else:
+            # Check is actions belongs to composite component, if true build processor name with self.uid_string to
+            # link to corresponding processor
+            composite_component = is_part_of_composite_component(element=component,
+                                                                 components=self.xml_cache.get_xml_tree(
+                                                                     &#34;repository&#34;).findall(
+                                                                     &#34;./components__Repository&#34;))
+            if composite_component:
+                processor_name_beginning = &#39;{component}_{interface}_{operation}&#39;.format(
+                    component=component_name,
+                    interface=interface_name,
+                    operation=operation_name)
+                for processor_name in self.mapping_cache[&#34;connector_mapping&#34;].keys():
+                    if processor_name_beginning in processor_name:
+                        synch_call_name = &#39;{processor_name}_Entry&#39;.format(processor_name=processor_name)
+                        return synch_call_name
+                # # TODO: richtige UID bekommen!!!!!!
+                # synch_call_name = &#39;{component}_{interface}_{operation}_{uid_specification}_Entry&#39;.format(
+                #     component=component_name,
+                #     interface=interface_name,
+                #     operation=operation_name,
+                #     uid_specification=&#34;#server5#&#34;)
+                # return synch_call_name
+            else:
+                #  Simple Heuristics: Create synch_call_name and add synch-call to activity
+                synch_call_name = &#39;{component}_{interface}_{operation}_Entry&#39;.format(component=component_name,
+                                                                                     interface=interface_name,
+                                                                                     operation=operation_name)
+                return synch_call_name</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="pyopteryx.factories.usage_action_factories.entrylevelsystemcall_usage_action_facotry.EntryLevelSystemCallUsageActionFactory"><code class="flex name class">
+<span>class <span class="ident">EntryLevelSystemCallUsageActionFactory</span></span>
+<span>(</span><span><small>ancestors:</small> <a title="pyopteryx.factories.usage_action_factories.abstract_usage_action_factory.AbstractUsageActionFactory" href="abstract_usage_action_factory.html#pyopteryx.factories.usage_action_factories.abstract_usage_action_factory.AbstractUsageActionFactory">AbstractUsageActionFactory</a>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class EntryLevelSystemCallUsageActionFactory(AbstractUsageActionFactory):
+    def __init__(self, action, xml_cache, input_data, processor, mapping_cache):
+        super().__init__(action=action, xml_cache=xml_cache, input_data=input_data, processor=processor,
+                         mapping_cache=mapping_cache)
+
+    def add_action(self):
+        activity = add_activity_to_task(task_activities=self.task_activities,
+                                        activity_name=self.activity_name,
+                                        hide_activity=True)
+        self._add_synch_call(activity=activity, usage_action=self.action)
+        self._add_precedences(action=self.action,
+                              action_activity_name=self.activity_name)
+
+    def add_loop_config(self):
+        activity = add_activity_to_task(task_activities=self.task_activities,
+                                        activity_name=self.activity_name,
+                                        hide_activity=True)
+        self._add_synch_call(activity=activity, usage_action=self.action)
+        self._add_precedences(action=self.action,
+                              action_activity_name=self.activity_name)
+
+    def _add_synch_call(self, activity, usage_action):
+        &#34;&#34;&#34;
+        Adds a synch-call to the given usage_action
+        :param activity:
+        :param usage_action:
+        :return:
+        &#34;&#34;&#34;
+        repository = self.xml_cache.get_xml_tree(&#34;repository&#34;)
+        # Get id that links from current usage action to id of element with &#34;signatures__OperationInterface&#34;-tag
+        component_repository_id = get_linkage_id(identifier=&#34;operationSignature__EntryLevelSystemCall&#34;,
+                                                 element_tree=usage_action)
+        # Get interface operation from element with &#34;signatures__OperationInterface&#34;-tag
+        # that&#39;s id == component_repository_id
+        interface_operation = get_by_id(element_id=component_repository_id, element=repository)
+        operation_name = interface_operation.get(&#34;entityName&#34;)
+        # Get the interface_name from interface&#39;s operation parent with tag &#34;interfaces__Repository&#34;
+        # and get &#34;entityName&#34;
+        interface = get_parent_by_tag(element=interface_operation, tag=&#34;interfaces__Repository&#34;)
+        interface_name = interface.get(&#34;entityName&#34;)
+
+        # Get component_name from parent element with tag &#34;components__Repository&#34; from
+        # element that&#39;s &#34;describedService__SEFF&#34; == component_repository_id
+        described_seff = None
+        for component in get_used_components(self.xml_cache.get_xml_tree(name=&#34;repository&#34;),
+                                             input_data=self.input_data):
+            described_seff = get_element_by_identifier(attribute=&#34;describedService__SEFF&#34;,
+                                                       search_string=component_repository_id,
+                                                       element_tree=component)
+            if described_seff is not None:
+                break
+
+        component = get_parent_by_tag(element=described_seff, tag=&#34;components__Repository&#34;)
+        synch_call_name = self.__create_synch_call_name(component=component, interface_name=interface_name,
+                                                        operation_name=operation_name)
+        add_synch_call_to_activity(activity=activity, synch_call_dest=synch_call_name)
+
+    def __create_synch_call_name(self, component, interface_name, operation_name):
+        &#34;&#34;&#34;
+        Creates a unique synch_call_name
+        :param component:
+        :param interface_name:
+        :param operation_name:
+        :return:
+        &#34;&#34;&#34;
+        component_name = component.get(&#34;entityName&#34;)
+        # If synch-call destination is type branch processor, find uid for that processor and add to synch call name
+        type_named_reference = get_element_by_identifier(element_tree=self.action, attribute=&#34;referenceName&#34;,
+                                                         search_string=&#34;type&#34;)
+        if type_named_reference is not None:
+            # Get child of sibling with tag = specification_VariableCharacterisation
+            element = get_element_by_identifier(element_tree=type_named_reference.getparent(),
+                                                attribute=&#34;type&#34;, search_string=&#34;TYPE&#34;)
+            if element is None:
+                element = get_element_by_identifier(element_tree=type_named_reference.getparent(),
+                                                    attribute=&#34;type&#34;, search_string=&#34;VALUE&#34;)
+            specification_variable = element.find(&#34;.//specification_VariableCharacterisation&#34;)
+            uid = get_unique_specification_string(specification_variable.get(&#34;specification&#34;))
+            synch_call_name = &#39;{component}_{interface}_{operation}_{uid}_Entry&#39;.format(component=component_name,
+                                                                                       interface=interface_name,
+                                                                                       operation=operation_name,
+                                                                                       uid=uid)
+            return synch_call_name
+        else:
+            # Check is actions belongs to composite component, if true build processor name with self.uid_string to
+            # link to corresponding processor
+            composite_component = is_part_of_composite_component(element=component,
+                                                                 components=self.xml_cache.get_xml_tree(
+                                                                     &#34;repository&#34;).findall(
+                                                                     &#34;./components__Repository&#34;))
+            if composite_component:
+                processor_name_beginning = &#39;{component}_{interface}_{operation}&#39;.format(
+                    component=component_name,
+                    interface=interface_name,
+                    operation=operation_name)
+                for processor_name in self.mapping_cache[&#34;connector_mapping&#34;].keys():
+                    if processor_name_beginning in processor_name:
+                        synch_call_name = &#39;{processor_name}_Entry&#39;.format(processor_name=processor_name)
+                        return synch_call_name
+                # # TODO: richtige UID bekommen!!!!!!
+                # synch_call_name = &#39;{component}_{interface}_{operation}_{uid_specification}_Entry&#39;.format(
+                #     component=component_name,
+                #     interface=interface_name,
+                #     operation=operation_name,
+                #     uid_specification=&#34;#server5#&#34;)
+                # return synch_call_name
+            else:
+                #  Simple Heuristics: Create synch_call_name and add synch-call to activity
+                synch_call_name = &#39;{component}_{interface}_{operation}_Entry&#39;.format(component=component_name,
+                                                                                     interface=interface_name,
+                                                                                     operation=operation_name)
+                return synch_call_name</code></pre>
+</details>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pyopteryx.factories.usage_action_factories.abstract_usage_action_factory.AbstractUsageActionFactory" href="abstract_usage_action_factory.html#pyopteryx.factories.usage_action_factories.abstract_usage_action_factory.AbstractUsageActionFactory">AbstractUsageActionFactory</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pyopteryx.factories.usage_action_factories.abstract_usage_action_factory.AbstractUsageActionFactory.__init__" href="abstract_usage_action_factory.html#pyopteryx.factories.usage_action_factories.abstract_usage_action_factory.AbstractUsageActionFactory.__init__">__init__</a></code></li>
+<li><code><a title="pyopteryx.factories.usage_action_factories.abstract_usage_action_factory.AbstractUsageActionFactory.add_action" href="abstract_usage_action_factory.html#pyopteryx.factories.usage_action_factories.abstract_usage_action_factory.AbstractUsageActionFactory.add_action">add_action</a></code></li>
+<li><code><a title="pyopteryx.factories.usage_action_factories.abstract_usage_action_factory.AbstractUsageActionFactory.add_loop_config" href="abstract_usage_action_factory.html#pyopteryx.factories.usage_action_factories.abstract_usage_action_factory.AbstractUsageActionFactory.add_loop_config">add_loop_config</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="pyopteryx.factories.usage_action_factories" href="index.html">pyopteryx.factories.usage_action_factories</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="pyopteryx.factories.usage_action_factories.entrylevelsystemcall_usage_action_facotry.EntryLevelSystemCallUsageActionFactory" href="#pyopteryx.factories.usage_action_factories.entrylevelsystemcall_usage_action_facotry.EntryLevelSystemCallUsageActionFactory">EntryLevelSystemCallUsageActionFactory</a></code></h4>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.5.3</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

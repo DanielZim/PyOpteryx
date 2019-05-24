@@ -1,0 +1,807 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.5.3" />
+<title>pyopteryx.factories.action_factories.branch_action_factory API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.name small{font-weight:normal}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title"><code>pyopteryx.factories.action_factories.branch_action_factory</code> module</h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">import re
+
+from lxml.etree import SubElement
+
+from pyopteryx.factories.action_factories import action_factory as branch_factory
+from pyopteryx.factories.action_factories.abstract_action_factory import AbstractActionFactory
+from pyopteryx.utils.utils import string_int_to_string_float
+from pyopteryx.utils.builder_utils import add_activity_to_task
+from pyopteryx.utils.xml_utils import get_element_by_identifier, get_by_id, get_action_type, get_element_from_list, \
+    get_xml_schema_type, get_branch_type, create_activity_name_from_action
+
+
+class BranchActionFactory(AbstractActionFactory):
+    def __init__(self, action, task_activities, xml_cache, input_data, latency, mapping_cache, processor):
+        super().__init__(action=action, task_activities=task_activities, xml_cache=xml_cache, processor=processor,
+                         mapping_cache=mapping_cache)
+        self.latency = latency
+        self.input_data = input_data
+
+    def add_action(self):
+        self.__branch_factory(action=self.action, task_activities=self.task_activities)
+
+    # ---- TODO:  BranchFactory Start ----
+    def __branch_factory(self, action, task_activities):
+        &#34;&#34;&#34;
+        creates branches depending on branch_type
+        :param action:
+        :param task_activities:
+        :return:
+        &#34;&#34;&#34;
+        branches = action.findall(&#34;./branches_Branch&#34;)
+        for branch in branches:
+            branch_type = get_branch_type(branch=branch)
+            if &#34;probabilistic&#34; == branch_type:
+                return self.__add_probabilistic_branch(action=action, task_activities=self.task_activities)
+            elif &#34;type&#34; == branch_type:
+                return self.__add_type_branch(action=action, task_activities=task_activities)
+            elif &#34;detailed&#34; == branch_type:
+                return self.__add_detailed_branch(action=action, task_activities=task_activities)
+            elif &#34;simple&#34; == branch_type:
+                return self.__add_simple_branch(action=self.action, task_activities=self.task_activities)
+            else:
+                raise ValueError(&#34;Unknown branch_type. Abort Mission.&#34;)
+
+    def __add_simple_branch(self, action, task_activities):
+        &#34;&#34;&#34;
+        Creates simple branches (only relevant in SimpleHeuristicsExample)
+        :param action:
+        :param task_activities:
+        :return:
+        &#34;&#34;&#34;
+        action_activity_name = create_activity_name_from_action(action=action)
+        add_activity_to_task(task_activities=task_activities, activity_name=action_activity_name, hide_activity=True)
+
+        post_or_element, stop_pre_or_tag = self.__add_pre_or_and_post_or(action=action,
+                                                                         action_activity_name=action_activity_name,
+                                                                         task_activities=task_activities)
+
+        for branch in action.findall(&#34;./branches_Branch&#34;):
+            branches_steps = branch.find(&#34;./branchBehaviour_BranchTransition&#34;).findall(&#34;.//steps_Behaviour&#34;)
+            branch_start_actions, final_successor_action = self.__get_final_successor_and_start(actions=branches_steps)
+            # Create ActionFactory and add action
+            self.__create_actions_for_all_branches(branches_steps, task_activities)
+
+            branch_conditions = branch.findall(&#34;.//branchCondition_GuardedBranchTransition&#34;)
+            for condition in branch_conditions:
+                condition_types = self.__get_condition_types(condition)
+                reference_name = self.__get_reference_name(condition_types=condition_types)
+                variable_usage = get_element_by_identifier(attribute=&#34;referenceName&#34;, search_string=reference_name,
+                                                           element_tree=self.xml_cache.get_xml_tree(&#34;usagemodel&#34;))
+
+                for branch_start_action in branch_start_actions:
+                    parent = variable_usage.getparent()
+                    bool_exp = parent.find(&#34;.//specification_VariableCharacterisation&#34;).get(&#34;specification&#34;)
+                    match_object = re.findall(r&#39;true;+\d\.\d*|false;+\d\.\d*&#39;, bool_exp)
+                    # Get branch probability for post element
+                    branch_probability = &#34;0&#34;
+                    # First start action has false probability
+                    if &#34;NOT&#34; in condition_types:
+                        for matching_object in match_object:
+                            if &#34;false&#34; in matching_object:
+                                branch_probability = matching_object.split(&#34;;&#34;)[1]
+                    else:
+                        for matching_object in match_object:
+                            if &#34;true&#34; in matching_object:
+                                branch_probability = matching_object.split(&#34;;&#34;)[1]
+
+                    post_predecessor_activity_name = create_activity_name_from_action(action=branch_start_action)
+                    post_predecessor_activity = SubElement(post_or_element, &#39;activity&#39;)
+                    post_predecessor_activity.set(&#34;name&#34;, post_predecessor_activity_name)
+                    post_predecessor_activity.set(&#34;prob&#34;, branch_probability)
+
+            self.__add_stop_action_precedences(final_successor_action, stop_pre_or_tag)
+
+    def __add_detailed_branch(self, action, task_activities):
+        &#34;&#34;&#34;
+        Copy whole processor and make names unique by adding unique string.
+        :param action:
+        :param task_activities:
+        :return:
+        &#34;&#34;&#34;
+        add_activity_to_task(task_activities=task_activities,
+                             activity_name=self.activity_name,
+                             hide_activity=True)
+        post_or_element, stop_pre_or_tag = self.__add_pre_or_and_post_or(action=self.action,
+                                                                         action_activity_name=self.activity_name,
+                                                                         task_activities=task_activities)
+        branch_counter = 0
+        branches = action.findall(&#34;./branches_Branch&#34;)
+        for branch in branches:
+            branches_steps = branch.find(&#34;./branchBehaviour_BranchTransition&#34;).findall(&#34;./steps_Behaviour&#34;)
+            branch_start_actions, final_successor_action = self.__get_final_successor_and_start(actions=branches_steps)
+            self.__create_actions_for_all_branches(branches_steps, task_activities)
+            # if branch is of type &#34;ProbabilisticBranchTransition&#34; it has entity &#34;branchProbability&#34;:
+            # use this to create or post tag
+            branch_conditions = branch.findall(&#34;.//branchCondition_GuardedBranchTransition&#34;)
+            for condition in branch_conditions:
+                condition_types = self.__get_condition_types(condition)
+                reference_name = self.__get_reference_name(condition_types=condition_types)
+                variable_usage = get_element_by_identifier(attribute=&#34;referenceName&#34;, search_string=reference_name,
+                                                           element_tree=self.xml_cache.get_xml_tree(&#34;usagemodel&#34;))
+                for branch_start_action in branch_start_actions:
+                    parent = variable_usage.getparent()
+                    bool_exp = parent.find(&#34;.//specification_VariableCharacterisation&#34;).get(&#34;specification&#34;)
+                    match_object = re.findall(r&#39;&#34;t&#34;;+\d\.\d*|&#34;f&#34;;+\d\.\d*&#39;, bool_exp)
+                    # Get branch probability for post element
+                    branch_uuid, branch_probability = match_object[branch_counter].replace(&#39;\&#34;&#39;, &#34;#&#34;).split(&#34;;&#34;)
+                    post_predecessor_activity_name = create_activity_name_from_action(action=branch_start_action,
+                                                                                      uid_string=self.uid_string)
+                    post_predecessor_activity = SubElement(post_or_element, &#39;activity&#39;)
+                    post_predecessor_activity.set(&#34;name&#34;, post_predecessor_activity_name)
+                    post_predecessor_activity.set(&#34;prob&#34;, branch_probability)
+            branch_counter += 1
+
+            # Add precedence for stop actions
+            self.__add_stop_action_precedences(final_successor_action, stop_pre_or_tag, uid=self.uid_string)
+
+    def __add_probabilistic_branch(self, action, task_activities):
+        &#34;&#34;&#34;
+        Creates Probabilistic branches with probabilities
+        :param action:
+        :param task_activities:
+        :return:
+        &#34;&#34;&#34;
+        activity_name = create_activity_name_from_action(action=action)
+        add_activity_to_task(task_activities=task_activities, activity_name=activity_name, hide_activity=True)
+
+        post_or_element, stop_pre_or_tag = self.__add_pre_or_and_post_or(action=action,
+                                                                         action_activity_name=activity_name,
+                                                                         task_activities=task_activities)
+        branches = action.findall(&#34;./branches_Branch&#34;)
+        for branch in branches:
+            branches_actions = branch.find(&#34;./branchBehaviour_BranchTransition&#34;).findall(&#34;.//steps_Behaviour&#34;)
+            self.__create_actions_for_all_branches(branches_steps=branches_actions, task_activities=task_activities)
+
+            branch_start_actions, final_successor_action = self.__get_final_successor_and_start(
+                actions=branches_actions)
+            # if branch is of type &#34;ProbabilisticBranchTransition&#34; it has entity &#34;branchProbability&#34;:
+            # use this to create or post tag
+            branch_probability = branch.get(&#34;branchProbability&#34;)
+            for start_action in branch_start_actions:
+                post_predecessor_activity = SubElement(post_or_element, &#39;activity&#39;)
+                post_predecessor_activity_id = create_activity_name_from_action(action=start_action)
+                post_predecessor_activity.set(&#34;name&#34;, post_predecessor_activity_id)
+                post_predecessor_activity.set(&#34;prob&#34;, string_int_to_string_float(branch_probability))
+
+            self.__add_stop_action_precedences(final_successor_action=final_successor_action,
+                                               stop_pre_or_tag=stop_pre_or_tag)
+
+    def __add_type_branch(self, action, task_activities):
+        &#34;&#34;&#34;
+        Creates type branches with type values as part of unique strings
+        :param action:
+        :param task_activities:
+        :return:
+        &#34;&#34;&#34;
+        # 1) Add branch action
+        add_activity_to_task(task_activities=task_activities, activity_name=self.activity_name, hide_activity=True)
+
+        post_or_element, stop_pre_or_tag = self.__add_pre_or_and_post_or(action=action,
+                                                                         action_activity_name=self.activity_name,
+                                                                         task_activities=task_activities)
+        for branch in action.findall(&#34;./branches_Branch&#34;):
+            for name, uid in self.mapping_cache[&#34;branch_mapping&#34;][branch.get(&#34;id&#34;)].items():
+                processor_name = &#39;{processor_name}_Processor&#39;.format(processor_name=name)
+                branch_uid = uid
+                if processor_name == self.processor.get(&#34;name&#34;):
+                    branches_steps = branch.find(&#34;./branchBehaviour_BranchTransition&#34;).findall(&#34;.//steps_Behaviour&#34;)
+                    branch_start_actions, final_successor_action = self.__get_final_successor_and_start(
+                        actions=branches_steps)
+                    # Add actions recursively for first actions of branches_Steps, which is StartAction
+                    self.__add_actions(action=branches_steps[0], processor=self.processor)
+                    self.__add_precedence_for_start_action(branches_steps=branches_steps,
+                                                           post_or_element=post_or_element,
+                                                           uid=branch_uid)
+                    self.__add_stop_action_precedences(final_successor_action=final_successor_action,
+                                                       stop_pre_or_tag=stop_pre_or_tag,
+                                                       uid=branch_uid)
+
+    @staticmethod
+    def __get_condition_types(condition):
+        &#34;&#34;&#34;
+        Get branch condition types as list. For SimpleHeuristicsExample [&#34;NOT&#34;, &#34;inBook&#34;],
+        which will be used for defining if a branch uses probability for true or false.
+        :param condition: string
+        :return: list of condition types
+        &#34;&#34;&#34;
+        branch_condition = condition.get(&#34;specification&#34;)
+        condition_type, condition_value = branch_condition.split(&#34;.&#34;)
+        condition_types = condition_type.split(&#34; &#34;)
+        return condition_types
+
+    def __create_actions_for_all_branches(self, branches_steps, task_activities):
+        &#34;&#34;&#34;
+        Create ActionFactory and add action
+        :param branches_steps:
+        :param task_activities:
+        :return:
+        &#34;&#34;&#34;
+        for branch_action in branches_steps:
+            action_factory = branch_factory.ActionFactory(xml_cache=self.xml_cache,
+                                                          mapping_cache=self.mapping_cache,
+                                                          input_data=self.input_data,
+                                                          action=branch_action,
+                                                          latency=self.latency,
+                                                          processor=self.processor
+                                                          ).create_action_factory(task_activities=task_activities)
+            action_factory.add_action()
+
+    def __add_actions(self, action, processor):
+        &#34;&#34;&#34;
+        Create ActionFactory and add action as &lt;activity&gt; to processors&#39; &lt;task-activities&gt;
+        and all corresponding &lt;precedences&gt; for action
+        :param processor: processor to add actions to
+        :param action: first action of a component is always StartAction
+        :return:
+        &#34;&#34;&#34;
+        # Create ActionFactory for action
+        task_activities = processor.find(&#34;.//task-activities&#34;)
+        action_factory = branch_factory.ActionFactory(xml_cache=self.xml_cache,
+                                                      mapping_cache=self.mapping_cache,
+                                                      action=action,
+                                                      input_data=self.input_data,
+                                                      latency=self.latency,
+                                                      processor=processor
+                                                      ).create_action_factory(task_activities=task_activities)
+        # If action is of type &#39;SetVariableAction&#39; no factory will be created,
+        # since &#39;SetVariableAction&#39; is not supported
+        if action_factory:
+            action_factory.add_action()
+
+        # Add actions recursively if current action has successor action
+        successor_id = action.get(&#34;successor_AbstractAction&#34;)
+        if successor_id is not None:
+            successor = get_by_id(element=action.getparent(), element_id=successor_id)
+            self.__add_actions(action=successor, processor=processor)
+
+    def __add_pre_or_and_post_or(self, action, action_activity_name, task_activities):
+        &#34;&#34;&#34;
+        Create pre-or and post-or precedences along with their respective activities
+        :param action:
+        :param action_activity_name:
+        :param task_activities:
+        :return:
+        &#34;&#34;&#34;
+        # Add: StopAction_1, StopAction_2 -&gt; final successor of BranchAction
+        final_successor_id = action.get(&#34;successor_AbstractAction&#34;)
+        final_successor_action = get_by_id(element=self.xml_cache.get_xml_tree(&#34;repository&#34;),
+                                           element_id=final_successor_id)
+        final_successor_action_name = create_activity_name_from_action(action=final_successor_action,
+                                                                       uid_string=self.uid_string)
+        # create precedence that contains pre-or and post tag
+        final_successor_precedence = SubElement(task_activities, &#39;precedence&#39;)
+        stop_pre_or_tag = SubElement(final_successor_precedence, &#39;pre-OR&#39;)
+        stop_post_tag = SubElement(final_successor_precedence, &#39;post&#39;)
+
+        # add activity_name to post element
+        stop_post_activity = SubElement(stop_post_tag, &#39;activity&#39;)
+        stop_post_activity.set(&#34;name&#34;, final_successor_action_name)
+        # branch action as pre tag and each branches&#39; start_action as post-OR tag
+        pre_precedence = SubElement(task_activities, &#39;precedence&#39;)
+        # create pre-element
+        pre_tag = SubElement(pre_precedence, &#39;pre&#39;)
+        stop_pre_or_activity = SubElement(pre_tag, &#39;activity&#39;)
+        stop_pre_or_activity.set(&#34;name&#34;, action_activity_name)
+        post_or_element = SubElement(pre_precedence, &#39;post-OR&#39;)
+        return post_or_element, stop_pre_or_tag
+
+    @staticmethod
+    def __get_final_successor_and_start(actions):
+        &#34;&#34;&#34;
+        Get StartActions and StopActions from all branches in lists
+        :param actions:
+        :return:
+        &#34;&#34;&#34;
+        branch_start_actions = []
+        final_successor_action = []
+        for steps in actions:
+            steps_action = get_action_type(action=steps)
+            if &#34;StartAction&#34; in steps_action:
+                branch_start_actions.append(steps)
+            elif &#34;StopAction&#34; in steps_action:
+                final_successor_action.append(steps)
+        return branch_start_actions, final_successor_action
+
+    def __get_reference_name(self, condition_types):
+        &#34;&#34;&#34;
+        Get reference name to look for probabilities in usagemodel. &#34;&lt;branchCondition_GuardedBranchTransition /&gt;&#34;
+        (repository) is used to look for reference name in usagemodel. Find matching reference name in condition types
+        and return corresponding reference name.
+        :param condition_types: &#39;specification=&#34;NOT isBook.VALUE&#34;&#39; -&gt; [&#34;NOT&#34;, &#34;isBook&#34;, &#34;VALUE&#34;]
+        :return: reference name
+        &#34;&#34;&#34;
+        named_references = self.__get_references()
+        reference_name = &#34;&#34;
+        for reference in named_references:
+            try:
+                name_index = condition_types.index(reference)
+                reference_name = condition_types[name_index]
+                break
+            except ValueError:
+                pass
+        return reference_name
+
+    def __get_references(self):
+        &#34;&#34;&#34;
+        Get references from usagemodel where references of branch action probabilities are stored
+        :return:
+        &#34;&#34;&#34;
+        named_references = []
+        for usage in self.xml_cache.get_xml_tree(&#34;usagemodel&#34;):
+            variable_usages = usage.findall(&#34;.//namedReference__VariableUsage&#34;)
+            for name in variable_usages:
+                named_references.append(name.get(&#34;referenceName&#34;))
+        return named_references
+
+    @staticmethod
+    def __add_stop_action_precedences(final_successor_action, stop_pre_or_tag, uid=None):
+        &#34;&#34;&#34;
+        Add precedences for StopAction
+        :param final_successor_action:
+        :param stop_pre_or_tag:
+        :param uid:
+        :return:
+        &#34;&#34;&#34;
+        # Add precedence for stop actions
+        for stop_action in final_successor_action:
+            activity_name = create_activity_name_from_action(action=stop_action, uid_string=uid)
+            stop_pre_or_activity = SubElement(stop_pre_or_tag, &#39;activity&#39;)
+            stop_pre_or_activity.set(&#34;name&#34;, activity_name)
+
+    @staticmethod
+    def __add_precedence_for_start_action(branches_steps, post_or_element, uid=None):
+        &#34;&#34;&#34;
+        Add precedences for StartAction.
+        :param branches_steps:
+        :param post_or_element:
+        :param uid:
+        :return:
+        &#34;&#34;&#34;
+        action = get_element_from_list(search_string=&#34;seff:StartAction&#34;,
+                                       attribute=get_xml_schema_type(),
+                                       element_list=branches_steps)
+        activity_name = create_activity_name_from_action(action=action, uid_string=uid)
+        activity = SubElement(post_or_element, &#39;activity&#39;)
+        activity.set(&#34;name&#34;, activity_name)
+        activity.set(&#34;prob&#34;, &#34;1.0&#34;)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="pyopteryx.factories.action_factories.branch_action_factory.BranchActionFactory"><code class="flex name class">
+<span>class <span class="ident">BranchActionFactory</span></span>
+<span>(</span><span><small>ancestors:</small> <a title="pyopteryx.factories.action_factories.abstract_action_factory.AbstractActionFactory" href="abstract_action_factory.html#pyopteryx.factories.action_factories.abstract_action_factory.AbstractActionFactory">AbstractActionFactory</a>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class BranchActionFactory(AbstractActionFactory):
+    def __init__(self, action, task_activities, xml_cache, input_data, latency, mapping_cache, processor):
+        super().__init__(action=action, task_activities=task_activities, xml_cache=xml_cache, processor=processor,
+                         mapping_cache=mapping_cache)
+        self.latency = latency
+        self.input_data = input_data
+
+    def add_action(self):
+        self.__branch_factory(action=self.action, task_activities=self.task_activities)
+
+    # ---- TODO:  BranchFactory Start ----
+    def __branch_factory(self, action, task_activities):
+        &#34;&#34;&#34;
+        creates branches depending on branch_type
+        :param action:
+        :param task_activities:
+        :return:
+        &#34;&#34;&#34;
+        branches = action.findall(&#34;./branches_Branch&#34;)
+        for branch in branches:
+            branch_type = get_branch_type(branch=branch)
+            if &#34;probabilistic&#34; == branch_type:
+                return self.__add_probabilistic_branch(action=action, task_activities=self.task_activities)
+            elif &#34;type&#34; == branch_type:
+                return self.__add_type_branch(action=action, task_activities=task_activities)
+            elif &#34;detailed&#34; == branch_type:
+                return self.__add_detailed_branch(action=action, task_activities=task_activities)
+            elif &#34;simple&#34; == branch_type:
+                return self.__add_simple_branch(action=self.action, task_activities=self.task_activities)
+            else:
+                raise ValueError(&#34;Unknown branch_type. Abort Mission.&#34;)
+
+    def __add_simple_branch(self, action, task_activities):
+        &#34;&#34;&#34;
+        Creates simple branches (only relevant in SimpleHeuristicsExample)
+        :param action:
+        :param task_activities:
+        :return:
+        &#34;&#34;&#34;
+        action_activity_name = create_activity_name_from_action(action=action)
+        add_activity_to_task(task_activities=task_activities, activity_name=action_activity_name, hide_activity=True)
+
+        post_or_element, stop_pre_or_tag = self.__add_pre_or_and_post_or(action=action,
+                                                                         action_activity_name=action_activity_name,
+                                                                         task_activities=task_activities)
+
+        for branch in action.findall(&#34;./branches_Branch&#34;):
+            branches_steps = branch.find(&#34;./branchBehaviour_BranchTransition&#34;).findall(&#34;.//steps_Behaviour&#34;)
+            branch_start_actions, final_successor_action = self.__get_final_successor_and_start(actions=branches_steps)
+            # Create ActionFactory and add action
+            self.__create_actions_for_all_branches(branches_steps, task_activities)
+
+            branch_conditions = branch.findall(&#34;.//branchCondition_GuardedBranchTransition&#34;)
+            for condition in branch_conditions:
+                condition_types = self.__get_condition_types(condition)
+                reference_name = self.__get_reference_name(condition_types=condition_types)
+                variable_usage = get_element_by_identifier(attribute=&#34;referenceName&#34;, search_string=reference_name,
+                                                           element_tree=self.xml_cache.get_xml_tree(&#34;usagemodel&#34;))
+
+                for branch_start_action in branch_start_actions:
+                    parent = variable_usage.getparent()
+                    bool_exp = parent.find(&#34;.//specification_VariableCharacterisation&#34;).get(&#34;specification&#34;)
+                    match_object = re.findall(r&#39;true;+\d\.\d*|false;+\d\.\d*&#39;, bool_exp)
+                    # Get branch probability for post element
+                    branch_probability = &#34;0&#34;
+                    # First start action has false probability
+                    if &#34;NOT&#34; in condition_types:
+                        for matching_object in match_object:
+                            if &#34;false&#34; in matching_object:
+                                branch_probability = matching_object.split(&#34;;&#34;)[1]
+                    else:
+                        for matching_object in match_object:
+                            if &#34;true&#34; in matching_object:
+                                branch_probability = matching_object.split(&#34;;&#34;)[1]
+
+                    post_predecessor_activity_name = create_activity_name_from_action(action=branch_start_action)
+                    post_predecessor_activity = SubElement(post_or_element, &#39;activity&#39;)
+                    post_predecessor_activity.set(&#34;name&#34;, post_predecessor_activity_name)
+                    post_predecessor_activity.set(&#34;prob&#34;, branch_probability)
+
+            self.__add_stop_action_precedences(final_successor_action, stop_pre_or_tag)
+
+    def __add_detailed_branch(self, action, task_activities):
+        &#34;&#34;&#34;
+        Copy whole processor and make names unique by adding unique string.
+        :param action:
+        :param task_activities:
+        :return:
+        &#34;&#34;&#34;
+        add_activity_to_task(task_activities=task_activities,
+                             activity_name=self.activity_name,
+                             hide_activity=True)
+        post_or_element, stop_pre_or_tag = self.__add_pre_or_and_post_or(action=self.action,
+                                                                         action_activity_name=self.activity_name,
+                                                                         task_activities=task_activities)
+        branch_counter = 0
+        branches = action.findall(&#34;./branches_Branch&#34;)
+        for branch in branches:
+            branches_steps = branch.find(&#34;./branchBehaviour_BranchTransition&#34;).findall(&#34;./steps_Behaviour&#34;)
+            branch_start_actions, final_successor_action = self.__get_final_successor_and_start(actions=branches_steps)
+            self.__create_actions_for_all_branches(branches_steps, task_activities)
+            # if branch is of type &#34;ProbabilisticBranchTransition&#34; it has entity &#34;branchProbability&#34;:
+            # use this to create or post tag
+            branch_conditions = branch.findall(&#34;.//branchCondition_GuardedBranchTransition&#34;)
+            for condition in branch_conditions:
+                condition_types = self.__get_condition_types(condition)
+                reference_name = self.__get_reference_name(condition_types=condition_types)
+                variable_usage = get_element_by_identifier(attribute=&#34;referenceName&#34;, search_string=reference_name,
+                                                           element_tree=self.xml_cache.get_xml_tree(&#34;usagemodel&#34;))
+                for branch_start_action in branch_start_actions:
+                    parent = variable_usage.getparent()
+                    bool_exp = parent.find(&#34;.//specification_VariableCharacterisation&#34;).get(&#34;specification&#34;)
+                    match_object = re.findall(r&#39;&#34;t&#34;;+\d\.\d*|&#34;f&#34;;+\d\.\d*&#39;, bool_exp)
+                    # Get branch probability for post element
+                    branch_uuid, branch_probability = match_object[branch_counter].replace(&#39;\&#34;&#39;, &#34;#&#34;).split(&#34;;&#34;)
+                    post_predecessor_activity_name = create_activity_name_from_action(action=branch_start_action,
+                                                                                      uid_string=self.uid_string)
+                    post_predecessor_activity = SubElement(post_or_element, &#39;activity&#39;)
+                    post_predecessor_activity.set(&#34;name&#34;, post_predecessor_activity_name)
+                    post_predecessor_activity.set(&#34;prob&#34;, branch_probability)
+            branch_counter += 1
+
+            # Add precedence for stop actions
+            self.__add_stop_action_precedences(final_successor_action, stop_pre_or_tag, uid=self.uid_string)
+
+    def __add_probabilistic_branch(self, action, task_activities):
+        &#34;&#34;&#34;
+        Creates Probabilistic branches with probabilities
+        :param action:
+        :param task_activities:
+        :return:
+        &#34;&#34;&#34;
+        activity_name = create_activity_name_from_action(action=action)
+        add_activity_to_task(task_activities=task_activities, activity_name=activity_name, hide_activity=True)
+
+        post_or_element, stop_pre_or_tag = self.__add_pre_or_and_post_or(action=action,
+                                                                         action_activity_name=activity_name,
+                                                                         task_activities=task_activities)
+        branches = action.findall(&#34;./branches_Branch&#34;)
+        for branch in branches:
+            branches_actions = branch.find(&#34;./branchBehaviour_BranchTransition&#34;).findall(&#34;.//steps_Behaviour&#34;)
+            self.__create_actions_for_all_branches(branches_steps=branches_actions, task_activities=task_activities)
+
+            branch_start_actions, final_successor_action = self.__get_final_successor_and_start(
+                actions=branches_actions)
+            # if branch is of type &#34;ProbabilisticBranchTransition&#34; it has entity &#34;branchProbability&#34;:
+            # use this to create or post tag
+            branch_probability = branch.get(&#34;branchProbability&#34;)
+            for start_action in branch_start_actions:
+                post_predecessor_activity = SubElement(post_or_element, &#39;activity&#39;)
+                post_predecessor_activity_id = create_activity_name_from_action(action=start_action)
+                post_predecessor_activity.set(&#34;name&#34;, post_predecessor_activity_id)
+                post_predecessor_activity.set(&#34;prob&#34;, string_int_to_string_float(branch_probability))
+
+            self.__add_stop_action_precedences(final_successor_action=final_successor_action,
+                                               stop_pre_or_tag=stop_pre_or_tag)
+
+    def __add_type_branch(self, action, task_activities):
+        &#34;&#34;&#34;
+        Creates type branches with type values as part of unique strings
+        :param action:
+        :param task_activities:
+        :return:
+        &#34;&#34;&#34;
+        # 1) Add branch action
+        add_activity_to_task(task_activities=task_activities, activity_name=self.activity_name, hide_activity=True)
+
+        post_or_element, stop_pre_or_tag = self.__add_pre_or_and_post_or(action=action,
+                                                                         action_activity_name=self.activity_name,
+                                                                         task_activities=task_activities)
+        for branch in action.findall(&#34;./branches_Branch&#34;):
+            for name, uid in self.mapping_cache[&#34;branch_mapping&#34;][branch.get(&#34;id&#34;)].items():
+                processor_name = &#39;{processor_name}_Processor&#39;.format(processor_name=name)
+                branch_uid = uid
+                if processor_name == self.processor.get(&#34;name&#34;):
+                    branches_steps = branch.find(&#34;./branchBehaviour_BranchTransition&#34;).findall(&#34;.//steps_Behaviour&#34;)
+                    branch_start_actions, final_successor_action = self.__get_final_successor_and_start(
+                        actions=branches_steps)
+                    # Add actions recursively for first actions of branches_Steps, which is StartAction
+                    self.__add_actions(action=branches_steps[0], processor=self.processor)
+                    self.__add_precedence_for_start_action(branches_steps=branches_steps,
+                                                           post_or_element=post_or_element,
+                                                           uid=branch_uid)
+                    self.__add_stop_action_precedences(final_successor_action=final_successor_action,
+                                                       stop_pre_or_tag=stop_pre_or_tag,
+                                                       uid=branch_uid)
+
+    @staticmethod
+    def __get_condition_types(condition):
+        &#34;&#34;&#34;
+        Get branch condition types as list. For SimpleHeuristicsExample [&#34;NOT&#34;, &#34;inBook&#34;],
+        which will be used for defining if a branch uses probability for true or false.
+        :param condition: string
+        :return: list of condition types
+        &#34;&#34;&#34;
+        branch_condition = condition.get(&#34;specification&#34;)
+        condition_type, condition_value = branch_condition.split(&#34;.&#34;)
+        condition_types = condition_type.split(&#34; &#34;)
+        return condition_types
+
+    def __create_actions_for_all_branches(self, branches_steps, task_activities):
+        &#34;&#34;&#34;
+        Create ActionFactory and add action
+        :param branches_steps:
+        :param task_activities:
+        :return:
+        &#34;&#34;&#34;
+        for branch_action in branches_steps:
+            action_factory = branch_factory.ActionFactory(xml_cache=self.xml_cache,
+                                                          mapping_cache=self.mapping_cache,
+                                                          input_data=self.input_data,
+                                                          action=branch_action,
+                                                          latency=self.latency,
+                                                          processor=self.processor
+                                                          ).create_action_factory(task_activities=task_activities)
+            action_factory.add_action()
+
+    def __add_actions(self, action, processor):
+        &#34;&#34;&#34;
+        Create ActionFactory and add action as &lt;activity&gt; to processors&#39; &lt;task-activities&gt;
+        and all corresponding &lt;precedences&gt; for action
+        :param processor: processor to add actions to
+        :param action: first action of a component is always StartAction
+        :return:
+        &#34;&#34;&#34;
+        # Create ActionFactory for action
+        task_activities = processor.find(&#34;.//task-activities&#34;)
+        action_factory = branch_factory.ActionFactory(xml_cache=self.xml_cache,
+                                                      mapping_cache=self.mapping_cache,
+                                                      action=action,
+                                                      input_data=self.input_data,
+                                                      latency=self.latency,
+                                                      processor=processor
+                                                      ).create_action_factory(task_activities=task_activities)
+        # If action is of type &#39;SetVariableAction&#39; no factory will be created,
+        # since &#39;SetVariableAction&#39; is not supported
+        if action_factory:
+            action_factory.add_action()
+
+        # Add actions recursively if current action has successor action
+        successor_id = action.get(&#34;successor_AbstractAction&#34;)
+        if successor_id is not None:
+            successor = get_by_id(element=action.getparent(), element_id=successor_id)
+            self.__add_actions(action=successor, processor=processor)
+
+    def __add_pre_or_and_post_or(self, action, action_activity_name, task_activities):
+        &#34;&#34;&#34;
+        Create pre-or and post-or precedences along with their respective activities
+        :param action:
+        :param action_activity_name:
+        :param task_activities:
+        :return:
+        &#34;&#34;&#34;
+        # Add: StopAction_1, StopAction_2 -&gt; final successor of BranchAction
+        final_successor_id = action.get(&#34;successor_AbstractAction&#34;)
+        final_successor_action = get_by_id(element=self.xml_cache.get_xml_tree(&#34;repository&#34;),
+                                           element_id=final_successor_id)
+        final_successor_action_name = create_activity_name_from_action(action=final_successor_action,
+                                                                       uid_string=self.uid_string)
+        # create precedence that contains pre-or and post tag
+        final_successor_precedence = SubElement(task_activities, &#39;precedence&#39;)
+        stop_pre_or_tag = SubElement(final_successor_precedence, &#39;pre-OR&#39;)
+        stop_post_tag = SubElement(final_successor_precedence, &#39;post&#39;)
+
+        # add activity_name to post element
+        stop_post_activity = SubElement(stop_post_tag, &#39;activity&#39;)
+        stop_post_activity.set(&#34;name&#34;, final_successor_action_name)
+        # branch action as pre tag and each branches&#39; start_action as post-OR tag
+        pre_precedence = SubElement(task_activities, &#39;precedence&#39;)
+        # create pre-element
+        pre_tag = SubElement(pre_precedence, &#39;pre&#39;)
+        stop_pre_or_activity = SubElement(pre_tag, &#39;activity&#39;)
+        stop_pre_or_activity.set(&#34;name&#34;, action_activity_name)
+        post_or_element = SubElement(pre_precedence, &#39;post-OR&#39;)
+        return post_or_element, stop_pre_or_tag
+
+    @staticmethod
+    def __get_final_successor_and_start(actions):
+        &#34;&#34;&#34;
+        Get StartActions and StopActions from all branches in lists
+        :param actions:
+        :return:
+        &#34;&#34;&#34;
+        branch_start_actions = []
+        final_successor_action = []
+        for steps in actions:
+            steps_action = get_action_type(action=steps)
+            if &#34;StartAction&#34; in steps_action:
+                branch_start_actions.append(steps)
+            elif &#34;StopAction&#34; in steps_action:
+                final_successor_action.append(steps)
+        return branch_start_actions, final_successor_action
+
+    def __get_reference_name(self, condition_types):
+        &#34;&#34;&#34;
+        Get reference name to look for probabilities in usagemodel. &#34;&lt;branchCondition_GuardedBranchTransition /&gt;&#34;
+        (repository) is used to look for reference name in usagemodel. Find matching reference name in condition types
+        and return corresponding reference name.
+        :param condition_types: &#39;specification=&#34;NOT isBook.VALUE&#34;&#39; -&gt; [&#34;NOT&#34;, &#34;isBook&#34;, &#34;VALUE&#34;]
+        :return: reference name
+        &#34;&#34;&#34;
+        named_references = self.__get_references()
+        reference_name = &#34;&#34;
+        for reference in named_references:
+            try:
+                name_index = condition_types.index(reference)
+                reference_name = condition_types[name_index]
+                break
+            except ValueError:
+                pass
+        return reference_name
+
+    def __get_references(self):
+        &#34;&#34;&#34;
+        Get references from usagemodel where references of branch action probabilities are stored
+        :return:
+        &#34;&#34;&#34;
+        named_references = []
+        for usage in self.xml_cache.get_xml_tree(&#34;usagemodel&#34;):
+            variable_usages = usage.findall(&#34;.//namedReference__VariableUsage&#34;)
+            for name in variable_usages:
+                named_references.append(name.get(&#34;referenceName&#34;))
+        return named_references
+
+    @staticmethod
+    def __add_stop_action_precedences(final_successor_action, stop_pre_or_tag, uid=None):
+        &#34;&#34;&#34;
+        Add precedences for StopAction
+        :param final_successor_action:
+        :param stop_pre_or_tag:
+        :param uid:
+        :return:
+        &#34;&#34;&#34;
+        # Add precedence for stop actions
+        for stop_action in final_successor_action:
+            activity_name = create_activity_name_from_action(action=stop_action, uid_string=uid)
+            stop_pre_or_activity = SubElement(stop_pre_or_tag, &#39;activity&#39;)
+            stop_pre_or_activity.set(&#34;name&#34;, activity_name)
+
+    @staticmethod
+    def __add_precedence_for_start_action(branches_steps, post_or_element, uid=None):
+        &#34;&#34;&#34;
+        Add precedences for StartAction.
+        :param branches_steps:
+        :param post_or_element:
+        :param uid:
+        :return:
+        &#34;&#34;&#34;
+        action = get_element_from_list(search_string=&#34;seff:StartAction&#34;,
+                                       attribute=get_xml_schema_type(),
+                                       element_list=branches_steps)
+        activity_name = create_activity_name_from_action(action=action, uid_string=uid)
+        activity = SubElement(post_or_element, &#39;activity&#39;)
+        activity.set(&#34;name&#34;, activity_name)
+        activity.set(&#34;prob&#34;, &#34;1.0&#34;)</code></pre>
+</details>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pyopteryx.factories.action_factories.abstract_action_factory.AbstractActionFactory" href="abstract_action_factory.html#pyopteryx.factories.action_factories.abstract_action_factory.AbstractActionFactory">AbstractActionFactory</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pyopteryx.factories.action_factories.abstract_action_factory.AbstractActionFactory.__init__" href="abstract_action_factory.html#pyopteryx.factories.action_factories.abstract_action_factory.AbstractActionFactory.__init__">__init__</a></code></li>
+<li><code><a title="pyopteryx.factories.action_factories.abstract_action_factory.AbstractActionFactory.add_action" href="abstract_action_factory.html#pyopteryx.factories.action_factories.abstract_action_factory.AbstractActionFactory.add_action">add_action</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="pyopteryx.factories.action_factories" href="index.html">pyopteryx.factories.action_factories</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="pyopteryx.factories.action_factories.branch_action_factory.BranchActionFactory" href="#pyopteryx.factories.action_factories.branch_action_factory.BranchActionFactory">BranchActionFactory</a></code></h4>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.5.3</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

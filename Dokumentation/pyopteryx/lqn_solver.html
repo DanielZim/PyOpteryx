@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.5.3" />
+<title>pyopteryx.lqn_solver API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.name small{font-weight:normal}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title"><code>pyopteryx.lqn_solver</code> module</h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">import os
+import subprocess
+from datetime import datetime
+
+from lxml import etree
+
+from pyopteryx.lqn_builder import LqnBuilder
+from pyopteryx.utils.xml_utils import get_element_by_identifier, get_by_id, get_linkage_id, get_xml_schema_type
+from pyopteryx.utils.utils import save_xml
+
+
+class LqnSolver:
+    &#34;&#34;&#34;
+    Class that execute LQNSolver with created .in file.
+    &#34;&#34;&#34;
+
+    def __init__(self, cache):
+        &#34;&#34;&#34;
+        Set __temp_output_path__ to &#39;C:/Output/&#39; and cache.
+        :param cache: cached PCM files
+        &#34;&#34;&#34;
+        self.__temp_output_path__ = &#39;C:/Output/&#39;
+        self.__cache = cache
+
+    def __read_response_time_from_result_file(self, filename):
+        &#34;&#34;&#34;
+        Read response time from created result file. If .out file couldn&#39;t be created return -1 as result time.
+        :param filename: result file name
+        :return: calculated result time
+        &#34;&#34;&#34;
+        response_time = -1
+        try:
+            # Open lqxo-output-file
+            xml_tree = etree.parse(self.__temp_output_path__ + filename)
+        except OSError as e:
+            print(&#34;Fehlerausgabe: &#34; + str(e))
+            return -1
+
+        # Parse XML
+        xml_root = xml_tree.getroot()
+
+        # Iterate over all &#34;processor&#34;-nodes
+        for xml_processor in xml_root.findall(&#39;processor&#39;):
+            # TODO: Usagescenationame auslesen aus __input_data[&#39;keys&#39;][&#39;usage&#39;]
+            if xml_processor.get(&#39;name&#39;) == &#39;UsageScenario_BRS_usage_scenario_1_Processor&#39; or xml_processor.get(
+                    &#39;name&#39;) == &#39;UsageScenario_defaultUsageScenario_1_Processor&#39;:
+                xml_task = xml_processor.find(&#39;task&#39;)
+                xml_entry = xml_task.find(&#39;entry&#39;)
+                xml_result_entry = xml_entry.find(&#39;result-entry&#39;)
+                response_time = xml_result_entry.get(&#39;phase1-service-time&#39;)
+
+        return response_time
+
+    def evaluate_fitness(self, input_data):
+        &#34;&#34;&#34;
+        Evaluate fitness by performing PyCM2LQN transformation for current input data and execute LQNSolver with
+        that created .in file. Read response time from created .out file
+        :param input_data: input containing cpu rates, allocation of components and assembled components
+        :return: calculated response time and calculated costs
+        &#34;&#34;&#34;
+        lqn_builder = LqnBuilder(input_data=input_data, cache=self.__cache)
+        lqn_input_xml = lqn_builder.transform_pycm2lqn()
+
+        date = datetime.now().strftime(&#34;%Y-%m-%d_%H%M%S_%f&#34;)
+
+        input_file_name = date + &#39;.in.lqxo&#39;
+        result_file_name = date + &#39;.out.lqxo&#39;
+
+        save_xml(lqn_input_xml, self.__temp_output_path__ + input_file_name)
+
+        # Command expression for lqn tool (-f = fast flag, -w = suppress warnings)
+        command = &#34;lqns -w -x -f -o&#34; + self.__temp_output_path__ + result_file_name + &#34; &#34; + self.__temp_output_path__ + input_file_name
+
+        # Execute LQN-solver
+        subprocess.call(command, shell=True)
+
+        # Get response time from result file
+        response_time = self.__read_response_time_from_result_file(result_file_name)
+
+        self.__delete_in_and_out_files(input_file_name, result_file_name)
+
+        costs = self.calculate_costs(input_data=input_data)
+
+        return costs, response_time
+
+    def __delete_in_and_out_files(self, input_file_name, result_file_name):
+        &#34;&#34;&#34;
+        Delete created .in and .out files.
+        :param input_file_name: created .in file
+        :param result_file_name: created .out file
+        &#34;&#34;&#34;
+        try:
+            os.remove(self.__temp_output_path__ + input_file_name)
+        except FileNotFoundError:
+            pass
+        try:
+            os.remove(self.__temp_output_path__ + result_file_name)
+        except FileNotFoundError:
+            pass
+
+    # TODO: Prototype calculated costs are not valid yet!
+    def calculate_costs(self, input_data):
+        &#34;&#34;&#34;
+        Calculate cost of current allocation, cpu rates of input data.
+        :param input_data: input containing cpu rates, allocation of components and assembled components
+        :return: calculated cost
+        &#34;&#34;&#34;
+        cost = 0.0
+        try:
+            used_server = []
+            # For every used server / cpu processor add &#34;processingRateInitialFunction&#34; to cost
+            for component, allocated_server in input_data[&#34;component_allocations&#34;].items():
+                # iterate trough cost type &#34;VariableProcessingResourceCost&#34;
+                for child in self.__cache.get_xml_tree(&#34;cost&#34;).findall(&#34;.//cost&#34;):
+                    child_type = child.get(get_xml_schema_type())
+                    if child_type == &#34;cost:VariableProcessingResourceCost&#34;:
+                        # Get cpu server
+                        resource_specification = get_linkage_id(identifier=&#34;processingresourcespecification&#34;,
+                                                                element_tree=child)
+                        server_element = get_by_id(element=self.__cache.get_xml_tree(&#34;resourceenvironment&#34;),
+                                                   element_id=resource_specification).getparent()
+                        server_id = server_element.get(&#34;id&#34;)
+                        # Add cost if component is allocated to server and server cost was not added before
+                        if allocated_server == server_id and server_id not in used_server:
+                            used_server.append(server_id)
+                            cost_function = child.find(&#34;processingRateInitialFunction&#34;).get(&#34;specification&#34;).replace(
+                                &#34;procRate.VALUE&#34;, str(input_data[&#34;cpu_rates&#34;][allocated_server])).replace(&#34;^&#34;, &#34;**&#34;)
+                            cost += eval(cost_function)
+            # Add cost for assembled component
+            for assembly_context, component in input_data[&#34;assembled_components&#34;].items():
+                cost_el = get_element_by_identifier(attribute=&#34;href&#34;, search_string=&#39;default.repository#&#39; + component,
+                                                    element_tree=self.__cache.get_xml_tree(&#34;cost&#34;))
+                if cost_el is not None:
+                    assembly_cost = cost_el.getparent().get(&#34;componentInitialCost&#34;)
+                    cost += float(assembly_cost)
+            amount_server = len(used_server)
+            cost += (22.0 * amount_server)
+        except Exception as e:
+            print(e)
+        return cost</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="pyopteryx.lqn_solver.LqnSolver"><code class="flex name class">
+<span>class <span class="ident">LqnSolver</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Class that execute LQNSolver with created .in file.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class LqnSolver:
+    &#34;&#34;&#34;
+    Class that execute LQNSolver with created .in file.
+    &#34;&#34;&#34;
+
+    def __init__(self, cache):
+        &#34;&#34;&#34;
+        Set __temp_output_path__ to &#39;C:/Output/&#39; and cache.
+        :param cache: cached PCM files
+        &#34;&#34;&#34;
+        self.__temp_output_path__ = &#39;C:/Output/&#39;
+        self.__cache = cache
+
+    def __read_response_time_from_result_file(self, filename):
+        &#34;&#34;&#34;
+        Read response time from created result file. If .out file couldn&#39;t be created return -1 as result time.
+        :param filename: result file name
+        :return: calculated result time
+        &#34;&#34;&#34;
+        response_time = -1
+        try:
+            # Open lqxo-output-file
+            xml_tree = etree.parse(self.__temp_output_path__ + filename)
+        except OSError as e:
+            print(&#34;Fehlerausgabe: &#34; + str(e))
+            return -1
+
+        # Parse XML
+        xml_root = xml_tree.getroot()
+
+        # Iterate over all &#34;processor&#34;-nodes
+        for xml_processor in xml_root.findall(&#39;processor&#39;):
+            # TODO: Usagescenationame auslesen aus __input_data[&#39;keys&#39;][&#39;usage&#39;]
+            if xml_processor.get(&#39;name&#39;) == &#39;UsageScenario_BRS_usage_scenario_1_Processor&#39; or xml_processor.get(
+                    &#39;name&#39;) == &#39;UsageScenario_defaultUsageScenario_1_Processor&#39;:
+                xml_task = xml_processor.find(&#39;task&#39;)
+                xml_entry = xml_task.find(&#39;entry&#39;)
+                xml_result_entry = xml_entry.find(&#39;result-entry&#39;)
+                response_time = xml_result_entry.get(&#39;phase1-service-time&#39;)
+
+        return response_time
+
+    def evaluate_fitness(self, input_data):
+        &#34;&#34;&#34;
+        Evaluate fitness by performing PyCM2LQN transformation for current input data and execute LQNSolver with
+        that created .in file. Read response time from created .out file
+        :param input_data: input containing cpu rates, allocation of components and assembled components
+        :return: calculated response time and calculated costs
+        &#34;&#34;&#34;
+        lqn_builder = LqnBuilder(input_data=input_data, cache=self.__cache)
+        lqn_input_xml = lqn_builder.transform_pycm2lqn()
+
+        date = datetime.now().strftime(&#34;%Y-%m-%d_%H%M%S_%f&#34;)
+
+        input_file_name = date + &#39;.in.lqxo&#39;
+        result_file_name = date + &#39;.out.lqxo&#39;
+
+        save_xml(lqn_input_xml, self.__temp_output_path__ + input_file_name)
+
+        # Command expression for lqn tool (-f = fast flag, -w = suppress warnings)
+        command = &#34;lqns -w -x -f -o&#34; + self.__temp_output_path__ + result_file_name + &#34; &#34; + self.__temp_output_path__ + input_file_name
+
+        # Execute LQN-solver
+        subprocess.call(command, shell=True)
+
+        # Get response time from result file
+        response_time = self.__read_response_time_from_result_file(result_file_name)
+
+        self.__delete_in_and_out_files(input_file_name, result_file_name)
+
+        costs = self.calculate_costs(input_data=input_data)
+
+        return costs, response_time
+
+    def __delete_in_and_out_files(self, input_file_name, result_file_name):
+        &#34;&#34;&#34;
+        Delete created .in and .out files.
+        :param input_file_name: created .in file
+        :param result_file_name: created .out file
+        &#34;&#34;&#34;
+        try:
+            os.remove(self.__temp_output_path__ + input_file_name)
+        except FileNotFoundError:
+            pass
+        try:
+            os.remove(self.__temp_output_path__ + result_file_name)
+        except FileNotFoundError:
+            pass
+
+    # TODO: Prototype calculated costs are not valid yet!
+    def calculate_costs(self, input_data):
+        &#34;&#34;&#34;
+        Calculate cost of current allocation, cpu rates of input data.
+        :param input_data: input containing cpu rates, allocation of components and assembled components
+        :return: calculated cost
+        &#34;&#34;&#34;
+        cost = 0.0
+        try:
+            used_server = []
+            # For every used server / cpu processor add &#34;processingRateInitialFunction&#34; to cost
+            for component, allocated_server in input_data[&#34;component_allocations&#34;].items():
+                # iterate trough cost type &#34;VariableProcessingResourceCost&#34;
+                for child in self.__cache.get_xml_tree(&#34;cost&#34;).findall(&#34;.//cost&#34;):
+                    child_type = child.get(get_xml_schema_type())
+                    if child_type == &#34;cost:VariableProcessingResourceCost&#34;:
+                        # Get cpu server
+                        resource_specification = get_linkage_id(identifier=&#34;processingresourcespecification&#34;,
+                                                                element_tree=child)
+                        server_element = get_by_id(element=self.__cache.get_xml_tree(&#34;resourceenvironment&#34;),
+                                                   element_id=resource_specification).getparent()
+                        server_id = server_element.get(&#34;id&#34;)
+                        # Add cost if component is allocated to server and server cost was not added before
+                        if allocated_server == server_id and server_id not in used_server:
+                            used_server.append(server_id)
+                            cost_function = child.find(&#34;processingRateInitialFunction&#34;).get(&#34;specification&#34;).replace(
+                                &#34;procRate.VALUE&#34;, str(input_data[&#34;cpu_rates&#34;][allocated_server])).replace(&#34;^&#34;, &#34;**&#34;)
+                            cost += eval(cost_function)
+            # Add cost for assembled component
+            for assembly_context, component in input_data[&#34;assembled_components&#34;].items():
+                cost_el = get_element_by_identifier(attribute=&#34;href&#34;, search_string=&#39;default.repository#&#39; + component,
+                                                    element_tree=self.__cache.get_xml_tree(&#34;cost&#34;))
+                if cost_el is not None:
+                    assembly_cost = cost_el.getparent().get(&#34;componentInitialCost&#34;)
+                    cost += float(assembly_cost)
+            amount_server = len(used_server)
+            cost += (22.0 * amount_server)
+        except Exception as e:
+            print(e)
+        return cost</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="pyopteryx.lqn_solver.LqnSolver.__init__"><code class="name flex">
+<span>def <span class="ident">__init__</span></span>(<span>self, cache)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Set <strong>temp_output_path</strong> to 'C:/Output/' and cache.
+:param cache: cached PCM files</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def __init__(self, cache):
+    &#34;&#34;&#34;
+    Set __temp_output_path__ to &#39;C:/Output/&#39; and cache.
+    :param cache: cached PCM files
+    &#34;&#34;&#34;
+    self.__temp_output_path__ = &#39;C:/Output/&#39;
+    self.__cache = cache</code></pre>
+</details>
+</dd>
+<dt id="pyopteryx.lqn_solver.LqnSolver.calculate_costs"><code class="name flex">
+<span>def <span class="ident">calculate_costs</span></span>(<span>self, input_data)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Calculate cost of current allocation, cpu rates of input data.
+:param input_data: input containing cpu rates, allocation of components and assembled components
+:return: calculated cost</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def calculate_costs(self, input_data):
+    &#34;&#34;&#34;
+    Calculate cost of current allocation, cpu rates of input data.
+    :param input_data: input containing cpu rates, allocation of components and assembled components
+    :return: calculated cost
+    &#34;&#34;&#34;
+    cost = 0.0
+    try:
+        used_server = []
+        # For every used server / cpu processor add &#34;processingRateInitialFunction&#34; to cost
+        for component, allocated_server in input_data[&#34;component_allocations&#34;].items():
+            # iterate trough cost type &#34;VariableProcessingResourceCost&#34;
+            for child in self.__cache.get_xml_tree(&#34;cost&#34;).findall(&#34;.//cost&#34;):
+                child_type = child.get(get_xml_schema_type())
+                if child_type == &#34;cost:VariableProcessingResourceCost&#34;:
+                    # Get cpu server
+                    resource_specification = get_linkage_id(identifier=&#34;processingresourcespecification&#34;,
+                                                            element_tree=child)
+                    server_element = get_by_id(element=self.__cache.get_xml_tree(&#34;resourceenvironment&#34;),
+                                               element_id=resource_specification).getparent()
+                    server_id = server_element.get(&#34;id&#34;)
+                    # Add cost if component is allocated to server and server cost was not added before
+                    if allocated_server == server_id and server_id not in used_server:
+                        used_server.append(server_id)
+                        cost_function = child.find(&#34;processingRateInitialFunction&#34;).get(&#34;specification&#34;).replace(
+                            &#34;procRate.VALUE&#34;, str(input_data[&#34;cpu_rates&#34;][allocated_server])).replace(&#34;^&#34;, &#34;**&#34;)
+                        cost += eval(cost_function)
+        # Add cost for assembled component
+        for assembly_context, component in input_data[&#34;assembled_components&#34;].items():
+            cost_el = get_element_by_identifier(attribute=&#34;href&#34;, search_string=&#39;default.repository#&#39; + component,
+                                                element_tree=self.__cache.get_xml_tree(&#34;cost&#34;))
+            if cost_el is not None:
+                assembly_cost = cost_el.getparent().get(&#34;componentInitialCost&#34;)
+                cost += float(assembly_cost)
+        amount_server = len(used_server)
+        cost += (22.0 * amount_server)
+    except Exception as e:
+        print(e)
+    return cost</code></pre>
+</details>
+</dd>
+<dt id="pyopteryx.lqn_solver.LqnSolver.evaluate_fitness"><code class="name flex">
+<span>def <span class="ident">evaluate_fitness</span></span>(<span>self, input_data)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Evaluate fitness by performing PyCM2LQN transformation for current input data and execute LQNSolver with
+that created .in file. Read response time from created .out file
+:param input_data: input containing cpu rates, allocation of components and assembled components
+:return: calculated response time and calculated costs</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def evaluate_fitness(self, input_data):
+    &#34;&#34;&#34;
+    Evaluate fitness by performing PyCM2LQN transformation for current input data and execute LQNSolver with
+    that created .in file. Read response time from created .out file
+    :param input_data: input containing cpu rates, allocation of components and assembled components
+    :return: calculated response time and calculated costs
+    &#34;&#34;&#34;
+    lqn_builder = LqnBuilder(input_data=input_data, cache=self.__cache)
+    lqn_input_xml = lqn_builder.transform_pycm2lqn()
+
+    date = datetime.now().strftime(&#34;%Y-%m-%d_%H%M%S_%f&#34;)
+
+    input_file_name = date + &#39;.in.lqxo&#39;
+    result_file_name = date + &#39;.out.lqxo&#39;
+
+    save_xml(lqn_input_xml, self.__temp_output_path__ + input_file_name)
+
+    # Command expression for lqn tool (-f = fast flag, -w = suppress warnings)
+    command = &#34;lqns -w -x -f -o&#34; + self.__temp_output_path__ + result_file_name + &#34; &#34; + self.__temp_output_path__ + input_file_name
+
+    # Execute LQN-solver
+    subprocess.call(command, shell=True)
+
+    # Get response time from result file
+    response_time = self.__read_response_time_from_result_file(result_file_name)
+
+    self.__delete_in_and_out_files(input_file_name, result_file_name)
+
+    costs = self.calculate_costs(input_data=input_data)
+
+    return costs, response_time</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="pyopteryx" href="index.html">pyopteryx</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="pyopteryx.lqn_solver.LqnSolver" href="#pyopteryx.lqn_solver.LqnSolver">LqnSolver</a></code></h4>
+<ul class="">
+<li><code><a title="pyopteryx.lqn_solver.LqnSolver.__init__" href="#pyopteryx.lqn_solver.LqnSolver.__init__">__init__</a></code></li>
+<li><code><a title="pyopteryx.lqn_solver.LqnSolver.calculate_costs" href="#pyopteryx.lqn_solver.LqnSolver.calculate_costs">calculate_costs</a></code></li>
+<li><code><a title="pyopteryx.lqn_solver.LqnSolver.evaluate_fitness" href="#pyopteryx.lqn_solver.LqnSolver.evaluate_fitness">evaluate_fitness</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.5.3</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>
